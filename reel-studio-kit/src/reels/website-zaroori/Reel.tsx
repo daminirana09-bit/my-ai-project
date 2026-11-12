@@ -27,6 +27,7 @@ import {
   type ReelProps,
 } from "../../components";
 import { useBrand } from "../../brand-context";
+import { brand as myBrand } from "../../brand";
 import { creamStory } from "../../presets";
 import { AVATAR_BOX, CAPTION_BOTTOM, SAFE, SAFE_BOX } from "../../layout";
 import { timing } from "../../timing";
@@ -68,7 +69,7 @@ const FeatureCard: React.FC = () => {
   );
 };
 
-export const Reel: React.FC<ReelProps> = ({ brand = creamStory, avatar = "none", debugSafeZones, probe }) => {
+export const Reel: React.FC<ReelProps> = ({ brand = { ...creamStory, handle: myBrand.handle }, avatar = "none", debugSafeZones, probe }) => {
   const m = useMouth(mouth, words);
   const build0 = t.at(49, 21.6) - 4;
   return (

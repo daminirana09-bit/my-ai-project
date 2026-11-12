@@ -27,5 +27,5 @@ export const brand: Brand = {
   font: "Inter",
   radius: 32,
   shadow: true,
-  handle: "@yourhandle",
+  handle: "@solvix_web",
 };
