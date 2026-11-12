@@ -26,4 +26,13 @@ export const softPastel: Brand = {
   handle: "@yourhandle",
 };
 
-export const PRESETS = { cleanLight, boldDark, softPastel };
+// Warm cream + coral, story-style explainer look (pairs with SceneLabel / VoiceBubble in fx.tsx).
+export const creamStory: Brand = {
+  colors: { bg: "#F2EEE5", surface: "#FFFDF8", text: "#191814", accent: "#E5484D", accent2: "#1F9D61" },
+  font: "Inter",
+  radius: 22,
+  shadow: true,
+  handle: "@yourhandle",
+};
+
+export const PRESETS = { cleanLight, boldDark, softPastel, creamStory };

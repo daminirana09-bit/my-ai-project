@@ -4,20 +4,23 @@
 // npm packages or Google Fonts), add an entry to FACES and a name to FONTS.
 import { continueRender, delayRender, staticFile } from "remotion";
 
-const FACES: { family: string; file: string; weights: number[] }[] = [
+const FACES: { family: string; file: string; weights: number[]; style?: "normal" | "italic" }[] = [
   { family: "Inter", file: "inter", weights: [400, 600, 800] },
   { family: "Space Grotesk", file: "space-grotesk", weights: [400, 600, 700] },
   { family: "Nunito", file: "nunito", weights: [400, 600, 800] },
+  // Accent faces used by src/components/fx.tsx (scene labels, serif highlight words)
+  { family: "JetBrains Mono", file: "jetbrains-mono", weights: [400, 600] },
+  { family: "Instrument Serif", file: "instrument-serif", weights: [400], style: "italic" },
 ];
 
 if (typeof document !== "undefined" && typeof FontFace !== "undefined") {
   const handle = delayRender("Loading local fonts");
   Promise.all(
-    FACES.flatMap(({ family, file, weights }) =>
+    FACES.flatMap(({ family, file, weights, style = "normal" }) =>
       weights.map((w) => {
-        const face = new FontFace(family, `url(${staticFile(`fonts/${file}-latin-${w}-normal.woff2`)}) format("woff2")`, {
+        const face = new FontFace(family, `url(${staticFile(`fonts/${file}-latin-${w}-${style}.woff2`)}) format("woff2")`, {
           weight: String(w),
-          style: "normal",
+          style,
         });
         (document.fonts as unknown as { add(f: FontFace): void }).add(face);
         return face.load();

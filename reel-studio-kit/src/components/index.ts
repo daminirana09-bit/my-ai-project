@@ -8,4 +8,4 @@ export { SafeZones } from "./SafeZones";
 export { SceneBlock, LayoutProbe } from "./probe";
 export { usePop } from "./pop";
 export { ReelFrame, type ReelProps, type AvatarStyle } from "./ReelFrame";
-export { Backdrop, Burst, CommentCTA, PhoneSite, PriceSlash, Ring, Scene, SearchMock, Tick, WalkAway, WordsIn } from "./fx";
+export { Backdrop, Badge, Burst, CommentCTA, CommentsCTA, PhoneSite, PriceSlash, Ring, Scene, SceneLabel, SearchMock, Tick, VoiceBubble, WalkAway, WordsIn } from "./fx";

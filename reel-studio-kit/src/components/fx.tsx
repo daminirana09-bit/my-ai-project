@@ -9,6 +9,8 @@ import { useBrand } from "../brand-context";
 const CL = { extrapolateLeft: "clamp", extrapolateRight: "clamp" } as const;
 const DANGER = "#E5484D"; // "no / wrong" marks
 const WHATSAPP = "#25D366";
+const MONO = "JetBrains Mono, monospace";
+const SERIF = "Instrument Serif, Georgia, serif";
 const clean = (s: string) => s.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
 const useT = () => {
   const frame = useCurrentFrame();
@@ -19,7 +21,7 @@ const useT = () => {
 };
 
 /** Soft colour blobs drifting behind everything, plus a slowly moving dot grid. */
-export const Backdrop: React.FC = () => {
+export const Backdrop: React.FC<{ grid?: boolean }> = ({ grid = true }) => {
   const b = useBrand();
   const { frame } = useT();
   const t = frame / 30;
@@ -31,7 +33,7 @@ export const Backdrop: React.FC = () => {
   return (
     <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
       <div style={{ position: "absolute", inset: 0, background: blobs.map((o) => `radial-gradient(circle at ${o.x}% ${o.y}%, ${o.c}22, transparent ${o.r}%)`).join(",") }} />
-      <div
+      {grid ? <div
         style={{
           position: "absolute",
           inset: 0,
@@ -42,7 +44,7 @@ export const Backdrop: React.FC = () => {
           maskImage: "linear-gradient(to bottom, black 0%, transparent 75%)",
           WebkitMaskImage: "linear-gradient(to bottom, black 0%, transparent 75%)",
         }}
-      />
+      /> : null}
     </div>
   );
 };
@@ -70,13 +72,14 @@ export const Scene: React.FC<{ name?: string; from: number; to: number; children
 };
 
 /** Headline whose words drop in one by one; `accent` words get the accent colour and a marker swipe. */
-export const WordsIn: React.FC<{ text: string; at: number; accent?: string[]; size?: number; stagger?: number; showHandle?: boolean }> = ({
+export const WordsIn: React.FC<{ text: string; at: number; accent?: string[]; size?: number; stagger?: number; showHandle?: boolean; serif?: boolean }> = ({
   text,
   at,
   accent = [],
   size = 110,
   stagger = 3,
   showHandle = false,
+  serif = false,
 }) => {
   const b = useBrand();
   const { frame, sp, fade } = useT();
@@ -92,10 +95,18 @@ export const WordsIn: React.FC<{ text: string; at: number; accent?: string[]; si
           const swipe = interpolate(frame - a - 5, [0, 8], [0, 1], { ...CL, easing: Easing.out(Easing.cubic) });
           return (
             <span key={i} style={{ position: "relative", display: "inline-block", opacity: fade(a, 4), transform: `translateY(${(1 - s) * 70}px) rotate(${(1 - s) * 9}deg)`, transformOrigin: "left bottom" }}>
-              {isKey ? (
+              {isKey && !serif ? (
                 <span style={{ position: "absolute", left: 0, right: 0, bottom: size * 0.06, height: size * 0.32, background: `${b.colors.accent2}40`, borderRadius: 8, transform: `scaleX(${swipe})`, transformOrigin: "left" }} />
               ) : null}
-              <span style={{ position: "relative", color: isKey ? b.colors.accent : b.colors.text }}>{w}</span>
+              <span
+                style={{
+                  position: "relative",
+                  color: isKey ? b.colors.accent : b.colors.text,
+                  ...(isKey && serif ? { fontFamily: SERIF, fontStyle: "italic", fontWeight: 400, fontSize: size * 1.14, letterSpacing: 0 } : {}),
+                }}
+              >
+                {w}
+              </span>
             </span>
           );
         })}
@@ -498,6 +509,179 @@ export const WalkAway: React.FC<{ at: number; leaveAt: number }> = ({ at, leaveA
       <svg width="200" height="40" style={{ position: "absolute", left: 470, top: 210, opacity: fade(leaveAt - 10) * (1 - walk * 0.6) }}>
         <path d="M0 20h170M150 4l20 16-20 16" fill="none" stroke={`${b.colors.text}55`} strokeWidth="6" strokeDasharray="14 12" strokeDashoffset={-frame * 2} strokeLinecap="round" />
       </svg>
+    </div>
+  );
+};
+
+
+/** Code-comment style scene label (top left) and a "voice: AI" tag (top right). Decoration, not measured. */
+export const SceneLabel: React.FC<{ text: string; at: number; tag?: string }> = ({ text, at, tag = "voice: AI" }) => {
+  const b = useBrand();
+  const { fade } = useT();
+  const o = fade(at, 8);
+  return (
+    <>
+      <div style={{ position: "absolute", left: 60, top: 150, fontFamily: MONO, fontSize: 26, color: `${b.colors.text}80`, opacity: o }}>{text}</div>
+      <div style={{ position: "absolute", right: 130, top: 140, fontFamily: MONO, fontSize: 22, color: `${b.colors.text}80`, border: `2px solid ${b.colors.text}26`, borderRadius: 999, padding: "6px 18px", opacity: o }}>{tag}</div>
+    </>
+  );
+};
+
+/** Bold warning badge with a hard shadow, e.g. "PROBLEM". */
+export const Badge: React.FC<{ text: string; at: number; color?: string }> = ({ text, at, color = "#F5C542" }) => {
+  const b = useBrand();
+  const { sp, fade } = useT();
+  const s = sp(at, { damping: 10, stiffness: 220, mass: 0.6 });
+  return (
+    <div
+      data-el="badge"
+      data-kind="content"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 12,
+        opacity: fade(at, 3),
+        transform: `scale(${0.5 + 0.5 * s})`,
+        transformOrigin: "left center",
+        background: color,
+        color: b.colors.text,
+        border: `4px solid ${b.colors.text}`,
+        boxShadow: `6px 6px 0 ${b.colors.text}`,
+        borderRadius: 14,
+        padding: "10px 22px",
+        fontFamily: b.fontFamily,
+        fontSize: 40,
+        fontWeight: 800,
+        letterSpacing: 1,
+      }}
+    >
+      <svg width="34" height="34" viewBox="0 0 24 24">
+        <path d="M12 2 1 22h22L12 2z" fill={b.colors.text} />
+        <rect x="11" y="9" width="2" height="7" fill={color} />
+        <rect x="11" y="17.5" width="2" height="2" fill={color} />
+      </svg>
+      {text}
+    </div>
+  );
+};
+
+/** Captions as a dark "live transcript" bubble: label + waveform, words light up as they are spoken. */
+export const VoiceBubble: React.FC<{ words: { word: string; start: number; end: number }[]; mouth: number[]; keywords?: string[]; perChunk?: number; label?: string; size?: number }> = ({
+  words,
+  mouth,
+  keywords = [],
+  perChunk = 5,
+  label = "voice · AI",
+  size = 54,
+}) => {
+  const b = useBrand();
+  const { frame, fps, sp } = useT();
+  const t = frame / fps;
+  let current = -1;
+  for (let i = 0; i < words.length; i++) {
+    if (words[i].start <= t) current = i;
+    else break;
+  }
+  if (current < 0) return null;
+  const chunkStart = Math.floor(current / perChunk) * perChunk;
+  const chunk = words.slice(chunkStart, chunkStart + perChunk);
+  const last = chunk[chunk.length - 1];
+  if (t > last.end + 0.5 && chunkStart + perChunk >= words.length) return null;
+  const keys = new Set(keywords.map(clean));
+  const enter = sp(Math.round(words[chunkStart].start * fps), { damping: 16, stiffness: 220, mass: 0.6 });
+  const level = mouth[frame] ?? 0;
+  return (
+    <div data-el="captions" data-kind="caption" style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div
+        style={{
+          maxWidth: 860,
+          background: b.colors.text,
+          color: b.colors.bg,
+          borderRadius: b.radius,
+          boxShadow: `0 20px 50px ${b.colors.text}40`,
+          padding: "22px 34px 26px",
+          fontFamily: b.fontFamily,
+          transform: `translateY(${(1 - enter) * 26}px)`,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 14, fontFamily: MONO, fontSize: 24, color: `${b.colors.bg}99`, marginBottom: 8 }}>
+          <span style={{ width: 14, height: 14, borderRadius: "50%", background: b.colors.accent }} />
+          {label}
+          <span style={{ display: "flex", alignItems: "center", gap: 5, height: 30, marginLeft: 6 }}>
+            {[0.6, 1, 0.75, 0.9, 0.5].map((k, i) => (
+              <span key={i} style={{ width: 6, borderRadius: 3, background: b.colors.accent, height: 6 + 24 * Math.min(1, level * k * (0.7 + 0.3 * Math.sin(frame / 2 + i))) }} />
+            ))}
+          </span>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0 0.28em", fontSize: size, fontWeight: 800, lineHeight: 1.22 }}>
+          {chunk.map((w, i) => {
+            const idx = chunkStart + i;
+            const spoken = idx <= current;
+            const isKey = keys.has(clean(w.word));
+            const now = idx === current && t <= w.end + 0.1;
+            return (
+              <span key={idx} style={{ color: isKey || now ? b.colors.accent : b.colors.bg, opacity: spoken ? 1 : 0.28 }}>
+                {w.word}
+              </span>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/** Comment list that fills with the keyword, then a DM preview card. */
+export const CommentsCTA: React.FC<{ at: number; keyword: string; dmAt: number; dmTitle: string; dmLines: string[]; tag?: string }> = ({ at, keyword, dmAt, dmTitle, dmLines, tag = "₹5,000" }) => {
+  const b = useBrand();
+  const { sp, fade } = useT();
+  const people = [
+    { name: "@ra***", c: b.colors.accent },
+    { name: "@pr***", c: b.colors.accent2 },
+    { name: "@ne***", c: "#F5A524" },
+    { name: "aap · abhi", c: b.colors.text },
+  ];
+  const card: React.CSSProperties = { background: b.colors.surface, borderRadius: b.radius, boxShadow: b.boxShadow, fontFamily: b.fontFamily, color: b.colors.text };
+  const s = sp(at);
+  const d = sp(dmAt);
+  const tg = sp(dmAt + 8, { damping: 8, stiffness: 220, mass: 0.6 });
+  return (
+    <div>
+      <div data-el="card" data-kind="content" style={{ ...card, padding: "30px 36px", opacity: fade(at), transform: `translateY(${(1 - s) * 40}px)` }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 32, fontWeight: 800, marginBottom: 10 }}>
+          Comments <span style={{ fontSize: 26, fontWeight: 600, opacity: 0.45 }}>Newest</span>
+        </div>
+        {people.map((p, i) => {
+          const a = at + 6 + i * 7;
+          const r = sp(a);
+          const heart = sp(a + 5, { damping: 7, stiffness: 240, mass: 0.5 });
+          return (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 20, padding: "12px 0", opacity: fade(a, 4), transform: `translateX(${-(1 - r) * 40}px)` }}>
+              <span style={{ width: 54, height: 54, borderRadius: "50%", background: p.c, flex: "none" }} />
+              <span style={{ fontFamily: MONO, fontSize: 28, opacity: 0.6, width: 230 }}>{p.name}</span>
+              <span style={{ background: b.colors.accent, color: "#fff", fontSize: 30, fontWeight: 800, padding: "6px 16px", borderRadius: 10, letterSpacing: 1 }}>{keyword}</span>
+              <span style={{ marginLeft: "auto", fontSize: 40, color: i === 3 ? b.colors.accent : `${b.colors.text}30`, transform: `scale(${Math.min(1, heart)})` }}>♥</span>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ position: "relative", marginTop: 34 }}>
+        <div data-el="card" data-kind="content" style={{ ...card, padding: "26px 32px", opacity: fade(dmAt), transform: `translateY(${(1 - d) * 50}px)`, border: `3px solid ${b.colors.accent}55` }}>
+          <div style={{ fontFamily: MONO, fontSize: 24, opacity: 0.55 }}>{b.handle} · New message</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 22, marginTop: 12 }}>
+            <span style={{ width: 84, height: 84, borderRadius: 18, background: b.colors.text, display: "grid", placeItems: "center", flex: "none" }}>
+              <svg width="44" height="44" viewBox="0 0 24 24"><g stroke={b.colors.accent} strokeWidth="2.6" strokeLinecap="round">{[0, 30, 60, 90, 120, 150].map((r) => <line key={r} x1="12" y1="3" x2="12" y2="21" transform={`rotate(${r} 12 12)`} />)}</g></svg>
+            </span>
+            <div>
+              <div style={{ fontSize: 40, fontWeight: 800 }}>{dmTitle}</div>
+              <div style={{ fontFamily: MONO, fontSize: 24, opacity: 0.6, marginTop: 4 }}>{dmLines.map((l) => `✓ ${l}`).join("  ")}</div>
+            </div>
+          </div>
+        </div>
+        <div data-overlap-ok="card" style={{ position: "absolute", right: -6, top: -26, transform: `rotate(${8 * tg}deg) scale(${Math.min(1, tg)})`, background: b.colors.accent2, color: "#fff", fontFamily: b.fontFamily, fontWeight: 800, fontSize: 30, padding: "8px 18px", borderRadius: 10, border: `3px solid ${b.colors.text}`, boxShadow: `4px 4px 0 ${b.colors.text}` }}>
+          {tag}
+        </div>
+      </div>
     </div>
   );
 };
