@@ -1,12 +1,31 @@
-// Reel "website-zaroori" (~33 s): businesses without a website -> get one made for ₹5,000.
+// Reel "website-zaroori" (~34 s): businesses without a website -> get one made for ₹5,000.
 // Script, sources: projects/website-zaroori/script.md. Word times: public/reels/website-zaroori/captions.words.json
 // (made by `npm run voice:timed -- website-zaroori`). Word numbers below refer to that file (0 = first word).
+// Motion comes from src/components/fx.tsx (scene transitions, kinetic titles, rings, phone build, CTA).
 import React from "react";
 import { brand as myBrand } from "../../brand";
 import { Avatar } from "../../avatars/Avatar";
 import { useMouth } from "../../avatars/useMouth";
 import type { PoseCue } from "../../avatars/SpritePlayer";
-import { BigNumber, Card, EndCard, Karaoke, Line, ReelFrame, SceneBlock, Sticker, Title, type ReelProps } from "../../components";
+import {
+  Backdrop,
+  BigNumber,
+  Burst,
+  CommentCTA,
+  Karaoke,
+  PhoneSite,
+  PriceSlash,
+  ReelFrame,
+  Ring,
+  Scene,
+  SearchMock,
+  Sticker,
+  Tick,
+  WalkAway,
+  WordsIn,
+  type ReelProps,
+} from "../../components";
+import { useBrand } from "../../brand-context";
 import { AVATAR_BOX, CAPTION_BOTTOM, SAFE, SAFE_BOX } from "../../layout";
 import { timing } from "../../timing";
 import mouth from "../../../public/reels/website-zaroori/mouth.json";
@@ -14,18 +33,18 @@ import words from "../../../public/reels/website-zaroori/captions.words.json";
 
 export const t = timing(words);
 export const AUDIO = "reels/website-zaroori/vo.wav";
-export const durationInFrames = t.duration();
+export const durationInFrames = t.duration(1.6);
 
 // Scene cuts on spoken words (word index, fallback seconds).
 const S = {
-  hook: [0, t.at(6, 3)], //            "Website nahi hai? Toh customer gaya."
-  survey: [t.at(6, 3), t.at(20, 9)], // "Ek survey mein 39% ..."
-  real: [t.at(20, 9), t.at(29, 13)], // "Aur 45% ko ..."
-  google: [t.at(29, 13), t.at(39, 17.6)], // "Customer pehle Google karta hai ..."
-  twist: [t.at(39, 17.6), t.at(45, 20)], // "Aur website banwana mehenga nahi hai."
-  offer: [t.at(45, 20), t.at(54, 24.3)], // "Hum ... sirf ₹5,000 mein."
+  hook: [0, t.at(6, 3)], //                    "Website nahi hai? Toh customer gaya."
+  survey: [t.at(6, 3), t.at(20, 9)], //         "Ek survey mein 39% ..."
+  real: [t.at(20, 9), t.at(29, 13)], //         "Aur 45% ko ..."
+  google: [t.at(29, 13), t.at(39, 17.6)], //    "Customer pehle Google karta hai ..."
+  twist: [t.at(39, 17.6), t.at(45, 20)], //     "Aur website banwana mehenga nahi hai."
+  offer: [t.at(45, 20), t.at(54, 24.3)], //     "Hum ... sirf ₹5,000 mein."
   features: [t.at(54, 24.3), t.at(65, 29.6)], // "Mobile pe perfect, WhatsApp button, ..."
-  end: [t.at(65, 29.6), t.duration()], // "Comment karo WEBSITE — hum DM karenge."
+  end: [t.at(65, 29.6), durationInFrames], //   "Comment karo WEBSITE — hum DM karenge."
 } as const;
 
 const poseCues: PoseCue[] = [
@@ -38,106 +57,118 @@ const poseCues: PoseCue[] = [
   { at: 29.6, pose: "point-down" },
 ];
 
-const top = 300;
-const box: React.CSSProperties = { position: "absolute", left: SAFE_BOX.x, top, width: SAFE_BOX.width };
+const col = { position: "absolute", left: SAFE_BOX.x } as const;
+const full = { ...col, top: 300, width: SAFE_BOX.width } as const;
+const left = { ...col, width: 500 } as const;
+
+const FeatureCard: React.FC = () => {
+  const b = useBrand();
+  return (
+    <div data-el="card" data-kind="content" style={{ background: b.colors.surface, borderRadius: b.radius, boxShadow: b.boxShadow, padding: "34px 30px", fontFamily: b.fontFamily }}>
+      <div style={{ fontSize: 34, fontWeight: 700, opacity: 0.55, marginBottom: 22 }}>₹5,000 mein:</div>
+      <Tick first at={t.at(54, 24.3)}>Mobile pe perfect</Tick>
+      <Tick at={t.at(57, 25.8)}>WhatsApp button</Tick>
+      <Tick at={t.at(59, 26.9)}>Google Map location</Tick>
+      <Tick at={t.at(63, 28.6)}>Aapke rate</Tick>
+    </div>
+  );
+};
 
 export const Reel: React.FC<ReelProps> = ({ brand = myBrand, avatar = "flat", debugSafeZones, probe }) => {
   const m = useMouth(mouth, words);
-  const c = brand.colors;
-  const small: React.CSSProperties = { fontSize: 30, fontWeight: 600, opacity: 0.55, marginTop: 28 };
-  const no = <span style={{ color: "#E5484D" }}>✕</span>;
-  const yes = <span style={{ color: c.accent2 }}>✓</span>;
+  const build0 = t.at(49, 21.6) - 4;
   return (
     <ReelFrame brand={brand} audio={AUDIO} debugSafeZones={debugSafeZones} probe={probe}>
-      {/* 1. Hook */}
-      <SceneBlock name="hook" from={S.hook[0]} to={S.hook[1]}>
-        <div style={{ ...box, top: SAFE.top + 40 }}>
-          <Title text="Website nahi hai? Customer gaya." highlight="Customer gaya." at={t.at(0)} size={112} />
-        </div>
-        <Sticker text="no website = no trust" at={t.at(4, 1.7)} rotate={-6} style={{ position: "absolute", left: 360, top: 700 }} />
-      </SceneBlock>
+      <Backdrop />
 
-      {/* 2. 39% did not buy */}
-      <SceneBlock name="survey" from={S.survey[0]} to={S.survey[1]}>
-        <div style={box}>
-          <Card at={S.survey[0]}>
-            <BigNumber to={39} suffix="%" at={S.survey[0] + 4} countFrames={t.at(9, 4.2) - S.survey[0]} size={230} tracked={false} label={<>ne kharida<br />hi nahi</>} />
-            <div style={{ fontSize: 44, fontWeight: 700, marginTop: 28 }}>kyunki website nahi thi</div>
-            <div style={small}>US survey, 2025 · DreamHost</div>
-          </Card>
+      {/* 1. Hook: words drop in, a customer walks away from the shop */}
+      <Scene name="hook" from={S.hook[0]} to={S.hook[1]}>
+        <div style={{ ...full, top: SAFE.top + 40 }}>
+          <WordsIn text="Website nahi hai? Customer gaya." accent={["customer", "gaya"]} at={0} size={112} showHandle />
         </div>
-        <Sticker text="customer gaya" at={t.at(17, 7.4)} rotate={6} style={{ position: "absolute", left: 560, top: 800 }} />
-      </SceneBlock>
+        <div style={{ ...col, top: 690 }}>
+          <WalkAway at={6} leaveAt={t.at(5, 2.2)} />
+        </div>
+      </Scene>
 
-      {/* 3. 45% feel it is not real */}
-      <SceneBlock name="real" from={S.real[0]} to={S.real[1]}>
-        <div style={box}>
-          <Card at={S.real[0]}>
-            <BigNumber to={45} suffix="%" at={S.real[0] + 3} countFrames={Math.max(10, t.at(21, 9.3) - S.real[0])} size={230} tracked={false} label={<>ko business<br />asli nahi lagta</>} />
-            <div style={small}>US survey, 2025 · DreamHost</div>
-          </Card>
+      {/* 2. 39% ring */}
+      <Scene name="survey" from={S.survey[0]} to={S.survey[1]}>
+        <div style={full}>
+          <Ring value={39} at={S.survey[0] + 4} countFrames={Math.max(12, t.at(9, 4.2) - S.survey[0])} size={280} label="ne kharida hi nahi" sub={<>kyunki website nahi thi<br />US survey, 2025 · DreamHost</>} />
+        </div>
+        <Sticker text="customer gaya" at={t.at(17, 7.4)} rotate={6} style={{ position: "absolute", left: 540, top: 760 }} />
+      </Scene>
+
+      {/* 3. 45% ring */}
+      <Scene name="real" from={S.real[0]} to={S.real[1]}>
+        <div style={full}>
+          <Ring value={45} at={S.real[0] + 3} countFrames={Math.max(12, t.at(21, 9.3) - S.real[0])} size={280} label="ko business asli nahi lagta" sub="US survey, 2025 · DreamHost" />
         </div>
         <Sticker text="asli hai?" at={t.at(25, 11.1)} rotate={-7} style={{ position: "absolute", left: 600, top: 760 }} />
-      </SceneBlock>
+      </Scene>
 
-      {/* 4. Customers google first */}
-      <SceneBlock name="google" from={S.google[0]} to={S.google[1]}>
-        <div style={box}>
-          <Card at={S.google[0]}>
-            <Line first at={S.google[0] + 4}>
-              <span style={{ opacity: 0.55 }}>Google:</span> "cake shop near me"
-            </Line>
-            <Line at={t.at(34, 15.2)}>{no} Aapki dukaan: nahi mili</Line>
-            <Line at={t.at(37, 16.3)}>{yes} Competitor: mil gaya</Line>
-          </Card>
+      {/* 4. Search: you are missing, the competitor shows up */}
+      <Scene name="google" from={S.google[0]} to={S.google[1]}>
+        <div style={full}>
+          <SearchMock at={S.google[0]} query="mithai shop near me" typeTo={t.at(33, 14.5)} missAt={t.at(35, 15.5)} hitAt={t.at(38, 16.4)} you="Aapki dukaan" them="Competitor Sweets" />
         </div>
-      </SceneBlock>
+      </Scene>
 
-      {/* 5. Twist: it is not expensive */}
-      <SceneBlock name="twist" from={S.twist[0]} to={S.twist[1]}>
-        <div style={{ ...box, top: SAFE.top + 40 }}>
-          <Title text="Website mehengi hoti hai?" highlight="mehengi" at={t.at(39, 17.6)} size={104} showHandle={false} />
+      {/* 5. Twist: ₹50,000? gets slashed */}
+      <Scene name="twist" from={S.twist[0]} to={S.twist[1]}>
+        <div style={{ ...full, top: SAFE.top + 40 }}>
+          <WordsIn text="Website mehengi hoti hai?" accent={["mehengi"]} at={S.twist[0]} size={104} />
         </div>
-        <div style={{ position: "absolute", left: SAFE_BOX.x, top: 560 }}>
-          <Card at={t.at(41, 18.3)} style={{ padding: "28px 44px" }}>
-            <div style={{ fontSize: 120, fontWeight: 800, textDecoration: "line-through", textDecorationColor: "#E5484D", textDecorationThickness: 12, opacity: 0.8 }}>₹50,000?</div>
-          </Card>
+        <div style={{ ...col, top: 560 }}>
+          <PriceSlash text="₹50,000?" at={t.at(41, 18.3)} slashAt={t.at(43, 19.1)} />
         </div>
-        <Sticker text="bilkul nahi" at={t.at(43, 19.1)} rotate={-8} style={{ position: "absolute", left: 600, top: 760 }} />
-      </SceneBlock>
+        <Sticker text="bilkul nahi" at={t.at(43, 19.1) + 6} rotate={-8} style={{ position: "absolute", left: 540, top: 820 }} />
+      </Scene>
 
-      {/* 6. Offer */}
-      <SceneBlock name="offer" from={S.offer[0]} to={S.offer[1]}>
-        <div style={box}>
-          <Card at={S.offer[0]}>
-            <div style={{ fontSize: 52, fontWeight: 700 }}>Aapke business ki website</div>
-            <div style={{ height: 24 }} />
-            <BigNumber prefix="₹" to={5000} at={S.offer[0] + 6} countFrames={Math.max(10, t.at(52, 23.3) - S.offer[0] - 6)} size={200} tracked={false} />
-            <div style={{ fontSize: 48, fontWeight: 700, marginTop: 16 }}>mein ready</div>
-          </Card>
+      {/* 6. Offer: price counts up to ₹5,000 with a burst */}
+      <Scene name="offer" from={S.offer[0]} to={S.offer[1]}>
+        <div style={{ ...left, top: 300 }}>
+          <WordsIn text="Aapke business ki website" accent={["website"]} at={S.offer[0]} size={70} stagger={2} />
         </div>
-        <Sticker text="sirf" at={t.at(51, 23)} rotate={-10} style={{ position: "absolute", left: 640, top: 250 }} />
-      </SceneBlock>
+        <Burst at={t.at(52, 23.3)} x={300} y={680} />
+        <div style={{ ...left, top: 610 }}>
+          <BigNumber prefix="₹" to={5000} at={S.offer[0] + 10} countFrames={Math.max(10, t.at(52, 23.3) - S.offer[0] - 10)} size={124} />
+        </div>
+        <div style={{ ...left, top: 770 }}>
+          <WordsIn text="sirf, ready-made" accent={["sirf"]} at={t.at(51, 23)} size={46} />
+        </div>
+      </Scene>
 
-      {/* 7. What you get */}
-      <SceneBlock name="features" from={S.features[0]} to={S.features[1]}>
-        <div style={box}>
-          <Card at={S.features[0]}>
-            <Line first at={t.at(54, 24.3)}>{yes} Mobile pe perfect</Line>
-            <Line at={t.at(57, 25.8)}>{yes} WhatsApp button</Line>
-            <Line at={t.at(59, 26.9)}>{yes} Google Map location</Line>
-            <Line at={t.at(62, 28.3)}>{yes} Aapke rate</Line>
-          </Card>
+      {/* 7. Features: ticks draw while the phone highlights each part */}
+      <Scene name="features" from={S.features[0]} to={S.features[1]}>
+        <div style={{ ...left, top: 300 }}>
+          <FeatureCard />
         </div>
-        <Sticker text="₹5,000 mein" at={t.at(62, 28.3)} rotate={7} style={{ position: "absolute", left: 600, top: 250 }} />
-      </SceneBlock>
+      </Scene>
 
-      {/* 8. CTA */}
-      <SceneBlock name="end" from={S.end[0]} to={S.end[1]}>
-        <div style={box}>
-          <EndCard keyword="WEBSITE" lead="Website banwani hai?" sub="Hum DM karenge" at={t.at(65, 29.6)} />
+      {/* Phone that builds a website, kept on screen across offer + features */}
+      <Scene from={S.offer[0]} to={S.end[0]}>
+        <div style={{ position: "absolute", left: 600, top: 290 }}>
+          <PhoneSite
+            at={S.offer[0] + 2}
+            name="Sharma Sweets"
+            build={{ nav: build0, hero: build0 + 5, rates: build0 + 10, whatsapp: build0 + 15, map: build0 + 20 }}
+            focus={[
+              { at: t.at(54, 24.3), key: "phone" },
+              { at: t.at(57, 25.8), key: "whatsapp" },
+              { at: t.at(59, 26.9), key: "map" },
+              { at: t.at(64, 28.9), key: "rates" },
+            ]}
+          />
         </div>
-      </SceneBlock>
+      </Scene>
+
+      {/* 8. CTA: the keyword gets typed and posted */}
+      <Scene name="end" from={S.end[0]} to={S.end[1] + 30 /* no exit: last frame stays sharp for the loop */}>
+        <div style={full}>
+          <CommentCTA at={S.end[0]} keyword="WEBSITE" lead="Website banwani hai?" sub="Hum DM karenge" typeAt={t.at(66, 30)} sendAt={t.at(68, 31.3)} />
+        </div>
+      </Scene>
 
       {avatar !== "none" ? (
         <div style={{ position: "absolute", left: AVATAR_BOX.x, top: AVATAR_BOX.y }}>
