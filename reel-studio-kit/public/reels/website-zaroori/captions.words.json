@@ -1,1 +1,357 @@
-[]
+[
+  {
+    "word": "Website",
+    "start": 0,
+    "end": 0.44
+  },
+  {
+    "word": "nahi",
+    "start": 0.48,
+    "end": 0.72
+  },
+  {
+    "word": "hai?",
+    "start": 0.8,
+    "end": 0.96
+  },
+  {
+    "word": "Toh",
+    "start": 1.04,
+    "end": 1.6
+  },
+  {
+    "word": "customer",
+    "start": 1.68,
+    "end": 2.08
+  },
+  {
+    "word": "gaya.",
+    "start": 2.2,
+    "end": 2.76
+  },
+  {
+    "word": "Ek",
+    "start": 3.04,
+    "end": 3.241
+  },
+  {
+    "word": "survey",
+    "start": 3.241,
+    "end": 3.846
+  },
+  {
+    "word": "mein",
+    "start": 3.846,
+    "end": 4.248
+  },
+  {
+    "word": "39%",
+    "start": 4.248,
+    "end": 4.55
+  },
+  {
+    "word": "logon",
+    "start": 4.55,
+    "end": 5.054
+  },
+  {
+    "word": "ne",
+    "start": 5.054,
+    "end": 5.255
+  },
+  {
+    "word": "kaha",
+    "start": 5.255,
+    "end": 5.658
+  },
+  {
+    "word": "website",
+    "start": 5.658,
+    "end": 6.363
+  },
+  {
+    "word": "nahi",
+    "start": 6.363,
+    "end": 6.766
+  },
+  {
+    "word": "thi,",
+    "start": 6.766,
+    "end": 7.168
+  },
+  {
+    "word": "toh",
+    "start": 7.168,
+    "end": 7.47
+  },
+  {
+    "word": "kharida",
+    "start": 7.47,
+    "end": 8.175
+  },
+  {
+    "word": "hi",
+    "start": 8.175,
+    "end": 8.377
+  },
+  {
+    "word": "nahi.",
+    "start": 8.377,
+    "end": 8.88
+  },
+  {
+    "word": "Aur",
+    "start": 8.96,
+    "end": 9.287
+  },
+  {
+    "word": "45%",
+    "start": 9.287,
+    "end": 9.613
+  },
+  {
+    "word": "ko",
+    "start": 9.613,
+    "end": 9.831
+  },
+  {
+    "word": "aisa",
+    "start": 9.831,
+    "end": 10.267
+  },
+  {
+    "word": "business",
+    "start": 10.267,
+    "end": 11.138
+  },
+  {
+    "word": "asli",
+    "start": 11.138,
+    "end": 11.573
+  },
+  {
+    "word": "hi",
+    "start": 11.573,
+    "end": 11.791
+  },
+  {
+    "word": "nahi",
+    "start": 11.791,
+    "end": 12.227
+  },
+  {
+    "word": "lagta.",
+    "start": 12.227,
+    "end": 12.88
+  },
+  {
+    "word": "Customer",
+    "start": 12.96,
+    "end": 13.44
+  },
+  {
+    "word": "pehle",
+    "start": 13.48,
+    "end": 13.76
+  },
+  {
+    "word": "Google",
+    "start": 13.84,
+    "end": 14.16
+  },
+  {
+    "word": "karta",
+    "start": 14.2,
+    "end": 14.48
+  },
+  {
+    "word": "hai",
+    "start": 14.52,
+    "end": 14.64
+  },
+  {
+    "word": "wahan",
+    "start": 15.227,
+    "end": 15.44
+  },
+  {
+    "word": "aap",
+    "start": 15.52,
+    "end": 15.72
+  },
+  {
+    "word": "nahi,",
+    "start": 15.76,
+    "end": 16.24
+  },
+  {
+    "word": "toh",
+    "start": 16.28,
+    "end": 16.4
+  },
+  {
+    "word": "competitor.",
+    "start": 16.44,
+    "end": 17.12
+  },
+  {
+    "word": "Aur",
+    "start": 17.6,
+    "end": 17.72
+  },
+  {
+    "word": "website",
+    "start": 17.76,
+    "end": 18.24
+  },
+  {
+    "word": "banwana",
+    "start": 18.28,
+    "end": 18.72
+  },
+  {
+    "word": "mehenga",
+    "start": 18.8,
+    "end": 19.08
+  },
+  {
+    "word": "nahi",
+    "start": 19.12,
+    "end": 19.36
+  },
+  {
+    "word": "hai.",
+    "start": 19.4,
+    "end": 20
+  },
+  {
+    "word": "Hum",
+    "start": 20.08,
+    "end": 20.335
+  },
+  {
+    "word": "aapke",
+    "start": 20.335,
+    "end": 20.759
+  },
+  {
+    "word": "business",
+    "start": 20.759,
+    "end": 21.438
+  },
+  {
+    "word": "ki",
+    "start": 21.438,
+    "end": 21.608
+  },
+  {
+    "word": "website",
+    "start": 21.608,
+    "end": 22.202
+  },
+  {
+    "word": "banayenge",
+    "start": 22.202,
+    "end": 22.967
+  },
+  {
+    "word": "sirf",
+    "start": 22.967,
+    "end": 23.306
+  },
+  {
+    "word": "₹5,000",
+    "start": 23.306,
+    "end": 23.816
+  },
+  {
+    "word": "mein.",
+    "start": 23.816,
+    "end": 24.24
+  },
+  {
+    "word": "Mobile",
+    "start": 24.32,
+    "end": 24.64
+  },
+  {
+    "word": "pe",
+    "start": 24.72,
+    "end": 24.88
+  },
+  {
+    "word": "perfect,",
+    "start": 24.92,
+    "end": 25.68
+  },
+  {
+    "word": "WhatsApp",
+    "start": 25.76,
+    "end": 26.16
+  },
+  {
+    "word": "button,",
+    "start": 26.24,
+    "end": 26.8
+  },
+  {
+    "word": "Google",
+    "start": 26.88,
+    "end": 27.12
+  },
+  {
+    "word": "Map",
+    "start": 27.2,
+    "end": 27.36
+  },
+  {
+    "word": "location,",
+    "start": 27.44,
+    "end": 28.24
+  },
+  {
+    "word": "aur",
+    "start": 28.28,
+    "end": 28.48
+  },
+  {
+    "word": "aapke",
+    "start": 28.56,
+    "end": 28.8
+  },
+  {
+    "word": "rate.",
+    "start": 28.88,
+    "end": 29.6
+  },
+  {
+    "word": "Comment",
+    "start": 29.64,
+    "end": 29.92
+  },
+  {
+    "word": "karo",
+    "start": 30,
+    "end": 30.24
+  },
+  {
+    "word": "WEBSITE",
+    "start": 30.4,
+    "end": 30.96
+  },
+  {
+    "word": "hum",
+    "start": 31.333,
+    "end": 31.44
+  },
+  {
+    "word": "DM",
+    "start": 31.52,
+    "end": 31.76
+  },
+  {
+    "word": "karenge.",
+    "start": 31.84,
+    "end": 32.64
+  }
+]

@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit",
     "new": "node tools/new-reel.mjs",
     "voice": "NODE_USE_ENV_PROXY=1 node tools/voice/index.mjs",
+    "voice:timed": "NODE_USE_ENV_PROXY=1 node tools/voice/elevenlabs-timed.mjs",
     "sync": "node tools/sync.mjs",
     "lipsync": "node tools/lipsync.mjs",
     "check": "node tools/check.mjs",
