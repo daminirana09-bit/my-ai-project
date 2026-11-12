@@ -1,0 +1,19 @@
+{
+  "name": "reel-maker",
+  "private": true,
+  "type": "module",
+  "description": "Script -> ElevenLabs voice -> animated 9:16 Reel (MP4)",
+  "scripts": {
+    "voice": "NODE_USE_ENV_PROXY=1 node scripts/voice.mjs",
+    "voice:dry": "node scripts/voice.mjs --dry-run",
+    "render": "node scripts/render.mjs",
+    "preview": "node scripts/render.mjs --preview",
+    "reel": "npm run voice && npm run render"
+  },
+  "dependencies": {
+    "@elevenlabs/elevenlabs-js": "^2.78.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/jetbrains-mono": "^5.3.0"
+  }
+}

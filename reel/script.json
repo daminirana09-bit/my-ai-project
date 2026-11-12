@@ -1,0 +1,85 @@
+{
+  "slug": "scam-guard",
+  "title": "Papa ka AI scam-guard",
+  "handle": "@aapka.handle",
+  "voice": {
+    "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+    "model": "eleven_v4",
+    "language": "hi",
+    "stability": 0.45,
+    "similarityBoost": 0.8
+  },
+  "video": { "width": 1080, "height": 1920, "fps": 30, "sceneGap": 0.3, "outro": 1.6 },
+  "notes": "Each chunk = one caption line. `text` is what viewers read (Hinglish, *stars* = accent colour). `tts` is what the voice speaks (Devanagari reads Hindi more naturally).",
+  "scenes": [
+    {
+      "id": "message",
+      "label": "// 01 — the message",
+      "tint": "#E5484D",
+      "chunks": [
+        { "text": "Agar Papa ke phone pe", "tts": "अगर पापा के फ़ोन पर" },
+        { "text": "ye message aaye...", "tts": "ये मैसेज आए..." },
+        { "text": "toh bas ek click,", "tts": "तो बस एक क्लिक," },
+        { "text": "aur *₹48,000* gayab.", "tts": "और अड़तालीस हज़ार रुपये गायब।" }
+      ]
+    },
+    {
+      "id": "trap",
+      "label": "// 02 — the trap",
+      "tint": "#F5C542",
+      "chunks": [
+        { "text": "Message kehta hai —", "tts": "मैसेज कहता है —" },
+        { "text": "aapka *KYC* aaj expire ho raha hai,", "tts": "आपका KYC आज एक्सपायर हो रहा है," },
+        { "text": "turant update karein.", "tts": "तुरंत अपडेट करें।" },
+        { "text": "Link kholo,", "tts": "लिंक खोलो," },
+        { "text": "*OTP* daalo,", "tts": "OTP डालो," },
+        { "text": "aur khel *khatam*.", "tts": "और खेल ख़त्म।" }
+      ]
+    },
+    {
+      "id": "fix",
+      "label": "// 03 — the fix",
+      "tint": "#1F9D61",
+      "chunks": [
+        { "text": "Isliye maine Papa ke liye", "tts": "इसलिए मैंने पापा के लिए" },
+        { "text": "ek *AI scam-guard* bana diya.", "tts": "एक AI स्कैम-गार्ड बना दिया।" }
+      ]
+    },
+    {
+      "id": "check",
+      "label": "// 04 — the check",
+      "tint": "#E5484D",
+      "chunks": [
+        { "text": "Ab koi bhi shak wala message aaye,", "tts": "अब कोई भी शक वाला मैसेज आए," },
+        { "text": "Papa bas use copy karke", "tts": "पापा बस उसे कॉपी करके" },
+        { "text": "*Claude* mein paste karte hain.", "tts": "Claude में पेस्ट करते हैं।" },
+        { "text": "Aur jawab aata hai —", "tts": "और जवाब आता है —" },
+        { "text": "ye *fraud* hai.", "tts": "ये फ़्रॉड है।" },
+        { "text": "Link asli bank ka nahi hai,", "tts": "लिंक असली बैंक का नहीं है," },
+        { "text": "aur bank kabhi *OTP* nahi maangta.", "tts": "और बैंक कभी OTP नहीं माँगता।" }
+      ]
+    },
+    {
+      "id": "setup",
+      "label": "// 05 — setup",
+      "tint": "#1F9D61",
+      "chunks": [
+        { "text": "Setup sirf do minute ka hai.", "tts": "सेटअप सिर्फ़ दो मिनट का है।" },
+        { "text": "Ek — Claude pe *free* account banao.", "tts": "एक — Claude पर फ़्री अकाउंट बनाओ।" },
+        { "text": "Do — mera *scam-check prompt* paste karo.", "tts": "दो — मेरा स्कैम-चेक प्रॉम्प्ट पेस्ट करो।" },
+        { "text": "Bas, har shak wala message", "tts": "बस, हर शक वाला मैसेज" },
+        { "text": "usi chat mein bhejo.", "tts": "उसी चैट में भेजो।" }
+      ]
+    },
+    {
+      "id": "cta",
+      "label": "// 06 — get it",
+      "tint": "#D97757",
+      "chunks": [
+        { "text": "Prompt chahiye?", "tts": "प्रॉम्प्ट चाहिए?" },
+        { "text": "Comment karo *SCAM* —", "tts": "कमेंट करो SCAM —" },
+        { "text": "prompt aapko mil jayega.", "tts": "प्रॉम्प्ट आपको मिल जाएगा।" }
+      ]
+    }
+  ]
+}
