@@ -20,9 +20,9 @@ Route::post('/setup', [SetupController::class, 'store'])->middleware('throttle:5
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:60,1'); // per-email lock is inside the controller
     Route::get('/login/otp', [AuthController::class, 'showOtp'])->name('login.otp');
-    Route::post('/login/otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:5,1');
+    Route::post('/login/otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:60,1');
 });
 
 Route::middleware('auth')->group(function () {

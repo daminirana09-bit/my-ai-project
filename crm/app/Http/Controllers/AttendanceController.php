@@ -39,7 +39,7 @@ class AttendanceController extends Controller
 
     public function person(Request $request, User $user)
     {
-        abort_unless(in_array($user->id, User::visibleTo($request->user())->pluck('id')->all(), true), 404);
+        abort_unless($request->user()->canSeeUser($user->id), 404);
 
         return $this->personMonth($request, $user);
     }
@@ -88,7 +88,7 @@ class AttendanceController extends Controller
     public function override(Request $request, User $user)
     {
         $me = $request->user();
-        abort_unless($me->canManage() && in_array($user->id, User::visibleTo($me)->pluck('id')->all(), true), 404);
+        abort_unless($me->canManage() && $me->canSeeUser($user->id), 404);
         $data = $request->validate([
             'date' => ['required', 'date'],
             'status' => ['required', Rule::in(['full_day', 'half_day', 'absent', 'leave', 'weekly_off', 'auto'])],

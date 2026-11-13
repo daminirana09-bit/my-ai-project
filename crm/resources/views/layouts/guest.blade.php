@@ -10,6 +10,7 @@
 <body>
 <div class="auth @yield('authclass')">
   <div class="card">@yield('content')</div>
+  @include('partials.credit')
 </div>
 </body>
 </html>

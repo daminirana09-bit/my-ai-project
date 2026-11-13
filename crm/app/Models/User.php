@@ -64,6 +64,14 @@ class User extends Authenticatable
         return [$this->id];
     }
 
+    /** True if this user may see the other person's data (self, own team, or anyone for admin). */
+    public function canSeeUser(int|string|null $userId): bool
+    {
+        $ids = $this->visibleUserIds();
+
+        return $userId !== null && ($ids === null || in_array((int) $userId, array_map('intval', $ids), true));
+    }
+
     public function scopeActive(Builder $q): Builder { return $q->where('active', true); }
 
     /** Users this user may assign leads to or view in reports. */

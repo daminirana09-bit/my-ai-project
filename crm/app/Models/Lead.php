@@ -81,8 +81,7 @@ class Lead extends Model
 
     public function isVisibleTo(User $user): bool
     {
-        $ids = $user->visibleUserIds();
-        return $ids === null || in_array((int) $this->owner_id, array_map('intval', $ids), true);
+        return $user->isAdmin() || $user->canSeeUser($this->owner_id);
     }
 
     public function maskedPhone(): string

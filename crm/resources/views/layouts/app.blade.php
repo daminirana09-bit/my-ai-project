@@ -61,6 +61,7 @@
       </header>
       @include('partials.flash')
       @yield('content')
+      @include('partials.credit')
     </div>
   </main>
 </div>

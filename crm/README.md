@@ -1,5 +1,7 @@
 # Sales CRM for pharma manufacturers
 
+© 2026 Solvix Web · Designed & developed by **Solvix Web** · Damini Rana · +91 82190 60177
+
 One installation per company. Each company sets its own name, logo, timings and team.
 
 **What it does today**

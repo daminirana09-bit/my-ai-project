@@ -323,5 +323,9 @@
  "Your session expired. Go back, refresh the page and try again.": "आपका सेशन खत्म हो गया। पीछे जाकर पेज रिफ़्रेश करें और दोबारा कोशिश करें।",
  "Too many attempts. Please wait a minute and try again.": "बहुत ज़्यादा कोशिशें। एक मिनट रुककर दोबारा कोशिश करें।",
  "Something went wrong on the server. Please try again. If it keeps happening, tell your admin.": "सर्वर पर कुछ गड़बड़ हुई। दोबारा कोशिश करें। बार-बार हो तो एडमिन को बताएँ।",
- "The CRM is being updated. Please try again in a few minutes.": "CRM अपडेट हो रहा है। कुछ मिनट बाद कोशिश करें।"
+ "The CRM is being updated. Please try again in a few minutes.": "CRM अपडेट हो रहा है। कुछ मिनट बाद कोशिश करें।",
+ "All rights reserved.": "सर्वाधिकार सुरक्षित।",
+ "Designed & developed by": "डिज़ाइन और डेवलप किया:",
+ "Phone or GSTIN changed on another lead": "दूसरी लीड में फ़ोन या GSTIN बदला गया",
+ "Too many wrong tries. Try again in :s seconds.": "बहुत बार गलत कोशिश हुई। :s सेकंड बाद दोबारा कोशिश करें।"
 }

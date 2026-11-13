@@ -44,9 +44,8 @@ class TargetController extends Controller
         $me = $request->user();
         $month = $this->month($request);
         $data = $request->validate(['targets' => ['array'], 'targets.*' => ['nullable', 'numeric', 'min:0']]);
-        $allowed = User::visibleTo($me)->pluck('id')->all();
         foreach ($data['targets'] ?? [] as $userId => $amount) {
-            if (! in_array((int) $userId, $allowed, true)) {
+            if (! $me->canSeeUser($userId)) {
                 continue;
             }
             if ($amount === null || $amount === '') {
@@ -89,7 +88,7 @@ class TargetController extends Controller
     public function updateSale(Request $request, Sale $sale)
     {
         $me = $request->user();
-        abort_unless($me->canManage() && in_array($sale->user_id, User::visibleTo($me)->pluck('id')->all(), true), 404);
+        abort_unless($me->canManage() && $me->canSeeUser($sale->user_id), 404);
         $sale->update($request->validate(['status' => ['required', Rule::in(array_keys(Sale::STATUSES))]]));
         AuditLog::record('sale.status', "sale:{$sale->id}", ['status' => $sale->status]);
 

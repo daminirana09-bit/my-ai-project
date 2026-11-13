@@ -91,8 +91,14 @@ class LeadController extends Controller
         $this->authorizeLead($request, $lead);
         $data = $this->validated($request);
 
+        // One client = one lead. Changing the phone/GSTIN to another lead's is never allowed;
+        // if that lead belongs to someone else, it is also reported as a clash.
         $existing = $this->clashes->findExisting($data['phone'] ?? null, $data['gstin'] ?? null, $lead->id);
-        if ($existing && (int) $existing->owner_id !== (int) $lead->owner_id) {
+        if ($existing) {
+            if ($existing->owner_id && (int) $existing->owner_id !== (int) $lead->owner_id && $lead->owner) {
+                $this->clashes->report($existing, $lead->owner, 'added_again', __('Phone or GSTIN changed on another lead'));
+            }
+
             return back()->withInput()->withErrors(['phone' => __('Another lead already has this phone number or GSTIN.')]);
         }
         $oldStatus = $lead->status;

@@ -323,5 +323,9 @@
  "Your session expired. Go back, refresh the page and try again.": "Aapka session khatam ho gaya. Peeche jaakar page refresh kariye aur dobara koshish kariye.",
  "Too many attempts. Please wait a minute and try again.": "Bahut zyada koshishein. Ek minute ruk kar dobara try kariye.",
  "Something went wrong on the server. Please try again. If it keeps happening, tell your admin.": "Server par kuch gadbad hui. Dobara try kariye. Baar-baar ho to admin ko bataiye.",
- "The CRM is being updated. Please try again in a few minutes.": "CRM update ho raha hai. Kuch minute baad try kariye."
+ "The CRM is being updated. Please try again in a few minutes.": "CRM update ho raha hai. Kuch minute baad try kariye.",
+ "All rights reserved.": "Sabhi adhikar surakshit.",
+ "Designed & developed by": "Design aur develop kiya:",
+ "Phone or GSTIN changed on another lead": "Doosri lead mein phone ya GSTIN badla gaya",
+ "Too many wrong tries. Try again in :s seconds.": "Bahut baar galat koshish hui. :s second baad dobara try kariye."
 }
