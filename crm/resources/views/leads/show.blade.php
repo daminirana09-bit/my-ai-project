@@ -1,0 +1,70 @@
+@extends('layouts.app')
+@section('title', $lead->firm_name)
+@section('content')
+@php $me = auth()->user(); @endphp
+<div class="head">
+  <div><h1>{{ $lead->firm_name }}</h1><p>{{ $lead->contact_name }} · {{ $lead->city }}{{ $lead->state ? ', '.$lead->state : '' }} · <span class="pill {{ $lead->status }}">{{ __(\App\Models\Lead::STATUSES[$lead->status]) }}</span></p></div>
+  <div class="row"><a class="btn" href="{{ route('leads.edit', $lead) }}">{{ __('Edit') }}</a></div>
+</div>
+
+@if($lead->clashes->isNotEmpty() && $me->canManage())
+  <div class="flash warn">{{ __('Clash: :names also tried to work this client.', ['names' => $lead->clashes->pluck('otherUser.name')->filter()->join(', ')]) }} <a href="{{ route('clashes.index') }}">{{ __('Resolve') }}</a></div>
+@endif
+
+<div class="grid g21">
+  <div class="grid">
+    <form method="post" action="{{ route('leads.activity', $lead) }}" class="card form">
+      @csrf
+      <h2>{{ __('Log a call or update') }}</h2>
+      <div class="f3">
+        <div class="field"><label for="type">{{ __('Type') }}</label><select id="type" name="type">@foreach(['call', 'whatsapp', 'visit', 'note'] as $t)<option value="{{ $t }}">{{ __(\App\Models\LeadActivity::TYPES[$t]) }}</option>@endforeach</select></div>
+        <div class="field"><label for="outcome">{{ __('Call result') }}</label><select id="outcome" name="outcome"><option value="">—</option>@foreach(\App\Models\LeadActivity::CALL_OUTCOMES as $k => $label)<option value="{{ $k }}">{{ __($label) }}</option>@endforeach</select></div>
+        <div class="field"><label for="a_status">{{ __('Change status') }}</label><select id="a_status" name="status"><option value="">{{ __('No change') }}</option>@foreach(\App\Models\Lead::STATUSES as $k => $label)<option value="{{ $k }}">{{ __($label) }}</option>@endforeach</select></div>
+      </div>
+      <div class="f2">
+        <div class="field"><label for="note">{{ __('What happened?') }}</label><input id="note" name="note"></div>
+        <div class="field"><label for="a_next">{{ __('Next follow-up') }}</label><input type="date" id="a_next" name="next_follow_up_on"></div>
+      </div>
+      <div><button class="btn p">{{ __('Save') }}</button></div>
+    </form>
+
+    <div class="card"><h2>{{ __('History') }}</h2>
+      <div class="timeline">
+        @forelse($lead->activities as $a)
+          <div class="tl {{ $a->type }}"><b>{{ __(\App\Models\LeadActivity::TYPES[$a->type] ?? $a->type) }}</b>@if($a->outcome) · {{ __(\App\Models\LeadActivity::CALL_OUTCOMES[$a->outcome] ?? $a->outcome) }}@endif
+            <div>{{ $a->note }}</div><span class="small muted">{{ $a->user?->name }} · {{ $a->occurred_at->format('d M Y, h:i A') }}</span></div>
+        @empty
+          <p class="muted">{{ __('No activity yet.') }}</p>
+        @endforelse
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card"><h2>{{ __('Details') }}</h2>
+      <table><tbody>
+        <tr><td class="muted">{{ __('Phone / WhatsApp') }}</td><td class="mono">{{ $lead->phone ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Email') }}</td><td>{{ $lead->email ?: '—' }}</td></tr>
+        <tr><td class="muted">GSTIN</td><td class="mono">{{ $lead->gstin ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Source') }}</td><td>{{ $lead->source ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Client type') }}</td><td>{{ $lead->client_type ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Requirement') }}</td><td>{{ $lead->requirement ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Expected value') }}</td><td>{{ $lead->expected_value ? inr($lead->expected_value) : '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Next follow-up') }}</td><td>{{ $lead->next_follow_up_on?->format('d M Y') ?? '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Last contact') }}</td><td>{{ $lead->last_contact_at?->diffForHumans() ?? '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Salesperson') }}</td><td>{{ $lead->owner?->name ?? __('Unassigned') }}</td></tr>
+        <tr><td class="muted">{{ __('Added') }}</td><td>{{ $lead->created_at->format('d M Y') }} · {{ $lead->created_via === 'import' ? __('Import') : __('Manual') }}</td></tr>
+      </tbody></table>
+      @if($lead->notes)<p class="note">{{ $lead->notes }}</p>@endif
+    </div>
+    @if($me->canManage())
+      <form method="post" action="{{ route('leads.assign', $lead) }}" class="card form">
+        @csrf
+        <h2>{{ __('Assign to salesperson') }}</h2>
+        <div class="field"><label for="owner_id">{{ __('Salesperson') }}</label><select id="owner_id" name="owner_id">@foreach($owners as $o)<option value="{{ $o->id }}" @selected($lead->owner_id === $o->id)>{{ $o->name }}</option>@endforeach</select></div>
+        <div><button class="btn">{{ __('Assign') }}</button></div>
+      </form>
+    @endif
+  </div>
+</div>
+@endsection
