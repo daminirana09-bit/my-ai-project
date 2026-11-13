@@ -1,4 +1,4 @@
-<title>Pharma Sales OS</title>
+<title>Vatave Healthcare Sales OS</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,7 @@
   --wa-bg:#e9e3d8; --wa-in:#ffffff; --wa-out:#d5f3c6; --wa-head:#0d6652; --wa-fg:#14202a;
   --shadow:0 1px 2px rgba(18,32,41,.05),0 6px 20px rgba(18,32,41,.06);
   --f-display:"Sora","Segoe UI",system-ui,sans-serif;
-  --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,"Noto Sans","Nirmala UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   --r:10px;
 }
@@ -52,10 +52,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .rail{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow-y:auto;background:var(--surface);border-right:1px solid var(--line);
   padding-block:18px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:14px;display:flex;flex-direction:column;gap:18px}
 .brand{display:flex;gap:10px;align-items:center}
-.brand b{font-family:var(--f-display);font-size:1rem;display:block;line-height:1.2}
-.brand small{color:var(--muted);font-size:.74rem}
-.capsule{width:30px;height:14px;border-radius:999px;transform:rotate(-35deg);flex:none;
-  background:linear-gradient(90deg,var(--accent) 50%,var(--ai) 50%);box-shadow:inset 0 0 0 1.5px var(--surface)}
+#brandLogo{display:flex}
+.brand b{font-family:var(--f-display);font-size:1rem;display:block;line-height:1.15}
+.brand small{color:var(--muted);font-size:.74rem;letter-spacing:.04em}
+.logo{width:36px;height:36px;flex:none;display:block}
+.logo .bg{fill:var(--accent)} .logo .l{fill:var(--accent-fg)} .logo .r{fill:var(--ai-soft)}
 .navgrp{display:flex;flex-direction:column;gap:2px}
 .navgrp>span{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);padding:0 10px 4px;font-weight:600}
 .nav{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;color:var(--fg);text-decoration:none;font-weight:500;font-size:.88rem}
@@ -63,19 +64,23 @@ button,input,select,textarea{font:inherit;color:inherit}
 .nav.on{background:var(--accent-soft);color:var(--accent)}
 .nav i{font-style:normal;font-size:.7rem;font-weight:600;padding:1px 7px;border-radius:999px;background:var(--bad-soft);color:var(--bad)}
 .nav i.ai{background:var(--ai-soft);color:var(--ai)}
+.nav i.new{background:var(--accent);color:var(--accent-fg)}
 .rail-foot{margin-top:auto;font-size:.74rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
 
 .main{min-width:0;padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .wrap{max-width:1240px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
 .top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.ask{flex:1 1 380px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 4px 4px 12px;min-width:0}
+.ask{flex:1 1 340px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 4px 4px 12px;min-width:0}
 .ask input{flex:1;min-width:0;border:0;background:transparent;padding:6px 2px;outline:none}
-.who{display:flex;gap:8px;align-items:center;margin-left:auto}
-.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:.78rem}
+.who{display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap}
+.avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:.78rem;flex:none}
 .demo{font-size:.72rem;color:var(--warn);background:var(--warn-soft);padding:3px 9px;border-radius:999px;font-weight:600}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--surface)}
+.seg button{border:0;background:transparent;border-radius:999px;padding:4px 11px;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 
 .vhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
-.vhead p{color:var(--muted);margin-top:4px;max-width:70ch}
+.vhead p{color:var(--muted);margin-top:4px;max-width:72ch}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;min-width:0}
@@ -101,12 +106,13 @@ button,input,select,textarea{font:inherit;color:inherit}
 .pill.good{background:var(--good-soft);color:var(--good)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
 .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.accent{background:var(--accent-soft);color:var(--accent)}
 .pill.ai{background:var(--ai-soft);color:var(--ai)}
-.ai-tag{font-family:var(--f-mono);font-size:.68rem;font-weight:500;padding:1px 6px;border-radius:5px;background:var(--ai-soft);color:var(--ai);letter-spacing:.04em}
+.ai-tag{font-family:var(--f-mono);font-size:.68rem;font-weight:500;padding:1px 6px;border-radius:5px;background:var(--ai-soft);color:var(--ai);letter-spacing:.04em;white-space:nowrap}
 
 .btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 12px;cursor:pointer;font-weight:500;font-size:.84rem;white-space:nowrap}
 a.btn{text-decoration:none;color:var(--fg);display:inline-block}
 a.btn-primary{color:var(--accent-fg)}
 .btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn:disabled{opacity:.55;cursor:wait}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
 .btn-primary:hover{color:var(--accent-fg);filter:brightness(1.08)}
 .btn-ai{background:var(--ai-soft);border-color:transparent;color:var(--ai)}
@@ -130,7 +136,6 @@ td.r,th.r{text-align:right}
 .task b{font-weight:600;display:block}
 .task small{color:var(--muted);font-size:.8rem;display:block}
 
-/* chart */
 .chart svg{width:100%;height:auto;display:block}
 .chart .tick{fill:var(--muted);font-size:11px;font-family:var(--f-mono)}
 .chart .grid{stroke:var(--line);stroke-width:1}
@@ -142,7 +147,6 @@ td.r,th.r{text-align:right}
 .hbar .trk b.over{background:var(--good)}
 .hbar .trk u{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--fg);text-decoration:none}
 
-/* kanban */
 .kanban{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(240px,1fr);gap:12px;overflow-x:auto;padding-bottom:6px}
 .col{background:var(--surface-2);border-radius:var(--r);padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
 .col h3{display:flex;justify-content:space-between;font-size:.8rem;padding:2px 4px}
@@ -156,16 +160,14 @@ td.r,th.r{text-align:right}
 .lead.flash{animation:flash 1.6s ease}
 @keyframes flash{0%{box-shadow:0 0 0 3px var(--ai)}100%{box-shadow:0 0 0 0 transparent}}
 
-/* drawer */
 .scrim{position:fixed;inset:0;background:rgba(8,16,22,.38);z-index:40}
 .drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);z-index:41;border-left:1px solid var(--line);overflow-y:auto;
   padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));padding-left:20px;padding-right:max(20px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
 .draft{background:var(--wa-out);color:var(--wa-fg);border-radius:10px;padding:12px;white-space:pre-wrap;font-size:.86rem}
 .reasons{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none;font-size:.84rem}
 .reasons li{display:flex;gap:8px}
-.reasons li span{font-family:var(--f-mono);font-weight:500;min-width:34px}
+.reasons li span{font-family:var(--f-mono);font-weight:500;min-width:34px;flex:none}
 
-/* phone / whatsapp */
 .phone{max-width:390px;width:100%;margin:0 auto;border-radius:28px;border:8px solid var(--fg);overflow:hidden;background:var(--wa-bg);display:flex;flex-direction:column;height:640px;box-shadow:var(--shadow)}
 .wa-h{background:var(--wa-head);color:#fff;padding:10px 14px;display:flex;gap:10px;align-items:center}
 .wa-h .avatar{background:#fff;color:var(--wa-head)}
@@ -177,6 +179,9 @@ td.r,th.r{text-align:right}
 .msg ol{margin:6px 0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
 .msg time{display:block;text-align:right;font-size:.66rem;opacity:.6;margin-top:2px}
 .msg .done{text-decoration:line-through;opacity:.55}
+.msg .tr{border-top:1px dashed currentColor;margin-top:6px;padding-top:5px;font-size:.8rem;opacity:.85}
+.msg .tr span{font-family:var(--f-mono);font-size:.66rem;font-weight:500;letter-spacing:.04em;text-transform:uppercase;opacity:.75;display:block}
+.msg .orig{font-size:.95rem;line-height:1.55}
 .voice{display:flex;align-items:center;gap:8px}
 .voice .wave{display:flex;gap:2px;align-items:center;height:20px}
 .voice .wave i{width:3px;background:currentColor;opacity:.55;border-radius:2px}
@@ -189,16 +194,44 @@ td.r,th.r{text-align:right}
 .wa-q{padding:8px;display:flex;gap:6px;overflow-x:auto;background:var(--wa-bg);border-top:1px solid rgba(0,0,0,.06)}
 .wa-q button{flex:none;border:0;background:var(--wa-in);color:var(--wa-fg);border-radius:999px;padding:7px 12px;font-size:.78rem;cursor:pointer;box-shadow:0 1px 1px rgba(0,0,0,.1)}
 
-/* orders */
+/* client chat inbox */
+.inbox{display:grid;grid-template-columns:290px minmax(0,1fr);gap:14px;align-items:start}
+.clist{display:flex;flex-direction:column;gap:6px}
+.conv{display:flex;flex-direction:column;gap:3px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 34px 10px 12px;cursor:pointer;position:relative;width:100%}
+.conv:hover{border-color:var(--accent)}
+.conv.on{border-color:var(--accent);background:var(--accent-soft)}
+.conv .t{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.conv b{font-size:.86rem}
+.conv small{color:var(--muted);font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv .lg{font-size:.74rem;font-weight:600;color:var(--ai);white-space:nowrap}
+.conv i{position:absolute;right:10px;bottom:9px;font-style:normal;font-size:.68rem;font-weight:600;background:var(--good);color:#fff;border-radius:999px;padding:0 6px}
+.cpane{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.cpane .chd{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.cpane .wa-body{background:var(--wa-bg);min-height:300px;max-height:460px}
+.cpane .msg{max-width:78%}
+.cfoot{padding:12px 16px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
+.qr{display:flex;gap:6px;flex-wrap:wrap}
+.qr button{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:5px 11px;font-size:.78rem;cursor:pointer;text-align:left}
+.qr button:hover{border-color:var(--accent)}
+.compose{display:flex;gap:8px;align-items:flex-end}
+.compose textarea{flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 10px;min-height:44px;max-height:140px;resize:vertical}
+.preview{font-size:.82rem;background:var(--ai-soft);border-radius:8px;padding:8px 10px}
+.preview span{font-family:var(--f-mono);font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--ai);display:block}
+.status{font-size:.78rem;color:var(--muted);min-height:1em}
+details.test{font-size:.82rem}
+details.test summary{cursor:pointer;color:var(--accent);font-weight:500}
+details.test .compose{margin-top:8px}
+.langs{display:flex;flex-wrap:wrap;gap:6px}
+@media (max-width:900px){.inbox{grid-template-columns:minmax(0,1fr)}.clist{flex-direction:row;overflow-x:auto;padding-bottom:4px}.conv{min-width:210px;max-width:230px}}
+
 .track{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-top:10px}
 .track span{height:6px;border-radius:3px;background:var(--surface-2)}
 .track span.d{background:var(--good)} .track span.c{background:var(--accent)} .track span.x{background:var(--bad)}
-.tl{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.tl{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
 .tl li{position:relative;padding:0 0 10px 16px;font-size:.82rem}
 .tl li::before{content:"";position:absolute;left:-7px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--line)}
 .tl li.d::before{background:var(--good);border-color:var(--good)} .tl li.c::before{background:var(--accent);border-color:var(--accent)} .tl li.x::before{background:var(--bad);border-color:var(--bad)}
 
-/* forms */
 .field{display:flex;flex-direction:column;gap:4px;min-width:0}
 .field label{font-size:.76rem;font-weight:600;color:var(--muted)}
 .field input,.field select,.field textarea{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;width:100%;min-width:0}
@@ -208,10 +241,11 @@ td.r,th.r{text-align:right}
 .note.bad{background:var(--bad-soft)}
 .note .ai-tag{flex:none}
 
-/* quote document */
 .qdoc{background:#fff;color:#16222c;border-radius:6px;padding:22px;font-size:.8rem;border:1px solid var(--line)}
 .qdoc h3{font-family:var(--f-display);font-size:1rem;color:#16222c}
 .qdoc .hd{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:2px solid #16222c;padding-bottom:10px;margin-bottom:12px}
+.qdoc .hd .lt{display:flex;gap:10px;align-items:center}
+.qdoc .logo .bg{fill:#1b5ea6} .qdoc .logo .l{fill:#fff} .qdoc .logo .r{fill:#fbeedf}
 .qdoc table{font-size:.78rem}
 .qdoc th,.qdoc td{border-color:#dfe5ea;color:#16222c;padding:6px}
 .qdoc .tot td{font-weight:600}
@@ -236,6 +270,7 @@ td.r,th.r{text-align:right}
     padding-block:8px;padding-right:max(16px,env(safe-area-inset-right,0px))}
   body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:25;background:var(--surface)}
   .brand div,.rail-foot,.navgrp>span{display:none}
+  .logo{width:30px;height:30px}
   #nav{display:flex;gap:4px}
   .navgrp{flex-direction:row;gap:4px}
   .nav{white-space:nowrap;padding:6px 10px}
@@ -246,9 +281,9 @@ td.r,th.r{text-align:right}
 
 <div class="app">
   <aside class="rail">
-    <div class="brand"><span class="capsule" aria-hidden="true"></span><div><b>Pharma Sales OS</b><small>Arogya Lifesciences · Baddi, H.P.</small></div></div>
+    <div class="brand"><span id="brandLogo"></span><div><b>Vatave Healthcare</b><small>SALES OS</small></div></div>
     <nav id="nav" aria-label="Modules"></nav>
-    <div class="rail-foot">Demo version · sab data sample hai<br>Plan: Growth · 4 sales users</div>
+    <div class="rail-foot" id="railFoot"></div>
   </aside>
   <main class="main">
     <div class="wrap">
@@ -256,10 +291,14 @@ td.r,th.r{text-align:right}
         <form id="askForm" class="ask" autocomplete="off">
           <span class="ai-tag">AI</span>
           <label for="askIn" class="sr">Ask AI</label>
-          <input id="askIn" placeholder="Poochiye: kis client ka reorder pending hai?">
-          <button class="btn btn-primary btn-sm" type="submit">Ask</button>
+          <input id="askIn">
+          <button class="btn btn-primary btn-sm" type="submit" id="askBtn">Ask</button>
         </form>
-        <div class="who"><span class="demo">Sample data</span><span class="avatar" title="Rakesh Kumar, Sales Head">RK</span></div>
+        <div class="who">
+          <div class="seg" role="group" aria-label="App language" id="langSeg"></div>
+          <span class="demo" id="demoTag"></span>
+          <span class="avatar" title="Rakesh Kumar, Sales Head">RK</span>
+        </div>
       </header>
       <div id="askOut" class="card askout" hidden></div>
       <section id="view" class="stack" style="gap:18px"></section>
@@ -271,12 +310,19 @@ td.r,th.r{text-align:right}
 <div id="toast" class="toast" hidden role="status"></div>
 
 <script>
+/* ---------- language ---------- */
+let lang='hi';
+try{const s=localStorage.getItem('vatave-lang');if(s==='en'||s==='hi')lang=s}catch(_){}
+const T=(en,hi)=>lang==='en'?en:hi;
+const L=x=>Array.isArray(x)?T(x[0],x[1]):x;
+const CO='Vatave Healthcare';
+
 /* ---------- sample data ---------- */
 const reps=[
- {id:'rahul',name:'Rahul Sharma',region:'North',target:3500000,achieved:2140000,calls:142,visits:38,orders:21,overdue:3},
- {id:'priya',name:'Priya Nair',region:'South',target:3000000,achieved:2380000,calls:126,visits:41,orders:24,overdue:0},
- {id:'amit',name:'Amit Verma',region:'West',target:2800000,achieved:1520000,calls:98,visits:22,orders:13,overdue:6},
- {id:'sunita',name:'Sunita Das',region:'East',target:2200000,achieved:1380000,calls:111,visits:30,orders:15,overdue:2}
+ {id:'rahul',name:'Rahul Sharma',region:'North',target:3500000,achieved:2140000,calls:142,visits:38,orders:21,overdue:3,lg:'English'},
+ {id:'priya',name:'Priya Nair',region:'South',target:3000000,achieved:2380000,calls:126,visits:41,orders:24,overdue:0,lg:'English'},
+ {id:'amit',name:'Amit Verma',region:'West',target:2800000,achieved:1520000,calls:98,visits:22,orders:13,overdue:6,lg:'Hinglish'},
+ {id:'sunita',name:'Sunita Das',region:'East',target:2200000,achieved:1380000,calls:111,visits:30,orders:15,overdue:2,lg:'Hinglish'}
 ];
 const P={
  1:{s:'PCM 650',c:'Paracetamol 650 mg',f:'Tablet',pk:'10×10 Blister',rate:9.8,moq:10000,cat:'Analgesic',st:'Available'},
@@ -284,56 +330,59 @@ const P={
  3:{s:'Aceclo-P-S',c:'Aceclofenac 100 mg + Paracetamol 325 mg + Serratiopeptidase 15 mg',f:'Tablet',pk:'10×10 Alu-Alu',rate:28,moq:5000,cat:'Analgesic',st:'Available'},
  4:{s:'Pan-D',c:'Pantoprazole 40 mg + Domperidone 30 mg SR',f:'Capsule',pk:'10×10 Alu-Alu',rate:22.4,moq:10000,cat:'Gastro',st:'Available'},
  5:{s:'Panto 40',c:'Pantoprazole 40 mg',f:'Tablet',pk:'10×10 Alu-Alu',rate:11.2,moq:10000,cat:'Gastro',st:'Available'},
- 6:{s:'Azithro 500',c:'Azithromycin 500 mg',f:'Tablet',pk:'10×3 Alu-Alu',rate:31.5,moq:5000,cat:'Antibiotic',st:'Booked till 5 Dec'},
+ 6:{s:'Azithro 500',c:'Azithromycin 500 mg',f:'Tablet',pk:'10×3 Alu-Alu',rate:31.5,moq:5000,cat:'Antibiotic',st:'Booked'},
  7:{s:'Cefixime 200',c:'Cefixime 200 mg',f:'Tablet',pk:'10×10 Alu-Alu',rate:38,moq:5000,cat:'Antibiotic',st:'Available'},
  8:{s:'Monte-LC',c:'Montelukast 10 mg + Levocetirizine 5 mg',f:'Tablet',pk:'10×10 Alu-Alu',rate:16.8,moq:10000,cat:'Respiratory',st:'Available'},
  9:{s:'Amox-Clav 625',c:'Amoxicillin 500 mg + Clavulanic Acid 125 mg',f:'Tablet',pk:'10×6 Alu-Alu',rate:78,moq:5000,cat:'Antibiotic',st:'Available'},
- 10:{s:'D3 60K',c:'Cholecalciferol 60,000 IU',f:'Softgel',pk:'4 caps blister',rate:19,moq:20000,cat:'Nutraceutical',st:'New launch'},
+ 10:{s:'D3 60K',c:'Cholecalciferol 60,000 IU',f:'Softgel',pk:'4 caps blister',rate:19,moq:20000,cat:'Nutraceutical',st:'New'},
  11:{s:'Ambro-Levo',c:'Ambroxol 30 mg + Levosalbutamol 1 mg + Guaifenesin 50 mg / 5 ml',f:'Syrup',pk:'100 ml PET bottle',rate:27,moq:10000,cat:'Respiratory',st:'Available'},
  12:{s:'Multivit',c:'Multivitamin + Multimineral + Antioxidant',f:'Capsule',pk:'10×10 Blister',rate:21,moq:10000,cat:'Nutraceutical',st:'Available'},
  13:{s:'Calci-D3',c:'Calcium Carbonate 1250 mg + Vitamin D3 500 IU',f:'Tablet',pk:'10×15 Strip',rate:13.5,moq:10000,cat:'Nutraceutical',st:'Available'},
  14:{s:'Ondan 4 MD',c:'Ondansetron 4 mg (mouth dissolving)',f:'Tablet',pk:'10×10 Alu-Alu',rate:8.2,moq:10000,cat:'Gastro',st:'Available'},
  15:{s:'Oflox-OZ',c:'Ofloxacin 200 mg + Ornidazole 500 mg',f:'Tablet',pk:'10×10 Alu-Alu',rate:24,moq:10000,cat:'Antibiotic',st:'Available'}
 };
+const stLabel=s=>({Available:T('Available','Available hai'),Booked:T('Booked till 5 Dec','5 Dec tak booked'),New:T('New launch','Naya launch')}[s]);
 const clients=[
- {id:1,name:'Shree Pharma',city:'Indore',type:'PCD Franchise',rep:'amit',last:47,cycle:30,avg:142000,ltv:1840000,buys:[1,5],cross:4},
- {id:2,name:'Medilife Healthcare',city:'Lucknow',type:'Third-party',rep:'rahul',last:18,cycle:30,avg:725000,ltv:4260000,buys:[1,2],cross:3},
- {id:3,name:'Om Healthcare',city:'Ahmedabad',type:'Third-party',rep:'amit',last:26,cycle:35,avg:560000,ltv:2890000,buys:[4,5],cross:8},
- {id:4,name:'Sai Distributors',city:'Nagpur',type:'Distributor',rep:'amit',last:96,cycle:30,avg:186000,ltv:1120000,buys:[7,1],cross:6},
- {id:5,name:'Kerala Medi Agencies',city:'Kochi',type:'Distributor',rep:'priya',last:12,cycle:21,avg:336000,ltv:3550000,buys:[5,11],cross:10},
- {id:6,name:'Zenlife Formulations',city:'Hyderabad',type:'Third-party',rep:'priya',last:33,cycle:30,avg:760000,ltv:5120000,buys:[7,9],cross:6},
- {id:7,name:'Ganga Pharmaceuticals',city:'Patna',type:'PCD Franchise',rep:'sunita',last:58,cycle:30,avg:118000,ltv:960000,buys:[2,13],cross:12},
- {id:8,name:'Northstar Remedies',city:'Chandigarh',type:'Third-party',rep:'rahul',last:9,cycle:45,avg:672000,ltv:3980000,buys:[8],cross:11},
- {id:9,name:'City Care Hospital',city:'Jaipur',type:'Hospital',rep:'rahul',last:22,cycle:30,avg:123000,ltv:1310000,buys:[14,5],cross:1},
- {id:10,name:'Bengal Medicorp',city:'Kolkata',type:'Distributor',rep:'sunita',last:74,cycle:30,avg:214000,ltv:2240000,buys:[1,11],cross:8},
- {id:11,name:'Nilgiri Life Sciences',city:'Coimbatore',type:'Third-party',rep:'priya',last:52,cycle:45,avg:485000,ltv:2760000,buys:[12],cross:10},
- {id:12,name:'Afro Med Imports',city:'Nairobi, Kenya',type:'Export',rep:'rahul',last:64,cycle:90,avg:1240000,ltv:6820000,buys:[6,9],cross:7}
+ {id:1,name:'Shree Pharma',city:'Indore',type:'PCD Franchise',rep:'amit',last:47,cycle:30,avg:142000,ltv:1840000,buys:[1,5],cross:4,lg:'hi'},
+ {id:2,name:'Medilife Healthcare',city:'Lucknow',type:'Third-party',rep:'rahul',last:18,cycle:30,avg:725000,ltv:4260000,buys:[1,2],cross:3,lg:'hi'},
+ {id:3,name:'Om Healthcare',city:'Ahmedabad',type:'Third-party',rep:'amit',last:26,cycle:35,avg:560000,ltv:2890000,buys:[4,5],cross:8,lg:'gu'},
+ {id:4,name:'Sai Distributors',city:'Nagpur',type:'Distributor',rep:'amit',last:96,cycle:30,avg:186000,ltv:1120000,buys:[7,1],cross:6,lg:'mr'},
+ {id:5,name:'Kerala Medi Agencies',city:'Kochi',type:'Distributor',rep:'priya',last:12,cycle:21,avg:336000,ltv:3550000,buys:[5,11],cross:10,lg:'ml'},
+ {id:6,name:'Zenlife Formulations',city:'Hyderabad',type:'Third-party',rep:'priya',last:33,cycle:30,avg:760000,ltv:5120000,buys:[7,9],cross:6,lg:'te'},
+ {id:7,name:'Ganga Pharmaceuticals',city:'Patna',type:'PCD Franchise',rep:'sunita',last:58,cycle:30,avg:118000,ltv:960000,buys:[2,13],cross:12,lg:'hi'},
+ {id:8,name:'Northstar Remedies',city:'Chandigarh',type:'Third-party',rep:'rahul',last:9,cycle:45,avg:672000,ltv:3980000,buys:[8],cross:11,lg:'en'},
+ {id:9,name:'City Care Hospital',city:'Jaipur',type:'Hospital',rep:'rahul',last:22,cycle:30,avg:123000,ltv:1310000,buys:[14,5],cross:1,lg:'hi'},
+ {id:10,name:'Bengal Medicorp',city:'Kolkata',type:'Distributor',rep:'sunita',last:74,cycle:30,avg:214000,ltv:2240000,buys:[1,11],cross:8,lg:'bn'},
+ {id:11,name:'Nilgiri Life Sciences',city:'Coimbatore',type:'Third-party',rep:'priya',last:52,cycle:45,avg:485000,ltv:2760000,buys:[12],cross:10,lg:'ta'},
+ {id:12,name:'Afro Med Imports',city:'Nairobi, Kenya',type:'Export',rep:'rahul',last:64,cycle:90,avg:1240000,ltv:6820000,buys:[6,9],cross:7,lg:'en'}
 ];
 const STAGES=['New','Contacted','Quote Sent','Negotiation','Won'];
+const stageL=s=>T(s,{New:'Naya',Contacted:'Baat hui','Quote Sent':'Quote gaya',Negotiation:'Mol-bhav',Won:'Jeeta'}[s]);
 const leads=[
- {id:1,name:'Healwell Biotech',contact:'Nikhil Joshi',city:'Pune',src:'Website',need:'Third-party: Pan-D caps, 50,000 strips',score:92,stage:'New',age:'25 min',value:1120000,rep:'amit',why:['+30 Quantity MOQ se 5× zyada','+25 Product hamare top-5 mein','+20 Company GST verified, 6 saal purani','+17 Form mein delivery date di hai']},
- {id:2,name:'Vivek Pharma',contact:'Vivek Gupta',city:'Jaipur',src:'IndiaMART',need:'PCD franchise, Rajasthan, ~40 products',score:88,stage:'New',age:'2 ghante',value:600000,rep:'rahul',why:['+30 Monopoly area maanga hai (serious buyer)','+22 40 products ki list bheji','+20 Pehle bhi PCD chala chuke hain','+16 Phone number verified']},
- {id:3,name:'Arihant Medicos',contact:'Paresh Shah',city:'Surat',src:'Referral',need:'Distributor, Gujarat south',score:52,stage:'New',age:'1 din',value:200000,rep:'amit',why:['+25 Referral: Om Healthcare se','+15 Area mein abhi koi distributor nahi','-10 Quantity nahi batayi']},
- {id:4,name:'Ravi Medical Agencies',contact:'Ravi Yadav',city:'Varanasi',src:'WhatsApp',need:'Distributor inquiry, analgesics',score:61,stage:'Contacted',age:'3 din',value:250000,rep:'rahul',why:['+20 Analgesic range match','+20 2 baar reply kiya','-10 Credit 60 din maang rahe hain']},
- {id:5,name:'Sanjivani Pharma',contact:'Dr. Anil Sahu',city:'Raipur',src:'Call',need:'PCD monopoly, Chhattisgarh',score:70,stage:'Contacted',age:'4 din',value:450000,rep:'sunita',why:['+25 Monopoly area','+20 Visiting card + drug licence bheja','-5 Response slow']},
- {id:6,name:'Nova Derma Labs',contact:'Sneha Kapoor',city:'Delhi',src:'TradeIndia',need:'Third-party: derma creams',score:24,stage:'Contacted',age:'6 din',value:300000,rep:'rahul',why:['-40 Creams hum nahi banate','+15 Quantity achhi hai','AI salah: politely mana karo ya partner refer karo']},
- {id:7,name:'Unity Healthcare',contact:'Bikash Bora',city:'Guwahati',src:'IndiaMART',need:'Cefixime 200, 30,000 strips',score:79,stage:'Quote Sent',age:'2 din',value:1140000,rep:'sunita',why:['+30 Quote 2 baar khola','+25 Quantity MOQ se zyada','+14 Payment advance offer kiya']},
- {id:8,name:'Pristine Formulations',contact:'Kiran Rao',city:'Bengaluru',src:'Website',need:'Multivit caps, 20,000 strips',score:66,stage:'Quote Sent',age:'5 din',value:420000,rep:'priya',why:['+25 Product match','+15 Quote khola','-10 Competitor se bhi quote liya']},
- {id:9,name:'Medisun Exports',contact:'Farhan Shaikh',city:'Mumbai',src:'Email',need:'Azithromycin export, WHO-GMP + COPP chahiye',score:84,stage:'Negotiation',age:'9 din',value:2400000,rep:'amit',why:['+30 Export order, bada value','+30 WHO-GMP + COPP ready hai','+14 Sample approve ho gaya']},
- {id:10,name:'Trust Pharma',contact:'Harpreet Singh',city:'Ludhiana',src:'IndiaMART',need:'PCM 650, 1,00,000 strips',score:90,stage:'Won',age:'12 din',value:980000,rep:'rahul',why:['Order SO-2611-047 ban gaya']}
+ {id:1,name:'Healwell Biotech',contact:'Nikhil Joshi',city:'Pune',src:'Website',need:'Third-party: Pan-D caps, 50,000 strips',score:92,stage:'New',age:[25,'min'],value:1120000,rep:'amit',why:[['+30','Quantity 5× above MOQ','Quantity MOQ se 5× zyada'],['+25','Product is in our top 5','Product hamare top-5 mein'],['+20','GST verified, company 6 years old','GST verified, company 6 saal purani'],['+17','Gave a delivery date in the form','Form mein delivery date di hai']]},
+ {id:2,name:'Vivek Pharma',contact:'Vivek Gupta',city:'Jaipur',src:'IndiaMART',need:'PCD franchise, Rajasthan, ~40 products',score:88,stage:'New',age:[2,'h'],value:600000,rep:'rahul',why:[['+30','Asked for monopoly area (serious buyer)','Monopoly area maanga hai (serious buyer)'],['+22','Sent a list of 40 products','40 products ki list bheji'],['+20','Has run a PCD before','Pehle bhi PCD chala chuke hain'],['+16','Phone number verified','Phone number verified']]},
+ {id:3,name:'Arihant Medicos',contact:'Paresh Shah',city:'Surat',src:'Referral',need:'Distributor, south Gujarat',score:52,stage:'New',age:[1,'d'],value:200000,rep:'amit',why:[['+25','Referred by Om Healthcare','Om Healthcare ka referral'],['+15','No distributor in this area yet','Area mein abhi koi distributor nahi'],['-10','No quantity given','Quantity nahi batayi']]},
+ {id:4,name:'Ravi Medical Agencies',contact:'Ravi Yadav',city:'Varanasi',src:'WhatsApp',need:'Distributor inquiry, analgesics',score:61,stage:'Contacted',age:[3,'d'],value:250000,rep:'rahul',why:[['+20','Analgesic range matches','Analgesic range match'],['+20','Replied twice','2 baar reply kiya'],['-10','Asking for 60-day credit','60 din ka credit maang rahe hain']]},
+ {id:5,name:'Sanjivani Pharma',contact:'Dr. Anil Sahu',city:'Raipur',src:'Call',need:'PCD monopoly, Chhattisgarh',score:70,stage:'Contacted',age:[4,'d'],value:450000,rep:'sunita',why:[['+25','Monopoly area','Monopoly area'],['+20','Sent visiting card and drug licence','Visiting card aur drug licence bheja'],['-5','Slow to respond','Response slow']]},
+ {id:6,name:'Nova Derma Labs',contact:'Sneha Kapoor',city:'Delhi',src:'TradeIndia',need:'Third-party: derma creams',score:24,stage:'Contacted',age:[6,'d'],value:300000,rep:'rahul',why:[['-40','We do not make creams','Creams hum nahi banate'],['+15','Good quantity','Quantity achhi hai']]},
+ {id:7,name:'Unity Healthcare',contact:'Bikash Bora',city:'Guwahati',src:'IndiaMART',need:'Cefixime 200, 30,000 strips',score:79,stage:'Quote Sent',age:[2,'d'],value:1140000,rep:'sunita',why:[['+30','Opened the quote twice','Quote 2 baar khola'],['+25','Quantity above MOQ','Quantity MOQ se zyada'],['+14','Offered advance payment','Advance payment offer kiya']]},
+ {id:8,name:'Pristine Formulations',contact:'Kiran Rao',city:'Bengaluru',src:'Website',need:'Multivit caps, 20,000 strips',score:66,stage:'Quote Sent',age:[5,'d'],value:420000,rep:'priya',why:[['+25','Product match','Product match'],['+15','Opened the quote','Quote khola'],['-10','Also took a quote from a competitor','Competitor se bhi quote liya']]},
+ {id:9,name:'Medisun Exports',contact:'Farhan Shaikh',city:'Mumbai',src:'Email',need:'Azithromycin export, needs WHO-GMP + COPP',score:84,stage:'Negotiation',age:[9,'d'],value:2400000,rep:'amit',why:[['+30','Export order, large value','Export order, bada value'],['+30','WHO-GMP and COPP are ready','WHO-GMP aur COPP ready hai'],['+14','Sample approved','Sample approve ho gaya']]},
+ {id:10,name:'Trust Pharma',contact:'Harpreet Singh',city:'Ludhiana',src:'IndiaMART',need:'PCM 650, 1,00,000 strips',score:90,stage:'Won',age:[12,'d'],value:980000,rep:'rahul',why:[['','Order SO-2611-047 created','Order SO-2611-047 ban gaya']]}
 ];
-const OSTAGES=['Order confirmed','Artwork approval','Raw material','Production','QC testing','Packing','Dispatched'];
+const ageL=a=>a[1]==='min'?T(a[0]+' min ago',a[0]+' min pehle'):a[1]==='h'?T(a[0]+' h ago',a[0]+' ghante pehle'):a[0]==='now'?T('just now','abhi'):T(a[0]+(a[0]>1?' days ago':' day ago'),a[0]+' din pehle');
+const OSTAGES=[['Order confirmed','Order pakka'],['Artwork approval','Artwork approval'],['Raw material','Raw material'],['Production','Production'],['QC testing','QC testing'],['Packing','Packing'],['Dispatched','Dispatch ho gaya']];
 const orders=[
- {id:'SO-2611-044',client:'Northstar Remedies',p:8,qty:40000,val:672000,stage:1,block:'Client ne carton artwork 6 din se approve nahi kiya',batch:'—',eta:'28 Nov'},
- {id:'SO-2611-041',client:'Medilife Healthcare',p:2,qty:50000,val:725000,stage:3,batch:'ARL-T2611A',eta:'21 Nov'},
- {id:'SO-2611-038',client:'Kerala Medi Agencies',p:5,qty:30000,val:336000,stage:4,batch:'ARL-T2611B',eta:'17 Nov'},
- {id:'SO-2611-046',client:'Zenlife Formulations',p:7,qty:20000,val:760000,stage:2,block:'Cefixime API supplier se 3 din late',batch:'—',eta:'2 Dec'},
- {id:'SO-2611-035',client:'City Care Hospital',p:14,qty:15000,val:123000,stage:5,batch:'ARL-T2610F',eta:'15 Nov'},
- {id:'SO-2611-047',client:'Trust Pharma',p:1,qty:100000,val:980000,stage:0,batch:'—',eta:'8 Dec'},
- {id:'SO-2610-029',client:'Om Healthcare',p:4,qty:25000,val:560000,stage:6,batch:'ARL-C2610C',eta:'Dispatched 11 Nov · LR 448213'}
+ {id:'SO-2611-044',client:'Northstar Remedies',p:8,qty:40000,val:672000,stage:1,block:['Client has not approved the carton artwork for 6 days','Client ne carton artwork 6 din se approve nahi kiya'],batch:'—',eta:['28 Nov','28 Nov']},
+ {id:'SO-2611-041',client:'Medilife Healthcare',p:2,qty:50000,val:725000,stage:3,batch:'VH-T2611A',eta:['21 Nov','21 Nov']},
+ {id:'SO-2611-038',client:'Kerala Medi Agencies',p:5,qty:30000,val:336000,stage:4,batch:'VH-T2611B',eta:['17 Nov','17 Nov']},
+ {id:'SO-2611-046',client:'Zenlife Formulations',p:7,qty:20000,val:760000,stage:2,block:['Cefixime API is 3 days late from the supplier','Cefixime API supplier se 3 din late'],batch:'—',eta:['2 Dec','2 Dec']},
+ {id:'SO-2611-035',client:'City Care Hospital',p:14,qty:15000,val:123000,stage:5,batch:'VH-T2610F',eta:['15 Nov','15 Nov']},
+ {id:'SO-2611-047',client:'Trust Pharma',p:1,qty:100000,val:980000,stage:0,batch:'—',eta:['8 Dec','8 Dec']},
+ {id:'SO-2610-029',client:'Om Healthcare',p:4,qty:25000,val:560000,stage:6,batch:'VH-C2610C',eta:['Dispatched 11 Nov · LR 448213','11 Nov ko dispatch · LR 448213']}
 ];
 const payments=[
- {client:'Afro Med Imports',inv:'INV-2609-112',amt:310000,days:45,note:'LC due 20 Nov'},
+ {client:'Afro Med Imports',inv:'INV-2609-112',amt:310000,days:45,note:['LC due 20 Nov','LC 20 Nov ko due']},
  {client:'Shree Pharma',inv:'INV-2609-097',amt:212000,days:52},
  {client:'Om Healthcare',inv:'INV-2610-131',amt:145000,days:18},
  {client:'Bengal Medicorp',inv:'INV-2608-074',amt:132000,days:88},
@@ -342,11 +391,11 @@ const payments=[
  {client:'City Care Hospital',inv:'INV-2610-140',amt:48000,days:34}
 ];
 const tenders=[
- {t:'Rate contract: analgesics & antacids (2 years)',by:'State medical services corporation, North India',val:24000000,days:9,match:92,items:'7 / 8 items',need:['Turnover ≥ ₹10 Cr','WHO-GMP','Market standing 3 saal','Non-conviction certificate'],have:[1,1,1,0]},
- {t:'GeM bid: antibiotic tablets for central govt hospitals',by:'GeM portal',val:6800000,days:4,match:85,items:'Cefixime, Azithro, Amox-Clav',need:['GeM seller registration','WHO-GMP','COA har batch'],have:[1,1,1]},
- {t:'Vitamin D3 & calcium for insurance dispensaries',by:'Central insurance scheme dispensaries',val:3800000,days:15,match:78,items:'D3 60K, Calci-D3',need:['Stability data','Market standing 2 saal'],have:[1,1]},
- {t:'Export: WHO-GMP antibiotics, 3-year supply',by:'Ministry of Health, East Africa',val:31000000,days:27,match:74,items:'Azithro, Amox-Clav, Cefixime',need:['WHO-GMP','COPP per product','Zone IVb stability','Local agent'],have:[1,1,1,0]},
- {t:'Paediatric syrups & drops',by:'Municipal hospitals, West India',val:2200000,days:21,match:41,items:'1 / 6 items',need:['Paediatric drops line'],have:[0]}
+ {t:['Rate contract: analgesics & antacids (2 years)','Rate contract: analgesic aur antacid (2 saal)'],by:['State medical services corporation, North India','State medical services corporation, North India'],val:24000000,days:9,match:92,items:['7 of 8 items','8 mein se 7 items'],need:[['Turnover ≥ ₹10 Cr','Turnover ≥ ₹10 Cr'],['WHO-GMP','WHO-GMP'],['3 years market standing','Market standing 3 saal'],['Non-conviction certificate','Non-conviction certificate']],have:[1,1,1,0]},
+ {t:['GeM bid: antibiotic tablets for central govt hospitals','GeM bid: sarkari hospitals ke liye antibiotic tablets'],by:['GeM portal','GeM portal'],val:6800000,days:4,match:85,items:['Cefixime, Azithro, Amox-Clav','Cefixime, Azithro, Amox-Clav'],need:[['GeM seller registration','GeM seller registration'],['WHO-GMP','WHO-GMP'],['COA for every batch','Har batch ka COA']],have:[1,1,1]},
+ {t:['Vitamin D3 & calcium for insurance dispensaries','Insurance dispensaries ke liye Vitamin D3 aur calcium'],by:['Central insurance scheme dispensaries','Central insurance scheme dispensaries'],val:3800000,days:15,match:78,items:['D3 60K, Calci-D3','D3 60K, Calci-D3'],need:[['Stability data','Stability data'],['2 years market standing','Market standing 2 saal']],have:[1,1]},
+ {t:['Export: WHO-GMP antibiotics, 3-year supply','Export: WHO-GMP antibiotics, 3 saal ki supply'],by:['Ministry of Health, East Africa','Ministry of Health, East Africa'],val:31000000,days:27,match:74,items:['Azithro, Amox-Clav, Cefixime','Azithro, Amox-Clav, Cefixime'],need:[['WHO-GMP','WHO-GMP'],['COPP per product','Har product ka COPP'],['Zone IVb stability','Zone IVb stability'],['Local agent','Local agent']],have:[1,1,1,0]},
+ {t:['Paediatric syrups & drops','Bachchon ke syrup aur drops'],by:['Municipal hospitals, West India','Municipal hospitals, West India'],val:2200000,days:21,match:41,items:['1 of 6 items','6 mein se 1 item'],need:[['Paediatric drops line','Paediatric drops line']],have:[0]}
 ];
 const docs=[
  {n:'WHO-GMP Certificate',k:'Certificate',exp:'14 Mar 2028',left:851,sent:46},
@@ -357,29 +406,80 @@ const docs=[
  {n:'Revised Schedule M compliance report',k:'Compliance',exp:'Audit Feb 2027',left:95,sent:4},
  {n:'Stability data, Zone IVb: Cefixime 200',k:'Export',exp:'—',left:999,sent:3},
  {n:'Market Standing Certificate',k:'Tender',exp:'31 Mar 2027',left:138,sent:8},
- {n:'COA: Batch ARL-C2610C (Pan-D)',k:'COA',exp:'—',left:999,sent:1},
+ {n:'COA: Batch VH-C2610C (Pan-D)',k:'COA',exp:'—',left:999,sent:1},
  {n:'Product list & rate card (Nov 2026)',k:'Sales',exp:'—',left:999,sent:122}
 ];
 const quotes=[
- {id:'QT-2611-109',client:'Unity Healthcare',p:7,val:1140000,st:['Opened 2×','warn'],when:'2 din pehle'},
- {id:'QT-2611-106',client:'Pristine Formulations',p:12,val:420000,st:['Opened','warn'],when:'5 din pehle'},
- {id:'QT-2611-101',client:'Trust Pharma',p:1,val:980000,st:['Accepted','good'],when:'12 din pehle'},
- {id:'QT-2610-088',client:'Nova Derma Labs',p:12,val:300000,st:['Not opened','bad'],when:'18 din pehle'}
+ {id:'QT-2611-109',client:'Unity Healthcare',p:7,val:1140000,st:[['Opened 2×','2 baar khola'],'warn'],when:[2,'d']},
+ {id:'QT-2611-106',client:'Pristine Formulations',p:12,val:420000,st:[['Opened','Khola'],'warn'],when:[5,'d']},
+ {id:'QT-2611-101',client:'Trust Pharma',p:1,val:980000,st:[['Accepted','Accept hua'],'good'],when:[12,'d']},
+ {id:'QT-2610-088',client:'Nova Derma Labs',p:12,val:300000,st:[['Not opened','Nahi khola'],'bad'],when:[18,'d']}
 ];
 let campaignsSent=[
- {name:'Diwali scheme: 5% extra on 50k+ strips',aud:'Sab clients (12)',del:12,read:11,rep:5,orders:3,val:2140000,when:'21 Oct'},
- {name:'New launch: D3 60K softgel',aud:'Distributors + PCD (5)',del:5,read:5,rep:2,orders:1,val:380000,when:'3 Nov'}
+ {name:['Diwali scheme: 5% extra on 50k+ strips','Diwali scheme: 50k+ strips par 5% extra'],aud:['All clients (12)','Sab clients (12)'],del:12,read:11,rep:5,orders:3,val:2140000,when:'21 Oct'},
+ {name:['New launch: D3 60K softgel','Naya launch: D3 60K softgel'],aud:['Distributors + PCD (5)','Distributors + PCD (5)'],del:5,read:5,rep:2,orders:1,val:380000,when:'3 Nov'}
 ];
 const integ=[
- {n:'WhatsApp Business API',d:'Reps ko subah ka brief, clients ko quote, tracking aur reminders',on:true},
- {n:'IndiaMART Lead Manager',d:'Nayi inquiry 1 minute mein Leads mein',on:true},
- {n:'TradeIndia',d:'Buy leads auto-import',on:false},
- {n:'Website inquiry form',d:'Aapki site ka contact form seedha Leads mein',on:true},
- {n:'Tally Prime',d:'Invoices, outstanding aur payments ka sync',on:true},
- {n:'Gmail / Outlook',d:'Email inquiries aur quote replies padhna',on:false},
- {n:'GeM & tender portals',d:'Naye tender roz subah scan',on:true},
- {n:'Excel / Google Sheets import',d:'Clients, products aur purane orders ek baar upload',on:true}
+ {n:'WhatsApp Business API',d:['Morning brief for reps; quotes, tracking and reminders for clients','Reps ko subah ka brief, clients ko quote, tracking aur reminders'],on:true},
+ {n:'IndiaMART Lead Manager',d:['New inquiries reach Leads within 1 minute','Nayi inquiry 1 minute mein Leads mein'],on:true},
+ {n:'TradeIndia',d:['Buy leads imported automatically','Buy leads apne aap import'],on:false},
+ {n:['Website inquiry form','Website inquiry form'],d:['Your site\'s contact form goes straight to Leads','Aapki site ka contact form seedha Leads mein'],on:true},
+ {n:'Tally Prime',d:['Sync invoices, outstanding and payments','Invoices, outstanding aur payments ka sync'],on:true},
+ {n:'Gmail / Outlook',d:['Read email inquiries and quote replies','Email inquiries aur quote replies padhna'],on:false},
+ {n:['GeM & tender portals','GeM aur tender portals'],d:['New tenders scanned every morning','Naye tender roz subah scan'],on:true},
+ {n:['Excel / Google Sheets import','Excel / Google Sheets import'],d:['Upload clients, products and past orders once','Clients, products aur purane orders ek baar upload'],on:true}
 ];
+
+/* ---------- client chat data: client writes in own language, rep reads in theirs ---------- */
+const LANGS={hi:['Hindi','हिन्दी'],gu:['Gujarati','ગુજરાતી'],ta:['Tamil','தமிழ்'],te:['Telugu','తెలుగు'],bn:['Bengali','বাংলা'],mr:['Marathi','मराठी'],ml:['Malayalam','മലയാളം'],en:['English','English']};
+const convs=[
+ {id:'nilgiri',client:'Nilgiri Life Sciences',contact:'Murugan',city:'Coimbatore',lg:'ta',unread:1,msgs:[
+  {f:'c',t:'10:02 AM',o:'வணக்கம், மல்டிவைட்டமின் கேப்ஸ்யூல் 20,000 ஸ்ட்ரிப் எப்போது அனுப்ப முடியும்?',en:'Hello, when can you send 20,000 strips of the multivitamin capsules?',hi:'Namaste, Multivitamin capsule 20,000 strips kab tak bhej sakte ho?'},
+  {f:'r',t:'10:05 AM',o:'வணக்கம் முருகன் அவர்களே, ஆர்ட்வொர்க் ஒப்புதல் கிடைத்த 21 நாட்களில் அனுப்பப்படும்.',en:'Hello Murugan ji, it will be dispatched within 21 days of artwork approval.',hi:'Namaste Murugan ji, artwork approve hone ke 21 din mein dispatch ho jaayega.'},
+  {f:'c',t:'10:11 AM',o:'சரி. விலையை கொஞ்சம் குறைக்க முடியுமா? 3% தள்ளுபடி கிடைக்குமா?',en:'Okay. Can you lower the price a little? Can we get a 3% discount?',hi:'Theek hai. Rate thoda kam ho sakta hai? 3% discount milega?'}],
+  quick:[{en:'Yes, we can give 3% if the order is 25,000 strips.',hi:'Haan, order 25,000 strips ka ho to 3% discount de sakte hain.',o:'ஆம், ஆர்டர் 25,000 ஸ்ட்ரிப் என்றால் 3% தள்ளுபடி தர முடியும்.'},
+   {en:'I will send the final rate by this evening.',hi:'Aaj shaam tak final rate bhejta hoon.',o:'இன்று மாலைக்குள் இறுதி விலையை அனுப்புகிறேன்.'},
+   {en:'Sending the quotation PDF, please have a look.',hi:'Quote PDF bhej raha hoon, please dekh lijiye.',o:'கொட்டேஷன் PDF அனுப்புகிறேன், தயவுசெய்து பாருங்கள்.'}]},
+ {id:'om',client:'Om Healthcare',contact:'Bhavesh bhai',city:'Ahmedabad',lg:'gu',unread:1,msgs:[
+  {f:'c',t:'9:20 AM',o:'નમસ્તે, Pan-D નો છેલ્લો ઓર્ડર મળી ગયો. COA મોકલશો?',en:'Hello, we received the last Pan-D order. Will you send the COA?',hi:'Namaste, Pan-D ka pichhla order mil gaya. COA bhejoge?'},
+  {f:'r',t:'9:24 AM',o:'હા, COA હમણાં જ મોકલી દીધું. આગળનો ઓર્ડર ક્યારે પ્લાન કરો છો?',en:'Yes, COA sent just now. When are you planning the next order?',hi:'Haan, COA abhi bhej diya. Agla order kab tak plan kar rahe ho?'},
+  {f:'c',t:'9:40 AM',o:'આવતા અઠવાડિયે. આ વખતે Monte-LC પણ જોઈએ, 10,000 સ્ટ્રીપ.',en:'Next week. This time we also need Monte-LC, 10,000 strips.',hi:'Agle hafte. Is baar Monte-LC bhi chahiye, 10,000 strips.'}],
+  quick:[{en:'Great! Monte-LC is ₹16.80 per strip.',hi:'Badhiya! Monte-LC ka rate ₹16.80 per strip hai.',o:'સરસ! Monte-LC નો ભાવ ₹16.80 પ્રતિ સ્ટ્રીપ છે.'},
+   {en:'Sending one combined quote for both products.',hi:'Dono products ka ek saath quote bhej raha hoon.',o:'બંને પ્રોડક્ટનું એક સાથે ક્વોટેશન મોકલું છું.'},
+   {en:'I will call you tomorrow.',hi:'Kal call karta hoon.',o:'કાલે ફોન કરું છું.'}]},
+ {id:'bengal',client:'Bengal Medicorp',contact:'Subrata babu',city:'Kolkata',lg:'bn',unread:1,msgs:[
+  {f:'r',t:'Yesterday',o:'নমস্কার সুব্রত বাবু, ₹1.32 লাখ টাকার পেমেন্ট 88 দিন ধরে বাকি আছে।',en:'Namaskar Subrata babu, a payment of ₹1.32 lakh has been pending for 88 days.',hi:'Namaskar Subrata ji, ₹1.32 lakh ka payment 88 din se baaki hai.'},
+  {f:'c',t:'8:55 AM',o:'নমস্কার, এই সপ্তাহে পেমেন্ট করে দেব। নতুন অর্ডারও দিতে চাই।',en:'Namaskar, we will pay this week. We also want to place a new order.',hi:'Namaskar, is hafte payment kar denge. Naya order bhi dena chahte hain.'}],
+  quick:[{en:'Thank you! We will process the new order as soon as payment arrives.',hi:'Dhanyavaad! Payment aate hi naya order process kar denge.',o:'ধন্যবাদ! পেমেন্ট এলেই নতুন অর্ডার প্রসেস করে দেব।'},
+   {en:'Please send the list for the new order.',hi:'Naye order ki list bhej dijiye.',o:'নতুন অর্ডারের তালিকা পাঠিয়ে দিন।'},
+   {en:'Sending UPI and bank details.',hi:'UPI aur bank details bhej raha hoon.',o:'UPI আর ব্যাংকের বিবরণ পাঠাচ্ছি।'}]},
+ {id:'zenlife',client:'Zenlife Formulations',contact:'Srinivas garu',city:'Hyderabad',lg:'te',unread:1,msgs:[
+  {f:'c',t:'11:30 AM',o:'నమస్తే, సెఫిక్సిమ్ ఆర్డర్ ఎప్పుడు వస్తుంది?',en:'Hello, when will the Cefixime order arrive?',hi:'Namaste, Cefixime ka order kab aayega?'}],
+  quick:[{en:'The API supplier is 3 days late. New dispatch date is 2 December.',hi:'API supplier se 3 din ki deri hai. Naya dispatch date 2 December hai.',o:'API సరఫరాదారు నుండి 3 రోజుల ఆలస్యం ఉంది. కొత్త డిస్పాచ్ తేదీ డిసెంబర్ 2.'},
+   {en:'Sending the tracking link.',hi:'Tracking link bhej raha hoon.',o:'ట్రాకింగ్ లింక్ పంపుతున్నాను.'},
+   {en:'Sorry for the delay.',hi:'Deri ke liye maafi chahte hain.',o:'ఆలస్యానికి క్షమించండి.'}]},
+ {id:'sai',client:'Sai Distributors',contact:'Patil saheb',city:'Nagpur',lg:'mr',unread:1,msgs:[
+  {f:'c',t:'Yesterday',o:'नमस्कार, आम्हाला दुसऱ्या कंपनीकडून कमी दर मिळत आहे.',en:'Namaskar, we are getting a lower rate from another company.',hi:'Namaskar, humein doosri company se kam rate mil raha hai.'}],
+  quick:[{en:'We give quality and on-time delivery. Let me check a special rate for you.',hi:'Hum quality aur time par delivery dete hain. Aapke liye special rate dekhte hain.',o:'आम्ही दर्जा आणि वेळेवर डिलिव्हरी देतो. तुमच्यासाठी खास दर पाहतो.'},
+   {en:'I will visit tomorrow and we can talk.',hi:'Kal milne aakar baat karta hoon.',o:'उद्या भेटायला येऊन बोलतो.'},
+   {en:'Can you tell me what rate you are getting?',hi:'Kitna rate mil raha hai, bata sakte hain?',o:'तुम्हाला किती दर मिळत आहे, सांगू शकाल का?'}]},
+ {id:'shree',client:'Shree Pharma',contact:'Agarwal ji',city:'Indore',lg:'hi',unread:0,msgs:[
+  {f:'c',t:'Yesterday',o:'भाई साहब, पैरासिटामोल का स्टॉक खत्म होने वाला है। रेट वही रहेगा?',en:'Brother, our paracetamol stock is about to run out. Will the rate stay the same?',hi:'Bhai sahab, Paracetamol ka stock khatam hone wala hai. Rate wahi rahega?'}],
+  quick:[{en:'Yes, the rate stays ₹9.80 per strip.',hi:'Haan, rate wahi ₹9.80 per strip rahega.',o:'हाँ, रेट वही ₹9.80 प्रति स्ट्रिप रहेगा।'},
+   {en:'How many strips should we send?',hi:'Kitni quantity bhejein?',o:'कितनी क्वांटिटी भेजें?'},
+   {en:'Order today and delivery is in 21 days.',hi:'Aaj order de do to 21 din mein delivery.',o:'आज ऑर्डर दे दें तो 21 दिन में डिलीवरी।'}]},
+ {id:'kerala',client:'Kerala Medi Agencies',contact:'Joseph',city:'Kochi',lg:'ml',unread:0,msgs:[
+  {f:'c',t:'Mon',o:'നമസ്കാരം, പുതിയ D3 60K യുടെ സാമ്പിൾ അയക്കാമോ?',en:'Hello, can you send a sample of the new D3 60K?',hi:'Namaskar, naye D3 60K ka sample bhej sakte ho?'}],
+  quick:[{en:'Sure, we will courier the sample tomorrow.',hi:'Haan, kal sample courier kar denge.',o:'ശരി, നാളെ സാമ്പിൾ കൊറിയർ ചെയ്യാം.'},
+   {en:'The launch rate is ₹19 per strip.',hi:'Launch rate ₹19 per strip hai.',o:'ലോഞ്ച് നിരക്ക് ഒരു സ്ട്രിപ്പിന് ₹19 ആണ്.'},
+   {en:'How many strips will you need?',hi:'Kitne strips chahiye honge?',o:'എത്ര സ്ട്രിപ്പുകൾ വേണ്ടിവരും?'}]},
+ {id:'afro',client:'Afro Med Imports',contact:'James',city:'Nairobi',lg:'en',unread:0,msgs:[
+  {f:'c',t:'Mon',o:'Hi, please share the COPP for Azithromycin 500 before we place the next order.',en:'Hi, please share the COPP for Azithromycin 500 before we place the next order.',hi:'Hi, agla order dene se pehle Azithromycin 500 ka COPP bhej dijiye.'}],
+  quick:[{en:'Sharing the COPP right away.',hi:'COPP abhi bhej raha hoon.',o:'Sharing the COPP right away.'},
+   {en:'The renewed COPP will be ready by 2 December.',hi:'Naya COPP 2 December tak renew ho jaayega.',o:'The renewed COPP will be ready by 2 December.'},
+   {en:'Please share the quantity for your next order.',hi:'Agle order ki quantity bata dijiye.',o:'Please share the quantity for your next order.'}]}
+];
+let curConv='nilgiri',pending=null;
 
 /* ---------- helpers ---------- */
 const $=s=>document.querySelector(s);
@@ -389,19 +489,27 @@ const sum=(a,f)=>a.reduce((s,x)=>s+(typeof f==='function'?f(x):x[f]),0);
 const rep=id=>reps.find(r=>r.id===id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function health(c){const r=c.last/c.cycle;if(r<.9)return['Healthy','good'];if(r<1.25)return['Reorder due','warn'];if(r<2)return['Reorder missed','bad'];return['Churn risk','bad']}
+const healthL=h=>T(h,{Healthy:'Sab theek','Reorder due':'Reorder aane wala','Reorder missed':'Reorder chhoota','Churn risk':'Client ja sakta hai'}[h]);
 const atRisk=()=>clients.filter(c=>health(c)[1]==='bad');
 const scoreCls=s=>s>=75?'hot':s>=50?'warm':'cold';
-let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3200)}
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3400)}
 function head(t,p,act=''){return`<div class="vhead"><div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div><div class="row">${act}</div></div>`}
+const logoSvg=(s=36)=>`<svg class="logo" width="${s}" height="${s}" viewBox="0 0 40 40" aria-hidden="true"><rect class="bg" width="40" height="40" rx="10"/><rect class="l" x="8.2" y="7" width="8" height="25" rx="4" transform="rotate(-20 12.2 19.5)"/><rect class="r" x="23.8" y="7" width="8" height="25" rx="4" transform="rotate(20 27.8 19.5)"/><circle class="bg" cx="20" cy="31.2" r="2.2"/></svg>`;
+
+/* Claude-powered translation (only when the viewer allows it); everything else works without it */
+const samplePromise=(window.claude&&window.claude.use)?window.claude.use('sample').catch(()=>null):Promise.resolve(null);
+let sampleOff=false;
+function sampleErr(e){const c=e&&e.code;if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(c)){sampleOff=true;return T('Live AI translation is off in this view. Use the ready replies above.','Is view mein live AI translation band hai. Upar ke ready replies use karein.')}
+ if(c==='rate_limited')return T('Too many requests. Try again in a minute.','Bahut zyada requests. Ek minute baad try karein.');if(c==='cancelled')return'';return T('Translation failed. Try again.','Translation nahi hua. Dobara try karein.')}
 
 function tasksFor(repId){
- const mine=x=>!repId||x.rep===repId, t=[];
- leads.filter(l=>mine(l)&&l.stage==='New'&&l.score>=60).forEach(l=>t.push({tone:'accent',ref:l.name,title:`Nayi lead: ${l.name}, ${l.city}`,why:`${l.need} · ${l.src} · ${l.age} purani · AI score ${l.score}`,cta:'Call karo',act:`lead:${l.id}`}));
- clients.filter(c=>mine(c)&&health(c)[0]==='Reorder missed').forEach(c=>t.push({tone:'bad',ref:c.name,title:`${c.name}: reorder ${c.last-c.cycle} din late`,why:`Har ~${c.cycle} din mein ${inr(c.avg)} ka order aata tha. Last order ${c.last} din pehle.`,cta:'Reminder bhejo',act:`remind:${c.id}`}));
- leads.filter(l=>mine(l)&&l.stage==='Quote Sent'&&l.score>=60).forEach(l=>t.push({tone:'ai',ref:l.name,title:`${l.name} ne quote khola, reply nahi`,why:`${l.need}. Abhi follow-up ka sahi time hai.`,cta:'Follow-up',act:`lead:${l.id}`}));
- clients.filter(c=>mine(c)&&health(c)[0]==='Churn risk').forEach(c=>t.push({tone:'bad',ref:c.name,title:`${c.name}: ${c.last} din se koi order nahi`,why:`Churn risk. Pichhle 12 mahine mein ${inr(c.ltv)} ka business diya tha.`,cta:'Offer bhejo',act:`remind:${c.id}`}));
- clients.filter(c=>mine(c)&&health(c)[0]==='Reorder due').forEach(c=>t.push({tone:'warn',ref:c.name,title:`${c.name}: reorder is hafte due`,why:`Expected order ~${inr(c.avg)}. Pehle se yaad dila do.`,cta:'Reminder bhejo',act:`remind:${c.id}`}));
- clients.filter(c=>mine(c)&&health(c)[0]==='Healthy').sort((a,b)=>b.avg-a.avg).slice(0,1).forEach(c=>t.push({tone:'ai',ref:c.name,title:`${c.name}: ${P[c.cross].s} offer karo`,why:`${P[c.buys[0]].s} leta hai. Aise clients mein 64% ${P[c.cross].s} bhi lete hain.`,cta:'Quote banao',act:`quote:${c.id}:${c.cross}`}));
+ const mine=x=>!repId||x.rep===repId,t=[];
+ leads.filter(l=>mine(l)&&l.stage==='New'&&l.score>=60).forEach(l=>t.push({tone:'accent',ref:l.name,title:T(`New lead: ${l.name}, ${l.city}`,`Nayi lead: ${l.name}, ${l.city}`),why:`${l.need} · ${l.src} · ${ageL(l.age)} · AI score ${l.score}`,cta:T('Call now','Call karo'),act:`lead:${l.id}`}));
+ clients.filter(c=>mine(c)&&health(c)[0]==='Reorder missed').forEach(c=>t.push({tone:'bad',ref:c.name,title:T(`${c.name}: reorder ${c.last-c.cycle} days late`,`${c.name}: reorder ${c.last-c.cycle} din late`),why:T(`Ordered ~${inr(c.avg)} every ${c.cycle} days. Last order ${c.last} days ago.`,`Har ~${c.cycle} din mein ${inr(c.avg)} ka order aata tha. Last order ${c.last} din pehle.`),cta:T('Send reminder','Reminder bhejo'),act:`remind:${c.id}`}));
+ leads.filter(l=>mine(l)&&l.stage==='Quote Sent'&&l.score>=60).forEach(l=>t.push({tone:'ai',ref:l.name,title:T(`${l.name} opened the quote, no reply`,`${l.name} ne quote khola, reply nahi`),why:T(`${l.need}. Good time to follow up.`,`${l.need}. Abhi follow-up ka sahi time hai.`),cta:'Follow-up',act:`lead:${l.id}`}));
+ clients.filter(c=>mine(c)&&health(c)[0]==='Churn risk').forEach(c=>t.push({tone:'bad',ref:c.name,title:T(`${c.name}: no order for ${c.last} days`,`${c.name}: ${c.last} din se koi order nahi`),why:T(`Churn risk. Gave ${inr(c.ltv)} of business in the last 12 months.`,`Client ja sakta hai. Pichhle 12 mahine mein ${inr(c.ltv)} ka business diya tha.`),cta:T('Send offer','Offer bhejo'),act:`remind:${c.id}`}));
+ clients.filter(c=>mine(c)&&health(c)[0]==='Reorder due').forEach(c=>t.push({tone:'warn',ref:c.name,title:T(`${c.name}: reorder due this week`,`${c.name}: reorder is hafte aane wala`),why:T(`Expected order ~${inr(c.avg)}. Remind them early.`,`Expected order ~${inr(c.avg)}. Pehle se yaad dila do.`),cta:T('Send reminder','Reminder bhejo'),act:`remind:${c.id}`}));
+ clients.filter(c=>mine(c)&&health(c)[0]==='Healthy').sort((a,b)=>b.avg-a.avg).slice(0,1).forEach(c=>t.push({tone:'ai',ref:c.name,title:T(`${c.name}: offer ${P[c.cross].s}`,`${c.name}: ${P[c.cross].s} offer karo`),why:T(`Buys ${P[c.buys[0]].s}. 64% of similar clients also buy ${P[c.cross].s}.`,`${P[c.buys[0]].s} leta hai. Aise 64% clients ${P[c.cross].s} bhi lete hain.`),cta:T('Make quote','Quote banao'),act:`quote:${c.id}:${c.cross}`}));
  return t;
 }
 function taskList(t){return`<div class="tasks">${t.map(x=>`<div class="task"><span class="bar ${x.tone}"></span><div><b>${esc(x.title)}</b><small>${esc(x.why)}</small></div><button class="btn btn-sm" data-act="${x.act}">${x.cta}</button></div>`).join('')}</div>`}
@@ -410,239 +518,306 @@ function taskList(t){return`<div class="tasks">${t.map(x=>`<div class="task"><sp
 function vDashboard(){
  const mtd=sum(reps,'achieved'),tgt=sum(reps,'target'),risk=sum(atRisk(),'avg'),pipe=sum(leads.filter(l=>l.stage!=='Won'),'value'),out=sum(payments,'amt');
  const months=[['Dec',82],['Jan',78],['Feb',86],['Mar',94],['Apr',88],['May',91],['Jun',97],['Jul',102],['Aug',99],['Sep',108],['Oct',113],['Nov',mtd/1e5]];
- const W=640,H=230,L=40,B=26,T=14,max=125,iw=W-L-8,ih=H-B-T,bw=iw/months.length;
- let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Monthly sales in lakh rupees">`;
- [0,25,50,75,100,125].forEach(v=>{const y=T+ih-ih*v/max;svg+=`<line class="grid" x1="${L}" x2="${W-8}" y1="${y}" y2="${y}"/><text class="tick" x="${L-6}" y="${y+4}" text-anchor="end">${v}</text>`});
- months.forEach(([m,v],i)=>{const h=ih*v/max,x=L+i*bw+bw*.18,y=T+ih-h,last=i===months.length-1;svg+=`<rect class="b${last?' mtd':''}" x="${x}" y="${y}" width="${bw*.64}" height="${h}" rx="3"/><text class="tick" x="${x+bw*.32}" y="${H-8}" text-anchor="middle">${m}</text>`;if(last||i===10)svg+=`<text class="vl" x="${x+bw*.32}" y="${y-5}" text-anchor="middle">${v.toFixed(1)}</text>`});
+ const W=640,H=230,Lf=40,B=26,Tp=14,max=125,iw=W-Lf-8,ih=H-B-Tp,bw=iw/months.length;
+ let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${T('Monthly sales in lakh rupees','Har mahine ki sales, lakh rupaye mein')}">`;
+ [0,25,50,75,100,125].forEach(v=>{const y=Tp+ih-ih*v/max;svg+=`<line class="grid" x1="${Lf}" x2="${W-8}" y1="${y}" y2="${y}"/><text class="tick" x="${Lf-6}" y="${y+4}" text-anchor="end">${v}</text>`});
+ months.forEach(([m,v],i)=>{const h=ih*v/max,x=Lf+i*bw+bw*.18,y=Tp+ih-h,last=i===months.length-1;svg+=`<rect class="b${last?' mtd':''}" x="${x}" y="${y}" width="${bw*.64}" height="${h}" rx="3"/><text class="tick" x="${x+bw*.32}" y="${H-8}" text-anchor="middle">${m}</text>`;if(last||i===10)svg+=`<text class="vl" x="${x+bw*.32}" y="${y-5}" text-anchor="middle">${v.toFixed(1)}</text>`});
  svg+='</svg>';
  const attn=orders.filter(o=>o.block);
- return head('Good morning, Rakesh ji','Aaj 13 November hai. Mahina khatam hone mein 17 din bache hain. Neeche woh kaam hain jo AI ke hisaab se sabse zyada paisa laayenge.',`<a class="btn" href="#assistant">Rep ka WhatsApp dekho</a><a class="btn btn-primary" href="#quotes">Naya quote</a>`)+
+ const unread=sum(convs,'unread');
+ return head('Good morning, Rakesh ji',T('It is 13 November, with 17 days left in the month. Below is the work the AI expects to bring in the most money.','Aaj 13 November hai. Mahina khatam hone mein 17 din bache hain. Neeche woh kaam hain jo AI ke hisaab se sabse zyada paisa laayenge.'),`<a class="btn" href="#chat">${T(`Client chat (${unread} new)`,`Client chat (${unread} naye)`)}</a><a class="btn btn-primary" href="#quotes">${T('New quote','Naya quote')}</a>`)+
  `<div class="grid g4">
-  <div class="card kpi"><div class="lbl">Is mahine ki sales</div><div class="val">${inr(mtd)}</div><div class="sub">Target ${inr(tgt)} · ${Math.round(mtd/tgt*100)}%</div><div class="meter"><b style="width:${mtd/tgt*100}%"></b></div></div>
-  <div class="card kpi risk"><div class="lbl">Khatre mein revenue</div><div class="val" style="color:var(--bad)">${inr(risk)}</div><div class="sub">${atRisk().length} clients ka reorder chhoota · <a href="#clients">dekho</a></div></div>
-  <div class="card kpi"><div class="lbl">Open pipeline</div><div class="val">${inr(pipe)}</div><div class="sub">${leads.filter(l=>l.stage!=='Won').length} leads · ${leads.filter(l=>l.score>=75&&l.stage!=='Won').length} hot</div></div>
-  <div class="card kpi"><div class="lbl">Baaki payment</div><div class="val">${inr(out)}</div><div class="sub">${inr(sum(payments.filter(p=>p.days>60),'amt'))} 60 din se purana</div></div>
+  <div class="card kpi"><div class="lbl">${T('Sales this month','Is mahine ki sales')}</div><div class="val">${inr(mtd)}</div><div class="sub">Target ${inr(tgt)} · ${Math.round(mtd/tgt*100)}%</div><div class="meter"><b style="width:${mtd/tgt*100}%"></b></div></div>
+  <div class="card kpi risk"><div class="lbl">${T('Revenue at risk','Khatre mein revenue')}</div><div class="val" style="color:var(--bad)">${inr(risk)}</div><div class="sub">${T(`${atRisk().length} clients missed a reorder`,`${atRisk().length} clients ka reorder chhoota`)} · <a href="#clients">${T('view','dekho')}</a></div></div>
+  <div class="card kpi"><div class="lbl">${T('Open pipeline','Khuli pipeline')}</div><div class="val">${inr(pipe)}</div><div class="sub">${leads.filter(l=>l.stage!=='Won').length} leads · ${leads.filter(l=>l.score>=75&&l.stage!=='Won').length} hot</div></div>
+  <div class="card kpi"><div class="lbl">${T('Outstanding payments','Baaki payment')}</div><div class="val">${inr(out)}</div><div class="sub">${T(`${inr(sum(payments.filter(p=>p.days>60),'amt'))} older than 60 days`,`${inr(sum(payments.filter(p=>p.days>60),'amt'))} 60 din se purana`)}</div></div>
  </div>
  <div class="grid g21">
-  <div class="card"><div class="ch"><h2>Aaj ke top kaam <span class="ai-tag">AI</span></h2><span class="muted" style="font-size:.8rem">Poori team ke liye, priority ke hisaab se</span></div>${taskList(tasksFor().slice(0,6))}</div>
+  <div class="card"><div class="ch"><h2>${T('Top tasks today','Aaj ke top kaam')} <span class="ai-tag">AI</span></h2><span class="muted" style="font-size:.8rem">${T('Whole team, by priority','Poori team ke liye, priority ke hisaab se')}</span></div>${taskList(tasksFor().slice(0,6))}</div>
   <div class="stack">
-   <div class="card"><h2>Team target, is mahine</h2>${reps.map(r=>{const p=r.achieved/r.target;return`<div class="hbar"><span>${r.name}<span class="tsub">${r.region}</span></span><span class="trk"><b class="${p>=.75?'over':''}" style="width:${Math.min(p,1)*100}%"></b><u style="left:calc(${13/30*100}% - 1px)" title="Aaj tak ka expected"></u></span><span class="num mono">${Math.round(p*100)}%</span></div>`}).join('')}<p class="muted" style="font-size:.76rem;margin-top:6px">Kaali line: 13 Nov tak expected progress (43%)</p></div>
-   <div class="card"><h2>Orders jo atke hain</h2>${attn.map(o=>`<div class="task"><span class="bar bad"></span><div><b>${o.id} · ${o.client}</b><small>${o.block}</small></div><a class="btn btn-sm" href="#orders">Dekho</a></div>`).join('')}</div>
+   <div class="card"><h2>${T('Team target, this month','Team target, is mahine')}</h2>${reps.map(r=>{const p=r.achieved/r.target;return`<div class="hbar"><span>${r.name}<span class="tsub">${r.region}</span></span><span class="trk"><b class="${p>=.75?'over':''}" style="width:${Math.min(p,1)*100}%"></b><u style="left:calc(${13/30*100}% - 1px)"></u></span><span class="num mono">${Math.round(p*100)}%</span></div>`}).join('')}<p class="muted" style="font-size:.76rem;margin-top:6px">${T('Black line: expected progress by 13 Nov (43%)','Kaali line: 13 Nov tak expected progress (43%)')}</p></div>
+   <div class="card"><h2>${T('Stuck orders','Atke hue orders')}</h2>${attn.map(o=>`<div class="task"><span class="bar bad"></span><div><b>${o.id} · ${o.client}</b><small>${L(o.block)}</small></div><a class="btn btn-sm" href="#orders">${T('View','Dekho')}</a></div>`).join('')}</div>
   </div>
  </div>
- <div class="card chart"><div class="ch"><h2>Monthly sales (₹ lakh)</h2><div class="legend"><span><i style="background:var(--accent)"></i>Poora mahina</span><span><i style="background:var(--ai)"></i>Nov, ab tak</span></div></div>${svg}</div>`;
+ <div class="card chart"><div class="ch"><h2>${T('Monthly sales (₹ lakh)','Har mahine ki sales (₹ lakh)')}</h2><div class="legend"><span><i style="background:var(--accent)"></i>${T('Full month','Poora mahina')}</span><span><i style="background:var(--ai)"></i>${T('Nov, so far','Nov, ab tak')}</span></div></div>${svg}</div>`;
 }
 
-let chat=null;
-function resetChat(id){clock=41;const r=rep(id),t=tasksFor(id).slice(0,5);chat={rep:id,tasks:t,msgs:[],stage:0,pct:r.achieved/r.target};
- chat.msgs.push({ai:1,time:'8:30 AM',h:`Good morning ${r.name.split(' ')[0]}! Aaj ke ${t.length} kaam:<ol>${t.map((x,i)=>`<li data-ti="${i}"><b>${esc(x.title)}</b><br><span style="opacity:.75">${esc(x.why)}</span></li>`).join('')}</ol>Kaam hone par bas reply karo, jaise <i>"1 done, order mila 1.4 lakh"</i>. Voice note bhi chalega.`});}
+/* rep's own WhatsApp assistant */
+let chat=null,clock=41;
+function now(){const m=clock++;return`${8+Math.floor(m/60)}:${String(m%60).padStart(2,'0')} AM`}
+function resetChat(id){clock=41;const r=rep(id),t=tasksFor(id).slice(0,5);chat={rep:id,tasks:t,msgs:[],stage:0,pct:r.achieved/r.target,done:0};
+ chat.msgs.push({ai:1,time:'8:30 AM',h:T(`Good morning ${r.name.split(' ')[0]}! Your ${t.length} tasks for today:`,`Good morning ${r.name.split(' ')[0]}! Aaj ke ${t.length} kaam:`)+`<ol>${t.map((x,i)=>`<li data-ti="${i}"><b>${esc(x.title)}</b><br><span style="opacity:.75">${esc(x.why)}</span></li>`).join('')}</ol>`+T(`Just reply when a task is done, like <i>"1 done, got order 1.4 lakh"</i>. Voice notes work too.`,`Kaam hone par bas reply karo, jaise <i>"1 done, order mila 1.4 lakh"</i>. Voice note bhi chalega.`)});}
 function vAssistant(){
  if(!chat)resetChat('amit');
  const r=rep(chat.rep);
- return head('AI Sales Assistant','Sales rep ko koi naya app nahi seekhna. Roz subah WhatsApp par kaam ki list aati hai. Rep text ya Hindi voice note mein reply karta hai, aur AI order, notes aur reminders apne aap update kar deta hai.',
-  `<label class="sr" for="repSel">Rep</label><select id="repSel" class="btn">${reps.map(x=>`<option value="${x.id}" ${x.id===chat.rep?'selected':''}>${x.name} (${x.region})</option>`).join('')}</select><button class="btn" data-act="chatreset">Shuru se</button>`)+
+ return head(T('AI Sales Assistant','AI Sales Assistant'),T('Reps learn no new app. Every morning their task list arrives on WhatsApp. They reply by text or a Hindi voice note, and the AI updates orders, notes and reminders.','Sales rep ko koi naya app nahi seekhna. Roz subah WhatsApp par kaam ki list aati hai. Rep text ya Hindi voice note mein reply karta hai, aur AI order, notes aur reminders apne aap update kar deta hai.'),
+  `<label class="sr" for="repSel">Rep</label><select id="repSel" class="btn">${reps.map(x=>`<option value="${x.id}" ${x.id===chat.rep?'selected':''}>${x.name} (${x.region})</option>`).join('')}</select><button class="btn" data-act="chatreset">${T('Restart','Shuru se')}</button>`)+
  `<div class="grid g12">
-  <div class="phone"><div class="wa-h"><span class="avatar">AI</span><div><b>Arogya Sales AI</b><small>online</small></div></div>
+  <div class="phone"><div class="wa-h"><span class="avatar">AI</span><div><b>Vatave Sales AI</b><small>online</small></div></div>
    <div class="wa-body" id="waBody">${chatHtml()}</div>
    <div class="wa-q" id="waQ">${quickHtml()}</div></div>
   <div class="stack">
-   <div class="card"><h2>Is screen par kya ho raha hai</h2>
+   <div class="card"><h2>${T('What is happening here','Is screen par kya ho raha hai')}</h2>
     <ul class="reasons">
-     <li><span>8:30</span>AI ne raat bhar ka data padha: orders, leads, payments, quotes. Fir ${r.name} ke liye top ${chat.tasks.length} kaam chune.</li>
-     <li><span>Reply</span>Neeche ke buttons dabaiye. Rep jaise WhatsApp par likhta hai, waise hi.</li>
-     <li><span>Voice</span>Hindi ya Hinglish voice note likhit mein badal kar CRM mein save hota hai.</li>
-     <li><span>Limit</span>Discount rep ki limit se zyada ho to approval apne aap manager ke paas jaata hai.</li>
-     <li><span>7 PM</span>Owner ko shaam ko 5 line ki team summary milti hai.</li>
+     <li><span>8:30</span>${T(`The AI read last night's data (orders, leads, payments, quotes) and picked the top ${chat.tasks.length} tasks for ${r.name}.`,`AI ne raat bhar ka data padha: orders, leads, payments, quotes. Fir ${r.name} ke liye top ${chat.tasks.length} kaam chune.`)}</li>
+     <li><span>${T('Reply','Reply')}</span>${T('Tap the buttons below, the way a rep would reply on WhatsApp.','Neeche ke buttons dabaiye. Rep jaise WhatsApp par likhta hai, waise hi.')}</li>
+     <li><span>Voice</span>${T('Hindi or Hinglish voice notes are transcribed and saved to the CRM.','Hindi ya Hinglish voice note likhit mein badal kar CRM mein save hota hai.')}</li>
+     <li><span>${T('Lang','Bhasha')}</span>${T('Each rep gets the brief in their own language. Switch English / Hinglish at the top to see it.','Har rep ko brief uski apni bhasha mein milta hai. Upar English / Hinglish badal kar dekhiye.')}</li>
+     <li><span>${T('Limit','Limit')}</span>${T('A discount above the rep\'s limit goes to the manager for approval automatically.','Discount rep ki limit se zyada ho to approval apne aap manager ke paas jaata hai.')}</li>
     </ul></div>
-   <div class="card"><h2>${r.name}: aaj ka score</h2>
+   <div class="card"><h2>${T(`${r.name}: today's score`,`${r.name}: aaj ka score`)}</h2>
     <div class="grid g3" style="gap:10px">
-     <div class="kpi"><div class="lbl">Target</div><div class="val" id="repPct">${Math.round(chat.pct*100)}%</div></div>
-     <div class="kpi"><div class="lbl">Kaam done</div><div class="val" id="repDone">${chat.msgs.filter(m=>m.doneTask!=null).length}/${chat.tasks.length}</div></div>
-     <div class="kpi"><div class="lbl">Overdue follow-ups</div><div class="val">${r.overdue}</div></div>
+     <div class="kpi"><div class="lbl">Target</div><div class="val">${Math.round(chat.pct*100)}%</div></div>
+     <div class="kpi"><div class="lbl">${T('Tasks done','Kaam done')}</div><div class="val">${chat.done}/${chat.tasks.length}</div></div>
+     <div class="kpi"><div class="lbl">${T('Overdue follow-ups','Pending follow-ups')}</div><div class="val">${r.overdue}</div></div>
     </div></div>
   </div></div>`;
 }
-function chatHtml(){return chat.msgs.map(m=>{let h=m.h;if(m.ai&&m===chat.msgs[0]){chat.msgs.forEach(x=>{if(x.doneTask!=null)h=h.replace(`<li data-ti="${x.doneTask}">`,`<li data-ti="${x.doneTask}" class="done">`)})}return`<div class="msg ${m.ai?'ai':'me'}">${h}<time>${m.time}</time></div>`}).join('')}
-function quickHtml(){const t=chat.tasks,c=t[0]?.ref||'client',c2=t[1]?.ref||c,q=t.find(x=>x.act.startsWith('quote'))?.ref||c;
- const opts=[['done','1 done, order mila ₹1.4 lakh'],['voice','🎤 Voice note (0:14)'],['quote',`${q} ka quote bhejo`],['target','Mera target kitna bacha?'],['remind','Kal 11 baje visit yaad dilana']];
- if(chat.stage==='q')opts.unshift(['send','Haan, bhejo']);
+function chatHtml(){return chat.msgs.map((m,j)=>{let h=m.h;if(j===0)for(let i=0;i<chat.done;i++)h=h.replace(`<li data-ti="${i}">`,`<li data-ti="${i}" class="done">`);return`<div class="msg ${m.ai?'ai':'me'}">${h}<time>${m.time}</time></div>`}).join('')}
+function quickHtml(){const t=chat.tasks,c=t[0]?.ref||'client',q=t.find(x=>x.act.startsWith('quote'))?.ref||c;
+ const opts=[['done',T('1 done, got order ₹1.4 lakh','1 done, order mila ₹1.4 lakh')],['voice',T('🎤 Voice note (0:14)','🎤 Voice note (0:14)')],['quote',T(`Send quote to ${q}`,`${q} ka quote bhejo`)],['target',T('How much target is left?','Mera target kitna bacha?')],['remind',T('Remind me of the 11 am visit tomorrow','Kal 11 baje visit yaad dilana')]];
+ if(chat.stage==='q')opts.unshift(['send',T('Yes, send it','Haan, bhejo')]);
  return opts.map(([k,l])=>`<button data-act="say:${k}">${esc(l)}</button>`).join('')}
-let clock=41;function now(){const m=clock++;return`${8+Math.floor(m/60)}:${String(m%60).padStart(2,'0')} AM`}
 function say(k){
  const r=rep(chat.rep),t=chat.tasks;let me,ai;
- if(k==='done'){const i=chat.msgs.filter(m=>m.doneTask!=null).length;const task=t[i]||t[0];me={h:`${i+1} done, order mila ₹1.4 lakh`};const before=chat.pct;chat.pct+=140000/r.target;
-  ai={h:`Badhiya! Kaam ${i+1} complete ✅<br>• <b>${esc(task.ref)}</b> ka order <span class="mono">SO-2611-0${48+i}</span> draft ban gaya, factory planning ko alert chala gaya<br>• Client status ab <b>Healthy</b><br>• Aapka target: ${Math.round(before*100)}% → <b>${Math.round(chat.pct*100)}%</b>`,doneTask:i};me.doneTask=null;ai.doneTask=i}
+ if(k==='done'){const i=chat.done;const task=t[i]||t[0];me={h:T(`${i+1} done, got order ₹1.4 lakh`,`${i+1} done, order mila ₹1.4 lakh`)};const before=chat.pct;chat.pct+=140000/r.target;
+  ai={h:T(`Great! Task ${i+1} complete ✅<br>• Order <span class="mono">SO-2611-0${48+i}</span> drafted for <b>${esc(task.ref)}</b> and the factory planning team alerted<br>• Client status is now <b>Healthy</b><br>• Your target: ${Math.round(before*100)}% → <b>${Math.round(chat.pct*100)}%</b>`,`Badhiya! Kaam ${i+1} complete ✅<br>• <b>${esc(task.ref)}</b> ka order <span class="mono">SO-2611-0${48+i}</span> draft ban gaya, factory planning ko alert chala gaya<br>• Client status ab <b>Sab theek</b><br>• Aapka target: ${Math.round(before*100)}% → <b>${Math.round(chat.pct*100)}%</b>`),fin:()=>chat.done++}}
  else if(k==='voice'){const c=t[1]?.ref||t[0].ref;me={h:`<div class="voice">▶ <span class="wave">${[8,14,6,18,10,16,7,12,19,9,13,6,15,8].map(h=>`<i style="height:${h}px"></i>`).join('')}</span> 0:14</div>`};
-  ai={h:`Voice note samjha:<br><i>"${esc(c)} se baat hui. Cefixime pe 8% discount maang rahe hain, 20,000 strips."</i><br><br>✓ Note client ki file mein save ho gaya<br>⚠ 8% aapki discount limit (5%) se zyada hai, isliye approval <b>Rakesh Kumar</b> ko bhej diya. Approve hote hi quote client ko apne aap chala jaayega.`}}
+  ai={h:T(`Voice note understood:<br><i>"Spoke to ${esc(c)}. They want 8% off on Cefixime, 20,000 strips."</i><br><br>✓ Note saved to the client file<br>⚠ 8% is above your discount limit (5%), so the approval went to <b>Rakesh Kumar</b>. The quote goes out automatically once approved.`,`Voice note samjha:<br><i>"${esc(c)} se baat hui. Cefixime pe 8% discount maang rahe hain, 20,000 strips."</i><br><br>✓ Note client ki file mein save ho gaya<br>⚠ 8% aapki discount limit (5%) se zyada hai, isliye approval <b>Rakesh Kumar</b> ko bhej diya. Approve hote hi quote client ko apne aap chala jaayega.`)}}
  else if(k==='quote'){const c=t.find(x=>x.act.startsWith('quote'));const cl=c?clients.find(x=>x.name===c.ref):clients[2];const p=P[c?cl.cross:4];const v=25000*p.rate;
-  me={h:`${esc(cl.name)} ka quote bhejo`};ai={h:`Quote taiyaar hai:<div class="qcard"><span class="pdf">PDF</span><div><b class="mono">QT-2611-114.pdf</b><br><span style="font-size:.76rem;opacity:.75">${p.s} · 25,000 strips · ${inr(v)} + 5% GST</span></div></div>Rate us client ke pichhle orders ke hisaab se lagaya hai. ${esc(cl.name)} ko WhatsApp par bhej doon?`};chat.stage='q'}
- else if(k==='send'){me={h:'Haan, bhejo'};ai={h:'Bhej diya ✓ Jaise hi client quote kholega, main aapko bata dunga. 2 din tak reply nahi aaya to follow-up ka reminder bhi laga diya.'};chat.stage=0}
- else if(k==='target'){const ach=r.achieved+(chat.pct*r.target-r.achieved),rem=Math.max(r.target-ach,0);const mine=clients.filter(c=>c.rep===chat.rep&&health(c)[1]==='bad');
-  me={h:'Mera target kitna bacha?'};ai={h:`Is mahine: <b>${inr(ach)}</b> / ${inr(r.target)} (${Math.round(ach/r.target*100)}%)<br>Bacha: <b>${inr(rem)}</b>, 17 din mein. Yaani roz ~${inr(rem/17)}.<br><br>Sabse jaldi raasta: ${mine.length?mine.map(c=>`<b>${esc(c.name)}</b> (${inr(c.avg)})`).join(' aur ')+' ka chhoota reorder wapas lao.':'apne hot leads close karo.'}`}}
- else if(k==='remind'){me={h:'Kal 11 baje visit yaad dilana'};ai={h:'Done ✓ Kal 10:30 baje reminder aayega. Visit se pehle us client ki last 3 orders aur baaki payment ki summary bhi bhej dunga.'}}
- me.time=ai.time=now();me.ai=0;ai.ai=1;
- chat.msgs.push(me);render();scrollChat();
- const b=$('#waBody');b.insertAdjacentHTML('beforeend','<div class="typing" id="typing"><i></i><i></i><i></i></div>');scrollChat();
- setTimeout(()=>{chat.msgs.push(ai);if(location.hash.slice(1)==='assistant'||!location.hash){render();scrollChat()}},900);
+  me={h:T(`Send quote to ${esc(cl.name)}`,`${esc(cl.name)} ka quote bhejo`)};ai={h:T('Quote ready:','Quote taiyaar hai:')+`<div class="qcard"><span class="pdf">PDF</span><div><b class="mono">QT-2611-114.pdf</b><br><span style="font-size:.76rem;opacity:.75">${p.s} · 25,000 strips · ${inr(v)} + 5% GST</span></div></div>`+T(`Rate is based on this client's past orders. It will go in ${LANGS[cl.lg][0]}, the client's language. Send to ${esc(cl.name)} on WhatsApp?`,`Rate us client ke pichhle orders ke hisaab se lagaya hai. Message client ki bhasha (${LANGS[cl.lg][0]}) mein jaayega. ${esc(cl.name)} ko WhatsApp par bhej doon?`),fin:()=>chat.stage='q'}}
+ else if(k==='send'){me={h:T('Yes, send it','Haan, bhejo')};ai={h:T('Sent ✓ I will tell you as soon as the client opens the quote. If there is no reply in 2 days, a follow-up reminder is already set.','Bhej diya ✓ Jaise hi client quote kholega, main aapko bata dunga. 2 din tak reply nahi aaya to follow-up ka reminder bhi laga diya.'),fin:()=>chat.stage=0}}
+ else if(k==='target'){const ach=chat.pct*r.target,rem=Math.max(r.target-ach,0);const mine=clients.filter(c=>c.rep===chat.rep&&health(c)[1]==='bad');
+  me={h:T('How much target is left?','Mera target kitna bacha?')};ai={h:T(`This month: <b>${inr(ach)}</b> / ${inr(r.target)} (${Math.round(ach/r.target*100)}%)<br>Left: <b>${inr(rem)}</b> in 17 days, about ${inr(rem/17)} a day.<br><br>Fastest way: `,`Is mahine: <b>${inr(ach)}</b> / ${inr(r.target)} (${Math.round(ach/r.target*100)}%)<br>Bacha: <b>${inr(rem)}</b>, 17 din mein. Yaani roz ~${inr(rem/17)}.<br><br>Sabse jaldi raasta: `)+(mine.length?mine.map(c=>`<b>${esc(c.name)}</b> (${inr(c.avg)})`).join(T(' and ',' aur '))+T(' — win back their missed reorders.',' ka chhoota reorder wapas lao.'):T('close your hot leads.','apne hot leads close karo.'))}}
+ else if(k==='remind'){me={h:T('Remind me of the 11 am visit tomorrow','Kal 11 baje visit yaad dilana')};ai={h:T('Done ✓ You will get a reminder at 10:30 tomorrow, with the client\'s last 3 orders and pending payment.','Done ✓ Kal 10:30 baje reminder aayega. Visit se pehle us client ki last 3 orders aur baaki payment ki summary bhi bhej dunga.')}}
+ me.time=now();me.ai=0;ai.ai=1;
+ chat.msgs.push(me);render();scrollEl('#waBody');
+ $('#waBody').insertAdjacentHTML('beforeend','<div class="typing"><i></i><i></i><i></i></div>');scrollEl('#waBody');
+ setTimeout(()=>{ai.time=now();ai.fin&&ai.fin();chat.msgs.push(ai);if(cur()==='assistant'){render();scrollEl('#waBody')}},900);
 }
-function scrollChat(){const b=$('#waBody');if(b)b.scrollTop=b.scrollHeight}
+function scrollEl(s){const b=$(s);if(b)b.scrollTop=b.scrollHeight}
+
+/* client chat with live translation */
+function conv(){return convs.find(c=>c.id===curConv)}
+function vChat(){const c=conv();c.unread=0;const lgN=LANGS[c.lg];const myL=T('English','Hinglish');
+ return head(T('Client Chat','Client Chat'),T('Clients write in their own language: Tamil, Gujarati, Bengali, Marathi and more. Your team reads every message in English or Hinglish, replies the same way, and the AI sends it in the client\'s language.','Client apni bhasha mein likhta hai: Tamil, Gujarati, Bangla, Marathi ya koi bhi. Aapki team har message English ya Hinglish mein padhti hai, waise hi reply likhti hai, aur AI use client ki bhasha mein badal kar bhejta hai.'))+
+ `<div class="inbox"><div class="clist">${convs.map(x=>{const last=x.msgs[x.msgs.length-1];return`<button class="conv ${x.id===curConv?'on':''}" data-act="conv:${x.id}"><span class="t"><b>${esc(x.client)}</b><span class="lg">${LANGS[x.lg][1]}</span></span><small>${last.f==='r'?T('You: ','Aap: '):''}${esc(L([last.en,last.hi]))}</small>${x.unread?`<i>${x.unread}</i>`:''}</button>`}).join('')}</div>
+ <div class="card cpane"><div class="chd"><div><b>${esc(c.client)}</b> <span class="muted">· ${esc(c.contact)}, ${esc(c.city)}</span><span class="tsub">${T('Client writes in','Client ki bhasha')}: <b>${lgN[1]}</b> (${lgN[0]}) · ${T('auto-detected','AI ne pehchani')}</span></div><div class="row"><span class="pill ai">${T(`You read & write in ${myL}`,`Aap ${myL} mein padhte/likhte ho`)}</span></div></div>
+  <div class="wa-body" id="cBody">${c.msgs.map(m=>msgHtml(m,c)).join('')}</div>
+  <div class="cfoot">
+   <div><span class="tsub" style="margin-bottom:6px">${T(`Ready replies (go to the client in ${lgN[0]})`,`Ready replies (client ko ${lgN[0]} mein jaayenge)`)}</span><div class="qr">${c.quick.map((q,i)=>`<button data-act="qr:${i}">${esc(L([q.en,q.hi]))}</button>`).join('')}</div></div>
+   <div class="compose"><label for="chatIn" class="sr">${T('Your reply','Aapka reply')}</label><textarea id="chatIn" rows="2" placeholder="${T('Type in English or Hinglish…','English ya Hinglish mein likhiye…')}"></textarea><div class="stack" style="gap:6px"><button class="btn btn-ai btn-sm" data-act="suggest">${T('AI reply','AI reply')}</button><button class="btn btn-primary btn-sm" data-act="csend" id="cSendBtn">${T('Translate & send','Translate karke bhejo')}</button></div></div>
+   <div id="cPrev"></div><div class="status" id="cStatus"></div>
+   <details class="test"><summary>${T('Test: write as the client, in any language','Test: client ki taraf se kisi bhi bhasha mein likho')}</summary><div class="compose"><label for="testIn" class="sr">Client message</label><textarea id="testIn" rows="2" placeholder="${T('e.g. type in Tamil, Gujarati, Bengali, Arabic…','jaise Tamil, Gujarati, Bangla, Arabic mein likho…')}"></textarea><button class="btn btn-sm" data-act="testin">${T('Receive','Receive karo')}</button></div></details>
+  </div></div></div>
+ <div class="card"><h2>${T('Languages supported','Kaunsi bhashayein chalti hain')}</h2><div class="langs">${['हिन्दी Hindi','ગુજરાતી Gujarati','मराठी Marathi','বাংলা Bengali','தமிழ் Tamil','తెలుగు Telugu','ಕನ್ನಡ Kannada','മലയാളം Malayalam','ਪੰਜਾਬੀ Punjabi','ଓଡ଼ିଆ Odia','অসমীয়া Assamese','اردو Urdu','English','العربية Arabic','Français','Kiswahili'].map(x=>`<span class="pill">${x}</span>`).join('')}</div><p class="muted" style="font-size:.8rem;margin-top:10px">${T('Voice notes from clients are transcribed and translated too. Every message keeps the original, so nothing is lost in translation.','Client ke voice note bhi likhit aur translate hote hain. Har message ka original bhi saath rehta hai, taaki kuch galat na samjha jaaye.')}</p></div>`;
+}
+function msgHtml(m,c){const lgN=LANGS[m.lg||c.lg];
+ if(m.f==='c'){const showTr=!(c.lg==='en'&&lang==='en')&&!m.same;return`<div class="msg ai"><div class="orig" lang="${c.lg}">${esc(m.o)}</div>${showTr?`<div class="tr"><span>${T('Translation','Matlab')} · ${T('English','Hinglish')}${m.det?` · ${T('detected','pehchani')}: ${esc(m.det)}`:''}</span>${esc(L([m.en,m.hi]))}</div>`:''}<time>${m.t}</time></div>`}
+ const mine=L([m.en,m.hi]);const showO=m.o!==mine;
+ return`<div class="msg me"><div>${esc(mine)}</div>${showO?`<div class="tr"><span>${T('Client received','Client ko gaya')} · ${lgN[1]}</span><span lang="${c.lg}" style="font-family:inherit;font-size:.9rem;text-transform:none;letter-spacing:0;opacity:1;display:inline">${esc(m.o)}</span></div>`:''}<time>${m.t} ✓✓</time></div>`}
+let cclock=12;function ctime(){return`12:${String(cclock++).padStart(2,'0')} PM`}
+function pushMine(en,hi,o){const c=conv();c.msgs.push({f:'r',t:ctime(),o,en,hi});pending=null;render();scrollEl('#cBody');toast(T(`Sent to ${c.client} in ${LANGS[c.lg][0]}.`,`${c.client} ko ${LANGS[c.lg][0]} mein bhej diya.`))}
+function setStatus(s){const el=$('#cStatus');if(el)el.textContent=s}
+async function translateOut(text){const c=conv();const s=await samplePromise;if(!s||sampleOff)throw{code:'not_granted'};
+ const r=await s.json(`You translate WhatsApp messages from an Indian pharmaceutical manufacturer's sales rep to their client. The rep wrote in ${T('English','Hinglish (Hindi in Roman letters)')}. Translate it into ${LANGS[c.lg][0]}${c.lg==='en'?'':' using its native script'}. Keep product names, strengths, numbers, ₹ amounts and units unchanged. Polite, natural business tone, as a native speaker would write it.\nReply with only JSON: {"translation":"..."}\n\nMessage:\n${text}`,{modelTier:'quick'});
+ if(!r||typeof r.translation!=='string')throw{code:'upstream_error'};return r.translation}
+async function sendFree(){const box=$('#chatIn');const text=box.value.trim();if(!text)return;const c=conv();
+ if(pending&&pending.src===text){pushMine(text,text,pending.o);return}
+ if(c.lg==='en'&&lang==='en'){pushMine(text,text,text);return}
+ const btn=$('#cSendBtn');btn.disabled=true;setStatus(T('Translating…','Translate ho raha hai…'));
+ try{const o=await translateOut(text);pushMine(text,text,o)}catch(e){setStatus(sampleErr(e))}finally{const b=$('#cSendBtn');if(b)b.disabled=false}}
+async function suggest(){const c=conv();const s=await samplePromise;
+ const fallback=()=>{const q=c.quick[0];$('#chatIn').value=L([q.en,q.hi]);pending={src:L([q.en,q.hi]),o:q.o};showPrev(q.o);setStatus(T('Suggested from ready replies.','Ready replies se suggest kiya.'))};
+ if(!s||sampleOff){fallback();return}
+ setStatus(T('AI is writing a reply…','AI reply likh raha hai…'));
+ const hist=c.msgs.slice(-6).map(m=>`${m.f==='c'?'Client':'Rep'}: ${m.en}`).join('\n');
+ try{const r=await s.json(`You help a sales rep at ${CO}, an Indian pharmaceutical manufacturer, reply to a client on WhatsApp. Conversation so far (English translation):\n${hist}\n\nWrite the rep's next reply: short, polite, helpful, no medical claims, no promises about price beyond what is said above. Give it twice: once in ${T('English','Hinglish (Hindi in Roman letters)')} for the rep, and once in ${LANGS[c.lg][0]}${c.lg==='en'?'':' in its native script'} for the client. Keep product names and numbers unchanged.\nReply with only JSON: {"rep":"...","client":"..."}`,{modelTier:'quick',cache:false});
+  if(!r||typeof r.rep!=='string'||typeof r.client!=='string')throw{code:'upstream_error'};
+  $('#chatIn').value=r.rep;pending={src:r.rep,o:r.client};showPrev(r.client);setStatus(T('Edit if needed, then send.','Zaroorat ho to badlo, fir bhejo.'))}
+ catch(e){const m=sampleErr(e);if(sampleOff)fallback();else setStatus(m)}}
+function showPrev(o){const c=conv();const el=$('#cPrev');if(el)el.innerHTML=`<div class="preview"><span>${T('Client will receive','Client ko jaayega')} · ${LANGS[c.lg][1]}</span><span lang="${c.lg}" style="font-family:inherit;font-size:.9rem;text-transform:none;letter-spacing:0;color:var(--fg);display:block">${esc(o)}</span></div>`}
+async function testIncoming(){const box=$('#testIn');const text=box.value.trim();if(!text)return;const c=conv();const s=await samplePromise;
+ if(!s||sampleOff){setStatus(T('Live AI translation is off in this view, so the test message cannot be translated. The saved chats above show how it works.','Is view mein live AI translation band hai, isliye test message translate nahi hoga. Upar ki chats mein dekh sakte hain ki kaise kaam karta hai.'));return}
+ setStatus(T('Detecting language and translating…','Bhasha pehchan kar translate ho raha hai…'));
+ try{const r=await s.json(`A client of an Indian pharmaceutical manufacturer sent this WhatsApp message. Detect its language, then translate it into English and into Hinglish (Hindi in Roman letters, the casual way Indian sales staff write). Keep product names and numbers unchanged.\nReply with only JSON: {"language":"<language name in English>","english":"...","hinglish":"..."}\n\nMessage:\n${text}`,{modelTier:'quick'});
+  if(!r||typeof r.english!=='string')throw{code:'upstream_error'};
+  c.msgs.push({f:'c',t:ctime(),o:text,en:r.english,hi:String(r.hinglish||r.english),det:String(r.language||'')});box.value='';setStatus('');render();scrollEl('#cBody')}
+ catch(e){setStatus(sampleErr(e))}}
 
 let leadSrc='All';
 function vLeads(){
  const srcs=['All','IndiaMART','Website','WhatsApp','TradeIndia','Call','Email','Referral'];
- const L=leads.filter(l=>leadSrc==='All'||l.src===leadSrc);
- return head('Leads','IndiaMART, website, WhatsApp, email aur calls ki saari inquiries ek jagah. AI har lead ko score karta hai aur 5 minute ke andar client ko auto-reply chala jaata hai.',`<button class="btn btn-ai" data-act="newlead">Nayi lead aane ka demo</button>`)+
- `<div class="row">${srcs.map(s=>`<button class="chip ${s===leadSrc?'on':''}" data-act="src:${s}">${s}</button>`).join('')}</div>
+ const Ls=leads.filter(l=>leadSrc==='All'||l.src===leadSrc);
+ return head('Leads',T('Every inquiry from IndiaMART, your website, WhatsApp, email and calls in one place. The AI scores each lead and the client gets an auto-reply within 5 minutes.','IndiaMART, website, WhatsApp, email aur calls ki saari inquiries ek jagah. AI har lead ko score karta hai aur 5 minute ke andar client ko auto-reply chala jaata hai.'),`<button class="btn btn-ai" data-act="newlead">${T('Demo: a new lead arrives','Nayi lead aane ka demo')}</button>`)+
+ `<div class="row">${srcs.map(s=>`<button class="chip ${s===leadSrc?'on':''}" data-act="src:${s}">${s==='All'?T('All','Sab'):s}</button>`).join('')}</div>
  <div class="grid g4">
-  <div class="card kpi"><div class="lbl">Avg response time</div><div class="val">4 min</div><div class="sub">Pehle: 6 ghante</div></div>
+  <div class="card kpi"><div class="lbl">${T('Avg response time','Avg jawab ka time')}</div><div class="val">4 min</div><div class="sub">${T('Before: 6 hours','Pehle: 6 ghante')}</div></div>
   <div class="card kpi"><div class="lbl">Hot leads</div><div class="val">${leads.filter(l=>l.score>=75&&l.stage!=='Won').length}</div><div class="sub">Score 75+</div></div>
-  <div class="card kpi"><div class="lbl">Pipeline value</div><div class="val">${inr(sum(leads.filter(l=>l.stage!=='Won'),'value'))}</div></div>
-  <div class="card kpi"><div class="lbl">Conversion, 90 din</div><div class="val">18%</div><div class="sub">IndiaMART 14% · Referral 41%</div></div>
+  <div class="card kpi"><div class="lbl">${T('Pipeline value','Pipeline value')}</div><div class="val">${inr(sum(leads.filter(l=>l.stage!=='Won'),'value'))}</div></div>
+  <div class="card kpi"><div class="lbl">${T('Conversion, 90 days','Conversion, 90 din')}</div><div class="val">18%</div><div class="sub">IndiaMART 14% · Referral 41%</div></div>
  </div>
- <div class="kanban">${STAGES.map(s=>{const ls=L.filter(l=>l.stage===s);return`<div class="col"><h3><span>${s}</span><span class="muted">${ls.length} · ${inr(sum(ls,'value'))}</span></h3>${ls.map(l=>`<button class="lead ${l.flash?'flash':''}" data-act="lead:${l.id}"><span class="t"><b>${esc(l.name)}</b><span class="score ${scoreCls(l.score)}">${l.score}</span></span><small>${esc(l.need)}</small><span class="row" style="justify-content:space-between"><span class="pill">${l.src}</span><small>${l.city} · ${l.age}</small></span></button>`).join('')||'<small class="muted" style="padding:4px">Koi lead nahi</small>'}</div>`}).join('')}</div>`;
+ <div class="kanban">${STAGES.map(s=>{const ls=Ls.filter(l=>l.stage===s);return`<div class="col"><h3><span>${stageL(s)}</span><span class="muted">${ls.length} · ${inr(sum(ls,'value'))}</span></h3>${ls.map(l=>`<button class="lead ${l.flash?'flash':''}" data-act="lead:${l.id}"><span class="t"><b>${esc(l.name)}</b><span class="score ${scoreCls(l.score)}">${l.score}</span></span><small>${esc(l.need)}</small><span class="row" style="justify-content:space-between"><span class="pill">${l.src}</span><small>${l.city} · ${ageL(l.age)}</small></span></button>`).join('')||`<small class="muted" style="padding:4px">${T('No leads','Koi lead nahi')}</small>`}</div>`}).join('')}</div>`;
 }
 function openLead(id){const l=leads.find(x=>x.id===id),r=rep(l.rep);l.flash=false;
- const draft=l.score<40?`Namaste ${l.contact} ji,\n\nAapki inquiry ke liye dhanyavaad. Abhi hum ${l.need.split(':').pop().trim()} manufacture nahi karte. Hamari tablet, capsule aur syrup range ki list bhej raha hoon. Agar inmein se kuch kaam aaye to zaroor batayein.\n\n${r.name}\nArogya Lifesciences`:
- `Namaste ${l.contact} ji,\n\nMain ${r.name}, Arogya Lifesciences (WHO-GMP, Baddi) se. Aapki inquiry mili: ${l.need}.\n\n• Rate list aur WHO-GMP certificate attach kar raha hoon\n• Delivery: artwork approval ke 21–28 din baad\n• Aaj 4 baje 10 minute call ho sakti hai?\n\nDhanyavaad`;
+ const draft=l.score<40?T(`Hello ${l.contact},\n\nThank you for your inquiry. We do not manufacture ${l.need.split(':').pop().trim()} at present. I am sharing our list of tablets, capsules and syrups in case something there is useful.\n\n${r.name}\n${CO}`,`Namaste ${l.contact} ji,\n\nAapki inquiry ke liye dhanyavaad. Abhi hum ${l.need.split(':').pop().trim()} manufacture nahi karte. Hamari tablet, capsule aur syrup range ki list bhej raha hoon. Agar inmein se kuch kaam aaye to zaroor batayein.\n\n${r.name}\n${CO}`):
+ T(`Hello ${l.contact},\n\nThis is ${r.name} from ${CO}. We received your inquiry: ${l.need}.\n\n• Rate list and WHO-GMP certificate attached\n• Delivery: 21–28 days after artwork approval\n• Can we have a 10-minute call today at 4 pm?\n\nThank you`,`Namaste ${l.contact} ji,\n\nMain ${r.name}, ${CO} se. Aapki inquiry mili: ${l.need}.\n\n• Rate list aur WHO-GMP certificate attach kar raha hoon\n• Delivery: artwork approval ke 21–28 din baad\n• Aaj 4 baje 10 minute call ho sakti hai?\n\nDhanyavaad`);
  const i=STAGES.indexOf(l.stage);
- drawer(`<div class="ch"><div><span class="pill">${l.src}</span><h2 style="margin-top:6px;font-size:1.2rem">${esc(l.name)}</h2><p class="muted">${esc(l.contact)} · ${l.city} · ${l.age} purani</p></div><button class="btn" data-act="close">Band karo</button></div>
- <div class="card"><div class="ch"><h3>AI lead score</h3><span class="score ${scoreCls(l.score)}" style="font-size:1rem">${l.score}/100</span></div><ul class="reasons">${l.why.map(w=>{const m=w.match(/^([+-]\d+)\s(.*)$/);return m?`<li><span style="color:var(${m[1][0]==='+'?'--good':'--bad'})">${m[1]}</span>${esc(m[2])}</li>`:`<li><span></span>${esc(w)}</li>`}).join('')}</ul></div>
- <div><div class="ch" style="margin-bottom:8px"><h3>Follow-up message <span class="ai-tag">AI draft</span></h3><span class="muted" style="font-size:.78rem">Assigned: ${r.name}</span></div><div class="draft">${esc(draft)}</div></div>
- <div class="row"><button class="btn btn-primary" data-act="sendlead:${l.id}">WhatsApp par bhejo</button>${i<4?`<button class="btn" data-act="stage:${l.id}">Agla stage: ${STAGES[i+1]}</button>`:''}<a class="btn" href="#quotes" data-act="close">Quote banao</a></div>
- <p class="muted" style="font-size:.78rem">Est. deal value: ${inr(l.value)}</p>`)}
+ drawer(`<div class="ch"><div><span class="pill">${l.src}</span><h2 style="margin-top:6px;font-size:1.2rem">${esc(l.name)}</h2><p class="muted">${esc(l.contact)} · ${l.city} · ${ageL(l.age)}</p></div><button class="btn" data-act="close">${T('Close','Band karo')}</button></div>
+ <div class="card"><div class="ch"><h3>AI lead score</h3><span class="score ${scoreCls(l.score)}" style="font-size:1rem">${l.score}/100</span></div><ul class="reasons">${l.why.map(w=>`<li><span style="color:var(${w[0][0]==='-'?'--bad':'--good'})">${w[0]}</span>${esc(T(w[1],w[2]))}</li>`).join('')}${l.score<40?`<li><span></span>${T('AI suggests: decline politely or refer a partner','AI salah: politely mana karo ya partner refer karo')}</li>`:''}</ul></div>
+ <div><div class="ch" style="margin-bottom:8px"><h3>${T('Follow-up message','Follow-up message')} <span class="ai-tag">AI draft</span></h3><span class="muted" style="font-size:.78rem">${T('Assigned','Kiske paas')}: ${r.name}</span></div><div class="draft">${esc(draft)}</div></div>
+ <div class="row"><button class="btn btn-primary" data-act="sendlead:${l.id}">${T('Send on WhatsApp','WhatsApp par bhejo')}</button>${i<4?`<button class="btn" data-act="stage:${l.id}">${T('Next stage','Agla stage')}: ${stageL(STAGES[i+1])}</button>`:''}<a class="btn" href="#quotes" data-act="close">${T('Make quote','Quote banao')}</a></div>
+ <p class="muted" style="font-size:.78rem">${T('Est. deal value','Andazan deal value')}: ${inr(l.value)}</p>`)}
 
 let qs={client:3,p:4,qty:25000,print:true,brand:true,disc:3};
 function vQuotes(){
- return head('Quotation generator','Product, quantity aur packing chuniye. Rate, GST aur terms apne aap lag jaate hain, aur PDF quote 2 minute mein client ke WhatsApp par.')+
+ return head(T('Quotation generator','Quotation banao'),T('Pick the product, quantity and packing. Rate, GST and terms fill in automatically, and a PDF quote reaches the client on WhatsApp in 2 minutes.','Product, quantity aur packing chuniye. Rate, GST aur terms apne aap lag jaate hain, aur PDF quote 2 minute mein client ke WhatsApp par.'))+
  `<div class="grid g12"><div class="card stack">
-  <h2>Naya quote</h2>
+  <h2>${T('New quote','Naya quote')}</h2>
   <div class="field"><label for="qClient">Client</label><select id="qClient">${clients.map(c=>`<option value="${c.id}" ${c.id==qs.client?'selected':''}>${c.name}, ${c.city}</option>`).join('')}</select></div>
   <div class="field"><label for="qProd">Product</label><select id="qProd">${Object.entries(P).map(([k,p])=>`<option value="${k}" ${k==qs.p?'selected':''}>${p.c} · ${p.f} · ${p.pk}</option>`).join('')}</select></div>
-  <div class="grid g2" style="gap:10px"><div class="field"><label for="qQty">Quantity (strips/units)</label><input id="qQty" type="number" min="0" step="1000" value="${qs.qty}"></div>
+  <div class="grid g2" style="gap:10px"><div class="field"><label for="qQty">${T('Quantity (strips/units)','Quantity (strips/units)')}</label><input id="qQty" type="number" min="0" step="1000" value="${qs.qty}"></div>
   <div class="field"><label for="qDisc">Discount %</label><input id="qDisc" type="number" min="0" max="20" step="0.5" value="${qs.disc}"></div></div>
-  <label class="check"><input type="checkbox" id="qPrint" ${qs.print?'checked':''}> Printed carton (+₹0.45/strip)</label>
-  <label class="check"><input type="checkbox" id="qBrand" ${qs.brand?'checked':''}> Client ke brand naam ka printed foil (+₹0.30/strip)</label>
+  <label class="check"><input type="checkbox" id="qPrint" ${qs.print?'checked':''}> ${T('Printed carton (+₹0.45/strip)','Printed carton (+₹0.45/strip)')}</label>
+  <label class="check"><input type="checkbox" id="qBrand" ${qs.brand?'checked':''}> ${T('Foil printed with client\'s brand (+₹0.30/strip)','Client ke brand naam ka printed foil (+₹0.30/strip)')}</label>
   <div id="qNotes" class="stack"></div>
-  <div class="row"><button class="btn btn-primary" data-act="sendquote">WhatsApp par bhejo</button><button class="btn" data-act="emailquote">Email karo</button></div>
+  <div class="row"><button class="btn btn-primary" data-act="sendquote">${T('Send on WhatsApp','WhatsApp par bhejo')}</button><button class="btn" data-act="emailquote">${T('Email','Email karo')}</button></div>
  </div>
  <div class="stack"><div id="qDoc"></div>
- <div class="card"><h2>Haal ke quotes</h2><div class="tbl"><table><thead><tr><th>Quote</th><th>Client</th><th class="r">Value</th><th>Status</th></tr></thead><tbody>${quotes.map(q=>`<tr><td class="mono">${q.id}<span class="tsub">${q.when}</span></td><td>${q.client}<span class="tsub">${P[q.p].s}</span></td><td class="r num">${inr(q.val)}</td><td><span class="pill ${q.st[1]}">${q.st[0]}</span></td></tr>`).join('')}</tbody></table></div></div></div></div>`;
+ <div class="card"><h2>${T('Recent quotes','Haal ke quotes')}</h2><div class="tbl"><table><thead><tr><th>Quote</th><th>Client</th><th class="r">Value</th><th>Status</th></tr></thead><tbody>${quotes.map(q=>`<tr><td class="mono">${q.id}<span class="tsub">${ageL(q.when)}</span></td><td>${q.client}<span class="tsub">${P[q.p].s}</span></td><td class="r num">${inr(q.val)}</td><td><span class="pill ${q.st[1]}">${L(q.st[0])}</span></td></tr>`).join('')}</tbody></table></div></div></div></div>`;
 }
 function updQuote(){
  const c=clients.find(x=>x.id==qs.client),p=P[qs.p];if(!c||!p)return;
  const add=(qs.print?.45:0)+(qs.brand?.3:0),unit=(p.rate+add)*(1-qs.disc/100),sub=unit*qs.qty,gst=sub*.05,fr=qs.qty>=50000?0:4500,tot=sub+gst+fr;
  const cost=p.rate*.8+add*.9,margin=(unit-cost)/unit*100;
  const notes=[];
- if(qs.qty<p.moq)notes.push(['bad',`Quantity MOQ (${num(p.moq)}) se kam hai. Ya to MOQ tak badhao, ya ₹${(1.2).toFixed(2)}/strip extra lagega.`]);
- if(qs.disc>5)notes.push(['bad',`${qs.disc}% discount rep ki limit (5%) se zyada hai. Bhejne se pehle Sales Head ka approval lagega.`]);
- notes.push([margin<12?'bad':'',`Discount ke baad margin: <b>${margin.toFixed(1)}%</b> ${margin<12?'(bahut kam)':'(theek hai)'}. ${esc(c.name)} ne pichhle 3 orders mein average 3% discount liya hai.`]);
- if(c.cross&&c.cross!=qs.p)notes.push(['',`Cross-sell: ${esc(c.name)} jaise clients ${P[c.cross].s} bhi lete hain. Quote mein ek line add karein?`]);
- if(p.st!=='Available')notes.push(['bad',`Production capacity: ${p.st}. Delivery date 1 hafta aage dikhegi.`]);
+ if(qs.qty<p.moq)notes.push(['bad',T(`Quantity is below MOQ (${num(p.moq)}). Raise it to MOQ, or add ₹1.20/strip.`,`Quantity MOQ (${num(p.moq)}) se kam hai. Ya to MOQ tak badhao, ya ₹1.20/strip extra lagega.`)]);
+ if(qs.disc>5)notes.push(['bad',T(`${qs.disc}% is above the rep limit (5%). Sales Head approval is needed before sending.`,`${qs.disc}% discount rep ki limit (5%) se zyada hai. Bhejne se pehle Sales Head ka approval lagega.`)]);
+ notes.push([margin<12?'bad':'',T(`Margin after discount: <b>${margin.toFixed(1)}%</b> ${margin<12?'(too low)':'(fine)'}. ${esc(c.name)} took a 3% discount on average over the last 3 orders.`,`Discount ke baad margin: <b>${margin.toFixed(1)}%</b> ${margin<12?'(bahut kam)':'(theek hai)'}. ${esc(c.name)} ne pichhle 3 orders mein average 3% discount liya hai.`)]);
+ if(c.cross&&c.cross!=qs.p)notes.push(['',T(`Cross-sell: clients like ${esc(c.name)} also buy ${P[c.cross].s}. Add a line to the quote?`,`Cross-sell: ${esc(c.name)} jaise clients ${P[c.cross].s} bhi lete hain. Quote mein ek line add karein?`)]);
+ if(p.st==='Booked')notes.push(['bad',T('Production capacity is booked till 5 Dec. Delivery date moves a week later.','Production capacity 5 Dec tak booked hai. Delivery date 1 hafta aage dikhegi.')]);
+ if(c.lg!=='en')notes.push(['',T(`The WhatsApp message with this quote goes to the client in ${LANGS[c.lg][0]}.`,`Is quote ka WhatsApp message client ko ${LANGS[c.lg][0]} mein jaayega.`)]);
  $('#qNotes').innerHTML=notes.map(([cl,t])=>`<div class="note ${cl}"><span class="ai-tag">AI</span><span>${t}</span></div>`).join('');
- $('#qDoc').innerHTML=`<div class="qdoc"><div class="hd"><div><h3>Arogya Lifesciences Pvt. Ltd.</h3><small>Plot 14, Industrial Area Phase II, Baddi, H.P. · WHO-GMP · Mfg. Lic. Form 25/28</small></div><div style="text-align:right"><b class="mono">QT-2611-114</b><br><small>13 Nov 2026 · 15 din valid</small></div></div>
+ $('#qDoc').innerHTML=`<div class="qdoc"><div class="hd"><div class="lt">${logoSvg(34)}<div><h3>${CO}</h3><small>${T('Address · GSTIN · Drug licence no. (your real details go here)','Address · GSTIN · Drug licence no. (aapki asli details yahan aayengi)')}</small></div></div><div style="text-align:right"><b class="mono">QT-2611-114</b><br><small>13 Nov 2026 · ${T('valid 15 days','15 din valid')}</small></div></div>
  <p><small>To</small><br><b>${esc(c.name)}</b>, ${esc(c.city)}</p>
  <div class="tbl" style="margin:10px 0 0;padding:0"><table><thead><tr><th>Product</th><th>HSN</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Amount</th></tr></thead><tbody>
  <tr><td>${esc(p.c)}<br><small>${p.f} · ${p.pk}${qs.print?' · printed carton':''}${qs.brand?' · client brand foil':''}</small></td><td class="mono">3004</td><td class="r num">${num(qs.qty)}</td><td class="r num">₹${unit.toFixed(2)}</td><td class="r num">₹${num(sub)}</td></tr>
  <tr><td colspan="4" class="r">GST 5%</td><td class="r num">₹${num(gst)}</td></tr>
  <tr><td colspan="4" class="r">Freight</td><td class="r num">${fr?'₹'+num(fr):'Free (FOR)'}</td></tr>
  <tr class="tot"><td colspan="4" class="r">Total</td><td class="r num">₹${num(tot)}</td></tr></tbody></table></div>
- <p style="margin-top:10px"><small>Terms: 50% advance, baaki dispatch se pehle · Delivery: artwork approval ke 21–28 din baad · Har batch ke saath COA · Shelf life 24 mahine</small></p></div>`;
+ <p style="margin-top:10px"><small>${T('Terms: 50% advance, balance before dispatch · Delivery: 21–28 days after artwork approval · COA with every batch · Shelf life 24 months','Terms: 50% advance, baaki dispatch se pehle · Delivery: artwork approval ke 21–28 din baad · Har batch ke saath COA · Shelf life 24 mahine')}</small></p></div>`;
 }
 
 let catQ='aceclofenac paracetamol alu alu';
-function vCatalog(){return head('Products & composition search','Sales rep ya client sirf composition likhe. AI batata hai ki product bante hain ya nahi, packing kya hai, MOQ kitna hai aur capacity kab tak free hai.')+
- `<div class="card stack"><div class="field"><label for="catIn">Composition, product ya packing likhiye</label><input id="catIn" value="${esc(catQ)}" placeholder="jaise: pantoprazole domperidone capsule"></div><div id="catOut"></div></div>
- <div class="card"><h2>Poori product list (${Object.keys(P).length})</h2><div class="tbl"><table><thead><tr><th>Composition</th><th>Form</th><th>Packing</th><th class="r">Rate</th><th class="r">MOQ</th><th>Capacity</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${p.c}<span class="tsub">${p.cat}</span></td><td>${p.f}</td><td>${p.pk}</td><td class="r num">₹${p.rate.toFixed(2)}</td><td class="r num">${num(p.moq)}</td><td><span class="pill ${p.st==='Available'?'good':p.st==='New launch'?'accent':'warn'}">${p.st}</span></td></tr>`).join('')}</tbody></table></div></div>`}
+function vCatalog(){return head(T('Products & composition search','Products aur composition search'),T('A rep or client just types the composition. The AI says whether we make it, the packing, MOQ, and when capacity is free.','Sales rep ya client sirf composition likhe. AI batata hai ki product bante hain ya nahi, packing kya hai, MOQ kitna hai aur capacity kab tak free hai.'))+
+ `<div class="card stack"><div class="field"><label for="catIn">${T('Type a composition, product or packing','Composition, product ya packing likhiye')}</label><input id="catIn" value="${esc(catQ)}" placeholder="${T('e.g. pantoprazole domperidone capsule','jaise: pantoprazole domperidone capsule')}"></div><div id="catOut"></div></div>
+ <div class="card"><h2>${T(`Full product list (${Object.keys(P).length})`,`Poori product list (${Object.keys(P).length})`)}</h2><div class="tbl"><table><thead><tr><th>Composition</th><th>Form</th><th>Packing</th><th class="r">Rate</th><th class="r">MOQ</th><th>Capacity</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${p.c}<span class="tsub">${p.cat}</span></td><td>${p.f}</td><td>${p.pk}</td><td class="r num">₹${p.rate.toFixed(2)}</td><td class="r num">${num(p.moq)}</td><td><span class="pill ${p.st==='Available'?'good':p.st==='New'?'accent':'warn'}">${stLabel(p.st)}</span></td></tr>`).join('')}</tbody></table></div></div>`}
 function updCat(){const w=catQ.toLowerCase().split(/[^a-z0-9]+/).filter(x=>x.length>2&&!['and','with','tablet','tab'].includes(x));
- const res=Object.entries(P).map(([k,p])=>{const hay=(p.c+' '+p.f+' '+p.pk+' '+p.s+' '+p.cat).toLowerCase();const hit=w.filter(x=>hay.includes(x)).length;return{k,p,hit}}).filter(x=>x.hit>0).sort((a,b)=>b.hit-a.hit).slice(0,4);
- $('#catOut').innerHTML=!w.length?'':res.length?`<div class="note"><span class="ai-tag">AI</span><span>${res.length} matching product mile. Sabse achha match: <b>${esc(res[0].p.c)}</b>, ${res[0].p.pk}, MOQ ${num(res[0].p.moq)}, ₹${res[0].p.rate.toFixed(2)}/strip. ${res[0].p.st==='Available'?'Capacity free hai, 21–28 din mein delivery.':res[0].p.st+'.'}</span></div>
- <div class="tbl"><table><tbody>${res.map(({k,p})=>`<tr><td><b>${p.c}</b><span class="tsub">${p.f} · ${p.pk} · MOQ ${num(p.moq)}</span></td><td class="r num">₹${p.rate.toFixed(2)}</td><td class="r"><button class="btn btn-sm" data-act="quotep:${k}">Quote banao</button></td></tr>`).join('')}</tbody></table></div>`:
- `<div class="note bad"><span class="ai-tag">AI</span><span>Ye composition abhi hamari list mein nahi hai. Development team ko request bhej sakte hain (lead time ~90 din, stability ke saath).</span></div>`}
+ const res=Object.entries(P).map(([k,p])=>{const hay=(p.c+' '+p.f+' '+p.pk+' '+p.s+' '+p.cat).toLowerCase();return{k,p,hit:w.filter(x=>hay.includes(x)).length}}).filter(x=>x.hit>0).sort((a,b)=>b.hit-a.hit).slice(0,4);
+ const top=res[0];
+ $('#catOut').innerHTML=!w.length?'':res.length?`<div class="note"><span class="ai-tag">AI</span><span>${T(`${res.length} matching products. Best match: <b>${esc(top.p.c)}</b>, ${top.p.pk}, MOQ ${num(top.p.moq)}, ₹${top.p.rate.toFixed(2)}/strip. ${top.p.st==='Available'?'Capacity is free, delivery in 21–28 days.':stLabel(top.p.st)+'.'}`,`${res.length} matching product mile. Sabse achha match: <b>${esc(top.p.c)}</b>, ${top.p.pk}, MOQ ${num(top.p.moq)}, ₹${top.p.rate.toFixed(2)}/strip. ${top.p.st==='Available'?'Capacity free hai, 21–28 din mein delivery.':stLabel(top.p.st)+'.'}`)}</span></div>
+ <div class="tbl"><table><tbody>${res.map(({k,p})=>`<tr><td><b>${p.c}</b><span class="tsub">${p.f} · ${p.pk} · MOQ ${num(p.moq)}</span></td><td class="r num">₹${p.rate.toFixed(2)}</td><td class="r"><button class="btn btn-sm" data-act="quotep:${k}">${T('Make quote','Quote banao')}</button></td></tr>`).join('')}</tbody></table></div>`:
+ `<div class="note bad"><span class="ai-tag">AI</span><span>${T('This composition is not on our list. We can send a request to the development team (lead time ~90 days, with stability).','Ye composition abhi hamari list mein nahi hai. Development team ko request bhej sakte hain (lead time ~90 din, stability ke saath).')}</span></div>`}
 
-function vOrders(){return head('Order tracking','Har order ka live status: artwork se dispatch tak. Client ko tracking link milta hai, isliye "mera order kahan hai?" wali calls band.')+
- `<div class="grid g4">${['Production mein','QC mein','Atke hue','Is hafte dispatch'].map((l,i)=>`<div class="card kpi"><div class="lbl">${l}</div><div class="val">${[orders.filter(o=>o.stage>=2&&o.stage<=3).length,orders.filter(o=>o.stage===4).length,orders.filter(o=>o.block).length,2][i]}</div></div>`).join('')}</div>
- <div class="stack">${orders.map(o=>`<div class="card"><div class="ch" style="margin:0"><div><b class="mono">${o.id}</b> · <b>${o.client}</b><span class="tsub">${P[o.p].c} · ${num(o.qty)} strips · ${inr(o.val)} · Batch <span class="mono">${o.batch}</span></span></div><div class="row"><span class="pill ${o.block?'bad':o.stage===6?'good':'accent'}">${o.block?'Atka hai: ':''}${OSTAGES[o.stage]}</span><span class="muted" style="font-size:.8rem">ETA ${o.eta}</span></div></div>
- <div class="track">${OSTAGES.map((s,i)=>`<span class="${i<o.stage||o.stage===6?'d':i===o.stage?(o.block?'x':'c'):''}" title="${s}"></span>`).join('')}</div>
- ${o.block?`<div class="note bad" style="margin-top:10px"><span class="ai-tag">AI</span><span>${o.block}. Client ko reminder bhej dein?</span></div>`:''}
- <div class="row" style="margin-top:10px"><button class="btn btn-sm" data-act="tl:${o.id}">Timeline</button><button class="btn btn-sm" data-act="track:${o.id}">Tracking link copy karo</button>${o.block?`<button class="btn btn-sm btn-primary" data-act="nudge:${o.id}">Client ko yaad dilao</button>`:''}</div>
- <ul class="tl" id="tl-${o.id}" hidden>${OSTAGES.map((s,i)=>`<li class="${i<o.stage||o.stage===6?'d':i===o.stage?(o.block?'x':'c'):''}">${s}${i<o.stage||o.stage===6?` <span class="muted">· ${[3,5,6,8,10,11,12][i]} Nov</span>`:i===o.stage?' <span class="muted">· abhi</span>':''}</li>`).join('')}</ul></div>`).join('')}</div>`}
+function vOrders(){return head(T('Order tracking','Order tracking'),T('Live status of every order from artwork to dispatch. Clients get a tracking link, so the "where is my order?" calls stop.','Har order ka live status: artwork se dispatch tak. Client ko tracking link milta hai, isliye "mera order kahan hai?" wali calls band.'))+
+ `<div class="grid g4">${[[T('In production','Production mein'),orders.filter(o=>o.stage>=2&&o.stage<=3).length],[T('In QC','QC mein'),orders.filter(o=>o.stage===4).length],[T('Stuck','Atke hue'),orders.filter(o=>o.block).length],[T('Dispatching this week','Is hafte dispatch'),2]].map(([l,v])=>`<div class="card kpi"><div class="lbl">${l}</div><div class="val">${v}</div></div>`).join('')}</div>
+ <div class="stack">${orders.map(o=>{const done=i=>i<o.stage||o.stage===6;return`<div class="card"><div class="ch" style="margin:0"><div><b class="mono">${o.id}</b> · <b>${o.client}</b><span class="tsub">${P[o.p].c} · ${num(o.qty)} strips · ${inr(o.val)} · Batch <span class="mono">${o.batch}</span></span></div><div class="row"><span class="pill ${o.block?'bad':o.stage===6?'good':'accent'}">${o.block?T('Stuck: ','Atka hai: '):''}${L(OSTAGES[o.stage])}</span><span class="muted" style="font-size:.8rem">ETA ${L(o.eta)}</span></div></div>
+ <div class="track">${OSTAGES.map((s,i)=>`<span class="${done(i)?'d':i===o.stage?(o.block?'x':'c'):''}" title="${L(s)}"></span>`).join('')}</div>
+ ${o.block?`<div class="note bad" style="margin-top:10px"><span class="ai-tag">AI</span><span>${L(o.block)}. ${T('Send the client a reminder?','Client ko reminder bhej dein?')}</span></div>`:''}
+ <div class="row" style="margin-top:10px"><button class="btn btn-sm" data-act="tl:${o.id}">Timeline</button><button class="btn btn-sm" data-act="track:${o.id}">${T('Copy tracking link','Tracking link copy karo')}</button>${o.block?`<button class="btn btn-sm btn-primary" data-act="nudge:${o.id}">${T('Remind client','Client ko yaad dilao')}</button>`:''}</div>
+ <ul class="tl" id="tl-${o.id}" hidden>${OSTAGES.map((s,i)=>`<li class="${done(i)?'d':i===o.stage?(o.block?'x':'c'):''}">${L(s)}${done(i)?` <span class="muted">· ${[3,5,6,8,10,11,12][i]} Nov</span>`:i===o.stage?` <span class="muted">· ${T('now','abhi')}</span>`:''}</li>`).join('')}</ul></div>`}).join('')}</div>`}
 
 let cFilter='All';
 function vClients(){const f=['All','Churn risk','Reorder missed','Reorder due','Healthy'];
  const C=clients.filter(c=>cFilter==='All'||health(c)[0]===cFilter).sort((a,b)=>b.last/b.cycle-a.last/a.cycle);
- return head('Clients & reorders','AI har client ka order pattern yaad rakhta hai. Reorder late hote hi alert aata hai, kyunki chupchaap kisi aur ke paas chale jaane wala client wahi hota hai.',`<button class="btn btn-primary" data-act="remindall">Sab late clients ko reminder</button>`)+
- `<div class="grid g4">${['Churn risk','Reorder missed','Reorder due','Healthy'].map(h=>{const cs=clients.filter(c=>health(c)[0]===h);return`<div class="card kpi"><div class="lbl">${h}</div><div class="val">${cs.length}</div><div class="sub">${inr(sum(cs,'avg'))} per cycle</div></div>`}).join('')}</div>
- <div class="row">${f.map(s=>`<button class="chip ${s===cFilter?'on':''}" data-act="cf:${s}">${s}</button>`).join('')}</div>
- <div class="card"><div class="tbl"><table><thead><tr><th>Client</th><th>Last order</th><th>Status</th><th class="r">Avg order</th><th>AI suggestion</th><th></th></tr></thead><tbody>${C.map(c=>{const h=health(c);return`<tr><td><b>${c.name}</b><span class="tsub">${c.type} · ${c.city} · ${rep(c.rep).name}</span></td><td class="num">${c.last} din pehle<span class="tsub">Aam taur par har ${c.cycle} din</span></td><td><span class="pill ${h[1]}">${h[0]}</span></td><td class="r num">${inr(c.avg)}</td><td style="min-width:220px">${h[1]==='bad'?`Call karo + ${P[c.buys[0]].s} pe chhota scheme do`:h[1]==='warn'?'Is hafte stock check karne ka message bhejo':`${P[c.cross].s} cross-sell karo`}</td><td class="r"><button class="btn btn-sm" data-act="remind:${c.id}">${h[1]==='good'?'Offer':'Reminder'}</button></td></tr>`}).join('')}</tbody></table></div></div>`}
+ return head(T('Clients & reorders','Clients aur reorder'),T('The AI remembers every client\'s order pattern. You get an alert as soon as a reorder is late, because that is the client who quietly moves to someone else.','AI har client ka order pattern yaad rakhta hai. Reorder late hote hi alert aata hai, kyunki chupchaap kisi aur ke paas chale jaane wala client wahi hota hai.'),`<button class="btn btn-primary" data-act="remindall">${T('Remind all late clients','Sab late clients ko reminder')}</button>`)+
+ `<div class="grid g4">${['Churn risk','Reorder missed','Reorder due','Healthy'].map(h=>{const cs=clients.filter(c=>health(c)[0]===h);return`<div class="card kpi"><div class="lbl">${healthL(h)}</div><div class="val">${cs.length}</div><div class="sub">${inr(sum(cs,'avg'))} ${T('per cycle','har cycle')}</div></div>`}).join('')}</div>
+ <div class="row">${f.map(s=>`<button class="chip ${s===cFilter?'on':''}" data-act="cf:${s}">${s==='All'?T('All','Sab'):healthL(s)}</button>`).join('')}</div>
+ <div class="card"><div class="tbl"><table><thead><tr><th>Client</th><th>${T('Last order','Last order')}</th><th>Status</th><th class="r">${T('Avg order','Avg order')}</th><th>${T('AI suggestion','AI ki salah')}</th><th></th></tr></thead><tbody>${C.map(c=>{const h=health(c);return`<tr><td><b>${c.name}</b><span class="tsub">${c.type} · ${c.city} · ${rep(c.rep).name} · ${LANGS[c.lg][1]}</span></td><td class="num">${T(`${c.last} days ago`,`${c.last} din pehle`)}<span class="tsub">${T(`Usually every ${c.cycle} days`,`Aam taur par har ${c.cycle} din`)}</span></td><td><span class="pill ${h[1]}">${healthL(h[0])}</span></td><td class="r num">${inr(c.avg)}</td><td style="min-width:220px">${h[1]==='bad'?T(`Call + small scheme on ${P[c.buys[0]].s}`,`Call karo + ${P[c.buys[0]].s} pe chhota scheme do`):h[1]==='warn'?T('Message to check stock this week','Is hafte stock check karne ka message bhejo'):T(`Cross-sell ${P[c.cross].s}`,`${P[c.cross].s} cross-sell karo`)}</td><td class="r"><button class="btn btn-sm" data-act="remind:${c.id}">${h[1]==='good'?'Offer':'Reminder'}</button></td></tr>`}).join('')}</tbody></table></div></div>`}
 
 function vPayments(){const b=[[0,30],[31,60],[61,90],[91,999]].map(([a,z])=>sum(payments.filter(p=>p.days>=a&&p.days<=z),'amt'));const tot=sum(payments,'amt');const col=['var(--good)','var(--warn)','var(--ai)','var(--bad)'];
- return head('Payment collection','Pharma mein paisa udhaar mein hi phansta hai. AI Tally se outstanding padhta hai, client ko politely reminder bhejta hai, aur purane due wale client ka naya order hold par daal deta hai.',`<button class="btn btn-primary" data-act="payall">Sabko reminder bhejo</button>`)+
- `<div class="card"><div class="ch"><h2>Kitne din se baaki (${inr(tot)})</h2></div><div class="split">${b.map((v,i)=>`<b style="width:${v/tot*100}%;background:${col[i]}"></b>`).join('')}</div><div class="legend">${['0–30 din','31–60','61–90','90+ din'].map((l,i)=>`<span><i style="background:${col[i]}"></i>${l}: <b class="num">${inr(b[i])}</b></span>`).join('')}</div></div>
- <div class="card"><div class="tbl"><table><thead><tr><th>Client</th><th>Invoice</th><th class="r">Amount</th><th class="r">Din</th><th>AI action</th><th></th></tr></thead><tbody>${payments.sort((a,b)=>b.days-a.days).map(p=>`<tr><td><b>${p.client}</b>${p.note?`<span class="tsub">${p.note}</span>`:''}</td><td class="mono">${p.inv}</td><td class="r num">${inr(p.amt)}</td><td class="r"><span class="pill ${p.days>90?'bad':p.days>60?'ai':p.days>30?'warn':'good'}">${p.days}</span></td><td>${p.days>90?'Naya order hold · owner call':p.days>60?'Firm reminder + rep visit':p.days>30?'Polite WhatsApp reminder':'Due date se 3 din pehle reminder'}</td><td class="r"><button class="btn btn-sm" data-act="pay:${p.inv}">Reminder</button></td></tr>`).join('')}</tbody></table></div></div>`}
+ return head(T('Payment collection','Payment wasooli'),T('In pharma, money gets stuck in credit. The AI reads outstanding from Tally, sends the client a polite reminder in their language, and holds new orders for very old dues.','Pharma mein paisa udhaar mein hi phansta hai. AI Tally se outstanding padhta hai, client ko uski bhasha mein politely reminder bhejta hai, aur bahut purane due wale client ka naya order hold par daal deta hai.'),`<button class="btn btn-primary" data-act="payall">${T('Remind everyone','Sabko reminder bhejo')}</button>`)+
+ `<div class="card"><div class="ch"><h2>${T(`How long pending (${inr(tot)})`,`Kitne din se baaki (${inr(tot)})`)}</h2></div><div class="split">${b.map((v,i)=>`<b style="width:${v/tot*100}%;background:${col[i]}"></b>`).join('')}</div><div class="legend">${[T('0–30 days','0–30 din'),'31–60','61–90',T('90+ days','90+ din')].map((l,i)=>`<span><i style="background:${col[i]}"></i>${l}: <b class="num">${inr(b[i])}</b></span>`).join('')}</div></div>
+ <div class="card"><div class="tbl"><table><thead><tr><th>Client</th><th>Invoice</th><th class="r">Amount</th><th class="r">${T('Days','Din')}</th><th>AI action</th><th></th></tr></thead><tbody>${payments.slice().sort((a,b)=>b.days-a.days).map(p=>`<tr><td><b>${p.client}</b>${p.note?`<span class="tsub">${L(p.note)}</span>`:''}</td><td class="mono">${p.inv}</td><td class="r num">${inr(p.amt)}</td><td class="r"><span class="pill ${p.days>90?'bad':p.days>60?'ai':p.days>30?'warn':'good'}">${p.days}</span></td><td>${p.days>90?T('Hold new orders · owner call','Naya order hold · owner call'):p.days>60?T('Firm reminder + rep visit','Sakht reminder + rep visit'):p.days>30?T('Polite WhatsApp reminder','Polite WhatsApp reminder'):T('Reminder 3 days before due','Due date se 3 din pehle reminder')}</td><td class="r"><button class="btn btn-sm" data-act="pay:${p.inv}">Reminder</button></td></tr>`).join('')}</tbody></table></div></div>`}
 
-function vTenders(){return head('Tender tracker','GeM aur sarkari tender portals roz subah scan hote hain. AI batata hai ki kis tender mein aapke products fit hote hain aur kaunsa document kam hai.')+
- `<div class="stack">${tenders.map((t,i)=>`<div class="card"><div class="ch" style="margin:0"><div style="min-width:0"><b>${t.t}</b><span class="tsub">${t.by} · sample</span></div><div class="row"><span class="pill ${t.match>=80?'good':t.match>=60?'warn':'bad'}">${t.match}% match</span><span class="pill ${t.days<=7?'bad':''}">${t.days} din bache</span></div></div>
- <div class="grid g3" style="margin-top:12px;gap:10px"><div><span class="tsub">Estimated value</span><b class="num">${inr(t.val)}</b></div><div><span class="tsub">Hamare products</span><b>${t.items}</b></div><div><span class="tsub">Eligibility</span>${t.need.map((n,j)=>`<span class="pill ${t.have[j]?'good':'bad'}" style="margin:2px 4px 0 0">${t.have[j]?'✓':'✗'} ${n}</span>`).join('')}</div></div>
- <div class="row" style="margin-top:12px"><button class="btn btn-sm btn-primary" data-act="bid:${i}">Bid documents taiyaar karo</button><button class="btn btn-sm" data-act="skip:${i}">Skip</button></div></div>`).join('')}</div>`}
+function vTenders(){return head(T('Tender tracker','Tender tracker'),T('GeM and government tender portals are scanned every morning. The AI shows which tenders fit your products and which document is missing.','GeM aur sarkari tender portals roz subah scan hote hain. AI batata hai ki kis tender mein aapke products fit hote hain aur kaunsa document kam hai.'))+
+ `<div class="stack">${tenders.map((t,i)=>`<div class="card"><div class="ch" style="margin:0"><div style="min-width:0"><b>${L(t.t)}</b><span class="tsub">${L(t.by)} · sample</span></div><div class="row"><span class="pill ${t.match>=80?'good':t.match>=60?'warn':'bad'}">${t.match}% match</span><span class="pill ${t.days<=7?'bad':''}">${T(`${t.days} days left`,`${t.days} din bache`)}</span></div></div>
+ <div class="grid g3" style="margin-top:12px;gap:10px"><div><span class="tsub">${T('Estimated value','Andazan value')}</span><b class="num">${inr(t.val)}</b></div><div><span class="tsub">${T('Our products','Hamare products')}</span><b>${L(t.items)}</b></div><div><span class="tsub">${T('Eligibility','Eligibility')}</span>${t.need.map((n,j)=>`<span class="pill ${t.have[j]?'good':'bad'}" style="margin:2px 4px 0 0">${t.have[j]?'✓':'✗'} ${L(n)}</span>`).join('')}</div></div>
+ <div class="row" style="margin-top:12px"><button class="btn btn-sm btn-primary" data-act="bid:${i}">${T('Prepare bid documents','Bid documents taiyaar karo')}</button><button class="btn btn-sm" data-act="skip:${i}">Skip</button></div></div>`).join('')}</div>`}
 
-const rules=[['Dispatch hote hi batch ka COA client ko bhejo',true],['Export lead aate hi WHO-GMP + COPP bhejo',true],['Tender se 7 din pehle documents check karo',true],['Expiry se 30 din pehle renewal alert',true]];
-function vDocuments(){return head('Documents','COA, WHO-GMP, licence, COPP: client maange to bot turant bhej deta hai. Kisi certificate ki expiry paas aaye to alert aata hai.')+
- `<div class="grid g21"><div class="card"><div class="tbl"><table><thead><tr><th>Document</th><th>Valid till</th><th class="r">Kitni baar bheja</th><th></th></tr></thead><tbody>${docs.map(d=>`<tr><td><b>${d.n}</b><span class="tsub">${d.k}</span></td><td>${d.left<30?`<span class="pill bad">${d.exp} · ${d.left} din</span>`:d.exp}</td><td class="r num">${d.sent}</td><td class="r"><button class="btn btn-sm" data-act="doc:${esc(d.n)}">Bhejo</button></td></tr>`).join('')}</tbody></table></div></div>
- <div class="stack"><div class="card"><h2>Auto-send rules</h2>${rules.map((r,i)=>`<label class="check" style="padding:6px 0"><input type="checkbox" id="rule${i}" ${r[1]?'checked':''}> ${r[0]}</label>`).join('')}</div>
- <div class="card"><h2>Aaj bheje gaye</h2><ul class="reasons"><li><span>10:42</span>COA ARL-C2610C → Om Healthcare (dispatch ke saath, apne aap)</li><li><span>09:15</span>WHO-GMP + COPP → Medisun Exports (client ne WhatsApp par maanga)</li><li><span>08:30</span>Alert: Free Sale Certificate 15 din mein expire hoga</li></ul></div></div></div>`}
+const rules=[[['Send the batch COA to the client on dispatch','Dispatch hote hi batch ka COA client ko bhejo'],true],[['Send WHO-GMP + COPP as soon as an export lead arrives','Export lead aate hi WHO-GMP + COPP bhejo'],true],[['Check documents 7 days before a tender closes','Tender se 7 din pehle documents check karo'],true],[['Renewal alert 30 days before expiry','Expiry se 30 din pehle renewal alert'],true]];
+function vDocuments(){return head(T('Documents','Documents'),T('COA, WHO-GMP, licences, COPP: the bot sends them the moment a client asks. You get an alert when a certificate is close to expiry.','COA, WHO-GMP, licence, COPP: client maange to bot turant bhej deta hai. Kisi certificate ki expiry paas aaye to alert aata hai.'))+
+ `<div class="grid g21"><div class="card"><div class="tbl"><table><thead><tr><th>Document</th><th>${T('Valid till','Kab tak valid')}</th><th class="r">${T('Times sent','Kitni baar bheja')}</th><th></th></tr></thead><tbody>${docs.map((d,i)=>`<tr><td><b>${d.n}</b><span class="tsub">${d.k}</span></td><td>${d.left<30?`<span class="pill bad">${d.exp} · ${T(`${d.left} days`,`${d.left} din`)}</span>`:d.exp}</td><td class="r num">${d.sent}</td><td class="r"><button class="btn btn-sm" data-act="doc:${i}">${T('Send','Bhejo')}</button></td></tr>`).join('')}</tbody></table></div></div>
+ <div class="stack"><div class="card"><h2>${T('Auto-send rules','Apne aap bhejne ke rules')}</h2>${rules.map((r,i)=>`<label class="check" style="padding:6px 0"><input type="checkbox" id="rule${i}" ${r[1]?'checked':''}> ${L(r[0])}</label>`).join('')}</div>
+ <div class="card"><h2>${T('Sent today','Aaj bheje gaye')}</h2><ul class="reasons"><li><span>10:42</span>${T('COA VH-C2610C → Om Healthcare (automatically, with dispatch)','COA VH-C2610C → Om Healthcare (dispatch ke saath, apne aap)')}</li><li><span>09:15</span>${T('WHO-GMP + COPP → Medisun Exports (client asked on WhatsApp)','WHO-GMP + COPP → Medisun Exports (client ne WhatsApp par maanga)')}</li><li><span>08:30</span>${T('Alert: Free Sale Certificate expires in 15 days','Alert: Free Sale Certificate 15 din mein expire hoga')}</li></ul></div></div></div>`}
 
 let camp={seg:0,tpl:0};
-const segs=[['Reorder chhoota / churn risk',()=>atRisk()],['Sab PCD partners',()=>clients.filter(c=>c.type==='PCD Franchise')],['Third-party clients',()=>clients.filter(c=>c.type==='Third-party')],['Distributors',()=>clients.filter(c=>c.type==='Distributor')]];
-const tpls=['Reorder reminder','New launch: D3 60K','Year-end scheme'];
-function campMsg(){const t=camp.tpl;return t===0?`Namaste {naam} ji,\n\nAapka pichhla order {din} din pehle aaya tha. Agar {product} ka stock kam ho raha hai, to is hafte order karne par 21 din mein delivery pakki.\n\nReply karein "ORDER", rate list turant bhej denge.\n— Arogya Lifesciences`:t===1?`Namaste {naam} ji,\n\nNaya launch: Cholecalciferol 60,000 IU softgel, 4 caps blister. Launch rate ₹19/strip, MOQ 20,000.\n\nSample ke liye reply karein "SAMPLE".\n— Arogya Lifesciences`:`Namaste {naam} ji,\n\nYear-end scheme: 31 Dec tak 50,000+ strips ke order par 3% extra discount aur free freight.\n\nApna order reply mein bhejein.\n— Arogya Lifesciences`}
-function vCampaigns(){const aud=segs[camp.seg][1]();const c=aud[0];
- return head('WhatsApp campaigns','Ek click mein sahi clients ko sahi message. AI har message mein client ka naam, product aur din khud bharta hai, isliye wo broadcast jaisa nahi lagta.')+
- `<div class="grid g12"><div class="card stack"><h2>Naya campaign</h2>
- <div class="field"><label for="cSeg">Kisko bhejna hai</label><select id="cSeg">${segs.map((s,i)=>`<option value="${i}" ${i==camp.seg?'selected':''}>${s[0]} (${s[1]().length})</option>`).join('')}</select></div>
- <div class="row">${tpls.map((t,i)=>`<button class="chip ${i==camp.tpl?'on':''}" data-act="tpl:${i}">${t}</button>`).join('')}</div>
+const segs=[[['Missed reorder / churn risk','Reorder chhoota / client ja sakta hai'],()=>atRisk()],[['All PCD partners','Sab PCD partners'],()=>clients.filter(c=>c.type==='PCD Franchise')],[['Third-party clients','Third-party clients'],()=>clients.filter(c=>c.type==='Third-party')],[['Distributors','Distributors'],()=>clients.filter(c=>c.type==='Distributor')]];
+const tpls=[['Reorder reminder','Reorder reminder'],['New launch: D3 60K','Naya launch: D3 60K'],['Year-end scheme','Year-end scheme']];
+function campMsg(){const t=camp.tpl;return t===0?T(`Hello {name},\n\nYour last order was {days} days ago. If your {product} stock is running low, order this week and delivery in 21 days is guaranteed.\n\nReply "ORDER" and we will send the rate list right away.\n— ${CO}`,`Namaste {naam} ji,\n\nAapka pichhla order {din} din pehle aaya tha. Agar {product} ka stock kam ho raha hai, to is hafte order karne par 21 din mein delivery pakki.\n\nReply karein "ORDER", rate list turant bhej denge.\n— ${CO}`):t===1?T(`Hello {name},\n\nNew launch: Cholecalciferol 60,000 IU softgel, 4-cap blister. Launch rate ₹19/strip, MOQ 20,000.\n\nReply "SAMPLE" for a sample.\n— ${CO}`,`Namaste {naam} ji,\n\nNaya launch: Cholecalciferol 60,000 IU softgel, 4 caps blister. Launch rate ₹19/strip, MOQ 20,000.\n\nSample ke liye reply karein "SAMPLE".\n— ${CO}`):T(`Hello {name},\n\nYear-end scheme: 3% extra discount and free freight on orders of 50,000+ strips until 31 Dec.\n\nReply with your order.\n— ${CO}`,`Namaste {naam} ji,\n\nYear-end scheme: 31 Dec tak 50,000+ strips ke order par 3% extra discount aur free freight.\n\nApna order reply mein bhejein.\n— ${CO}`)}
+function vCampaigns(){const aud=segs[camp.seg][1]();const c=aud[0];const lgs=[...new Set(aud.map(x=>LANGS[x.lg][0]))];
+ return head(T('WhatsApp campaigns','WhatsApp campaigns'),T('The right message to the right clients in one click. The AI fills in each client\'s name, product and days, and sends it in the client\'s own language, so it never reads like a broadcast.','Ek click mein sahi clients ko sahi message. AI har message mein client ka naam, product aur din khud bharta hai, aur client ki apni bhasha mein bhejta hai, isliye wo broadcast jaisa nahi lagta.'))+
+ `<div class="grid g12"><div class="card stack"><h2>${T('New campaign','Naya campaign')}</h2>
+ <div class="field"><label for="cSeg">${T('Send to','Kisko bhejna hai')}</label><select id="cSeg">${segs.map((s,i)=>`<option value="${i}" ${i==camp.seg?'selected':''}>${L(s[0])} (${s[1]().length})</option>`).join('')}</select></div>
+ <div class="row">${tpls.map((t,i)=>`<button class="chip ${i==camp.tpl?'on':''}" data-act="tpl:${i}">${L(t)}</button>`).join('')}</div>
  <div class="field"><label for="cMsg">Message <span class="ai-tag">AI</span></label><textarea id="cMsg">${esc(campMsg())}</textarea></div>
- <div class="row"><button class="btn btn-primary" data-act="sendcamp">${aud.length} clients ko bhejo</button><span class="muted" style="font-size:.8rem">Kharcha ~₹${(aud.length*0.88).toFixed(2)} (WhatsApp marketing rate)</span></div></div>
- <div class="card"><h2>Preview: ${c?esc(c.name):'—'}</h2><div style="background:var(--wa-bg);border-radius:10px;padding:14px"><div class="msg me" style="max-width:100%;white-space:pre-wrap">${c?esc(campMsg().replace('{naam}',c.name.split(' ')[0]).replace('{din}',c.last).replace('{product}',P[c.buys[0]].s)):''}<time>9:00 AM ✓✓</time></div></div></div></div>
- <div class="card"><h2>Pichhle campaigns</h2><div class="tbl"><table><thead><tr><th>Campaign</th><th class="r">Delivered</th><th class="r">Padha</th><th class="r">Reply</th><th class="r">Orders</th><th class="r">Business</th></tr></thead><tbody>${campaignsSent.map(c=>`<tr><td><b>${esc(c.name)}</b><span class="tsub">${c.aud} · ${c.when}</span></td><td class="r num">${c.del}</td><td class="r num">${c.read}</td><td class="r num">${c.rep}</td><td class="r num">${c.orders}</td><td class="r num">${c.val?inr(c.val):'—'}</td></tr>`).join('')}</tbody></table></div></div>`}
+ <div class="note"><span class="ai-tag">AI</span><span>${T(`Will be sent in each client's language: ${lgs.join(', ')}.`,`Har client ko uski bhasha mein jaayega: ${lgs.join(', ')}.`)}</span></div>
+ <div class="row"><button class="btn btn-primary" data-act="sendcamp">${T(`Send to ${aud.length} clients`,`${aud.length} clients ko bhejo`)}</button><span class="muted" style="font-size:.8rem">${T('Cost','Kharcha')} ~₹${(aud.length*0.88).toFixed(2)}</span></div></div>
+ <div class="card"><h2>Preview: ${c?esc(c.name):'—'}</h2><div style="background:var(--wa-bg);border-radius:10px;padding:14px"><div class="msg me" style="max-width:100%;white-space:pre-wrap">${c?esc(campMsg().replace(/\{naam\}|\{name\}/,c.name.split(' ')[0]).replace(/\{din\}|\{days\}/,c.last).replace('{product}',P[c.buys[0]].s)):''}<time>9:00 AM ✓✓</time></div></div>${c&&c.lg!=='en'?`<p class="muted" style="font-size:.8rem;margin-top:8px">${T(`${c.name} receives this in ${LANGS[c.lg][0]} (${LANGS[c.lg][1]}).`,`${c.name} ko ye ${LANGS[c.lg][0]} (${LANGS[c.lg][1]}) mein milega.`)}</p>`:''}</div></div>
+ <div class="card"><h2>${T('Past campaigns','Pichhle campaigns')}</h2><div class="tbl"><table><thead><tr><th>Campaign</th><th class="r">Delivered</th><th class="r">${T('Read','Padha')}</th><th class="r">Reply</th><th class="r">Orders</th><th class="r">Business</th></tr></thead><tbody>${campaignsSent.map(x=>`<tr><td><b>${esc(L(x.name))}</b><span class="tsub">${L(x.aud)} · ${x.when}</span></td><td class="r num">${x.del}</td><td class="r num">${x.read}</td><td class="r num">${x.rep}</td><td class="r num">${x.orders}</td><td class="r num">${x.val?inr(x.val):'—'}</td></tr>`).join('')}</tbody></table></div></div>`}
 
 function vAnalytics(){const prodRev=[[2,2850000],[4,2140000],[7,1720000],[1,1310000],[9,980000]];const pm=prodRev[0][1];
  const types=[['Third-party',.46,'var(--accent)'],['Distributor',.22,'var(--ai)'],['PCD Franchise',.14,'var(--good)'],['Export',.12,'var(--warn)'],['Hospital',.06,'var(--muted)']];
- return head('Analytics','Kahan se business aa raha hai, kaunsa product chal raha hai aur kaunsa region peeche hai.')+
- `<div class="grid g2"><div class="card"><h2>Region: target vs achieved (MTD)</h2>${reps.map(r=>`<div class="hbar"><span>${r.region}<span class="tsub">${inr(r.achieved)} / ${inr(r.target)}</span></span><span class="trk"><b class="${r.achieved/r.target>=.75?'over':''}" style="width:${r.achieved/r.target*100}%"></b></span><span class="num mono">${Math.round(r.achieved/r.target*100)}%</span></div>`).join('')}</div>
- <div class="card"><h2>Top products, pichhle 90 din</h2>${prodRev.map(([k,v])=>`<div class="hbar"><span>${P[k].s}</span><span class="trk"><b style="width:${v/pm*100}%"></b></span><span class="num mono">${inr(v)}</span></div>`).join('')}</div>
- <div class="card"><h2>Business kis type ke client se</h2><div class="split">${types.map(t=>`<b style="width:${t[1]*100}%;background:${t[2]}"></b>`).join('')}</div><div class="legend">${types.map(t=>`<span><i style="background:${t[2]}"></i>${t[0]} ${Math.round(t[1]*100)}%</span>`).join('')}</div></div>
- <div class="card"><h2>Lead source: kaun sa channel kaam karta hai</h2><div class="tbl"><table><thead><tr><th>Source</th><th class="r">Leads</th><th class="r">Won</th><th class="r">Conv.</th><th class="r">Avg deal</th></tr></thead><tbody>${[['IndiaMART',86,12,640000],['Website',31,6,820000],['Referral',17,7,910000],['WhatsApp',44,5,310000],['TradeIndia',22,1,280000]].map(r=>`<tr><td>${r[0]}</td><td class="r num">${r[1]}</td><td class="r num">${r[2]}</td><td class="r num">${Math.round(r[2]/r[1]*100)}%</td><td class="r num">${inr(r[3])}</td></tr>`).join('')}</tbody></table></div></div></div>
- <div class="note"><span class="ai-tag">AI</span><span>Referral leads 41% convert hoti hain, IndiaMART sirf 14%. Har khush client se ek referral maangne ka campaign chalayein? Andaza: 6 nayi leads per mahina.</span></div>`}
+ return head(T('Analytics','Report'),T('Where business comes from, which product sells, and which region is behind.','Kahan se business aa raha hai, kaunsa product chal raha hai aur kaunsa region peeche hai.'))+
+ `<div class="grid g2"><div class="card"><h2>${T('Region: target vs achieved (MTD)','Region: target vs hasil (is mahine)')}</h2>${reps.map(r=>`<div class="hbar"><span>${r.region}<span class="tsub">${inr(r.achieved)} / ${inr(r.target)}</span></span><span class="trk"><b class="${r.achieved/r.target>=.75?'over':''}" style="width:${r.achieved/r.target*100}%"></b></span><span class="num mono">${Math.round(r.achieved/r.target*100)}%</span></div>`).join('')}</div>
+ <div class="card"><h2>${T('Top products, last 90 days','Top products, pichhle 90 din')}</h2>${prodRev.map(([k,v])=>`<div class="hbar"><span>${P[k].s}</span><span class="trk"><b style="width:${v/pm*100}%"></b></span><span class="num mono">${inr(v)}</span></div>`).join('')}</div>
+ <div class="card"><h2>${T('Business by client type','Business kis type ke client se')}</h2><div class="split">${types.map(t=>`<b style="width:${t[1]*100}%;background:${t[2]}"></b>`).join('')}</div><div class="legend">${types.map(t=>`<span><i style="background:${t[2]}"></i>${t[0]} ${Math.round(t[1]*100)}%</span>`).join('')}</div></div>
+ <div class="card"><h2>${T('Lead source: which channel works','Lead source: kaun sa channel kaam karta hai')}</h2><div class="tbl"><table><thead><tr><th>Source</th><th class="r">Leads</th><th class="r">Won</th><th class="r">Conv.</th><th class="r">Avg deal</th></tr></thead><tbody>${[['IndiaMART',86,12,640000],['Website',31,6,820000],['Referral',17,7,910000],['WhatsApp',44,5,310000],['TradeIndia',22,1,280000]].map(r=>`<tr><td>${r[0]}</td><td class="r num">${r[1]}</td><td class="r num">${r[2]}</td><td class="r num">${Math.round(r[2]/r[1]*100)}%</td><td class="r num">${inr(r[3])}</td></tr>`).join('')}</tbody></table></div></div></div>
+ <div class="note"><span class="ai-tag">AI</span><span>${T('Referral leads convert at 41%, IndiaMART only 14%. Run a campaign asking every happy client for one referral? Estimate: 6 new leads a month.','Referral leads 41% convert hoti hain, IndiaMART sirf 14%. Har khush client se ek referral maangne ka campaign chalayein? Andaza: 6 nayi leads har mahine.')}</span></div>`}
 
-function vTeam(){return head('Team & targets','Kaun kitna kaam kar raha hai, kiske follow-ups pending hain, aur AI har rep ko kya sudhaarne ki salah de raha hai.')+
- `<div class="card"><div class="tbl"><table><thead><tr><th>Rep</th><th>Target (MTD)</th><th class="r">Calls</th><th class="r">Visits</th><th class="r">Orders</th><th class="r">Overdue</th><th>AI coaching</th></tr></thead><tbody>${reps.map(r=>{const p=r.achieved/r.target;return`<tr><td><b>${r.name}</b><span class="tsub">${r.region}</span></td><td style="min-width:150px"><span class="num">${inr(r.achieved)} / ${inr(r.target)}</span><div class="meter"><b style="width:${p*100}%;${p>=.75?'background:var(--good)':''}"></b></div></td><td class="r num">${r.calls}</td><td class="r num">${r.visits}</td><td class="r num">${r.orders}</td><td class="r"><span class="pill ${r.overdue>3?'bad':r.overdue?'warn':'good'}">${r.overdue}</span></td><td style="min-width:240px">${{rahul:'Calls achhi hain, par Afro Med ka LC follow-up 20 Nov se pehle karo.',priya:'Target se aage. Zenlife ka reorder due hai, use pakka karo.',amit:'2 bade clients ka reorder chhoota hai (₹3.3 L). Pehle wahi call karo, nayi leads baad mein.',sunita:'Bengal Medicorp 74 din se band hai. Visit + scheme se wapas lao.'}[r.id]}</td></tr>`}).join('')}</tbody></table></div></div>
- <div class="grid g3"><div class="card kpi"><div class="lbl">Team calls, is hafte</div><div class="val">477</div><div class="sub">Pichhle hafte se 12% zyada</div></div><div class="card kpi"><div class="lbl">Avg lead response</div><div class="val">4 min</div><div class="sub">Pehle 6 ghante</div></div><div class="card kpi"><div class="lbl">Brief open rate</div><div class="val">96%</div><div class="sub">Subah ke WhatsApp brief</div></div></div>`}
+function vTeam(){const coach={rahul:['Good call volume. Follow up on the Afro Med LC before 20 Nov.','Calls achhi hain, par Afro Med ka LC follow-up 20 Nov se pehle karo.'],priya:['Ahead of target. Zenlife\'s reorder is due, lock it in.','Target se aage. Zenlife ka reorder due hai, use pakka karo.'],amit:['Two big clients missed reorders (₹3.3 L). Call them before new leads.','2 bade clients ka reorder chhoota hai (₹3.3 L). Pehle wahi call karo, nayi leads baad mein.'],sunita:['Bengal Medicorp has been silent 74 days. Visit with a scheme to win them back.','Bengal Medicorp 74 din se band hai. Visit + scheme se wapas lao.']};
+ return head(T('Team & targets','Team aur target'),T('Who is doing how much, whose follow-ups are pending, and what the AI suggests each rep improves. Each rep picks their own app language.','Kaun kitna kaam kar raha hai, kiske follow-ups pending hain, aur AI har rep ko kya sudhaarne ki salah de raha hai. Har rep apni app ki bhasha khud chunta hai.'))+
+ `<div class="card"><div class="tbl"><table><thead><tr><th>Rep</th><th>${T('App language','App ki bhasha')}</th><th>Target (MTD)</th><th class="r">Calls</th><th class="r">Visits</th><th class="r">Orders</th><th class="r">${T('Overdue','Pending')}</th><th>AI coaching</th></tr></thead><tbody>${reps.map(r=>{const p=r.achieved/r.target;return`<tr><td><b>${r.name}</b><span class="tsub">${r.region}</span></td><td><span class="pill ${r.lg==='Hinglish'?'ai':''}">${r.lg}</span></td><td style="min-width:150px"><span class="num">${inr(r.achieved)} / ${inr(r.target)}</span><div class="meter"><b style="width:${p*100}%;${p>=.75?'background:var(--good)':''}"></b></div></td><td class="r num">${r.calls}</td><td class="r num">${r.visits}</td><td class="r num">${r.orders}</td><td class="r"><span class="pill ${r.overdue>3?'bad':r.overdue?'warn':'good'}">${r.overdue}</span></td><td style="min-width:240px">${L(coach[r.id])}</td></tr>`}).join('')}</tbody></table></div></div>
+ <div class="grid g3"><div class="card kpi"><div class="lbl">${T('Team calls this week','Team calls, is hafte')}</div><div class="val">477</div><div class="sub">${T('12% more than last week','Pichhle hafte se 12% zyada')}</div></div><div class="card kpi"><div class="lbl">${T('Avg lead response','Avg lead jawab')}</div><div class="val">4 min</div><div class="sub">${T('Was 6 hours','Pehle 6 ghante')}</div></div><div class="card kpi"><div class="lbl">${T('Brief open rate','Brief open rate')}</div><div class="val">96%</div><div class="sub">${T('Morning WhatsApp brief','Subah ka WhatsApp brief')}</div></div></div>`}
 
 let scanned=false;
-function vSetup(){return head('Setup & integrations','Shuru karne mein 1 din lagta hai: Excel upload karo, WhatsApp jodo, team ke number daalo. Koi training nahi chahiye.')+
- `<div class="grid g12"><div class="card"><h2>Integrations</h2>${integ.map((x,i)=>`<div class="integ"><div><b>${x.n}</b><small>${x.d}</small></div>${x.on?`<span class="row"><span class="pill good">Connected</span><button class="btn btn-sm" data-act="integ:${i}">Hatao</button></span>`:`<button class="btn btn-sm btn-primary" data-act="integ:${i}">Jodo</button>`}</div>`).join('')}</div>
- <div class="stack"><div class="card stack"><h2>Chhoota business scan <span class="ai-tag">AI</span></h2><p class="muted">Purane orders ki Excel daaliye. AI batayega ki pichhle 6 mahine mein kitne clients ka reorder chhoota aur kitna paisa gaya. Naye client ko demo dikhane ka sabse asardaar tareeka yahi hai.</p>
-  <div class="field"><label for="xl">Orders ki Excel / CSV</label><input type="file" id="xl" accept=".xlsx,.xls,.csv"></div>
-  <button class="btn btn-ai" data-act="scan">Sample data se scan karo</button>
+function vSetup(){return head('Setup',T('Getting started takes one day: upload your Excel, connect WhatsApp, add your team\'s numbers. No training needed.','Shuru karne mein 1 din lagta hai: Excel upload karo, WhatsApp jodo, team ke number daalo. Koi training nahi chahiye.'))+
+ `<div class="grid g12"><div class="card"><h2>Integrations</h2>${integ.map((x,i)=>`<div class="integ"><div><b>${L(x.n)}</b><small>${L(x.d)}</small></div>${x.on?`<span class="row"><span class="pill good">${T('Connected','Juda hai')}</span><button class="btn btn-sm" data-act="integ:${i}">${T('Remove','Hatao')}</button></span>`:`<button class="btn btn-sm btn-primary" data-act="integ:${i}">${T('Connect','Jodo')}</button>`}</div>`).join('')}</div>
+ <div class="stack"><div class="card stack"><h2>${T('Missed business scan','Chhoota business scan')} <span class="ai-tag">AI</span></h2><p class="muted">${T('Upload an Excel of past orders. The AI shows how many clients missed a reorder in the last 6 months and how much money that cost. This is the strongest way to demo to a new client.','Purane orders ki Excel daaliye. AI batayega ki pichhle 6 mahine mein kitne clients ka reorder chhoota aur kitna paisa gaya. Naye client ko demo dikhane ka sabse asardaar tareeka yahi hai.')}</p>
+  <div class="field"><label for="xl">${T('Orders Excel / CSV','Orders ki Excel / CSV')}</label><input type="file" id="xl" accept=".xlsx,.xls,.csv"></div>
+  <button class="btn btn-ai" data-act="scan">${T('Scan sample data','Sample data se scan karo')}</button>
   <div id="scanOut">${scanned?scanHtml():''}</div></div>
- <div class="card stack"><h2>Company rules</h2><div class="grid g2" style="gap:10px"><div class="field"><label for="dl">Rep discount limit %</label><input id="dl" type="number" value="5"></div><div class="field"><label for="gst">GST rate (HSN 3004)</label><input id="gst" value="5%"></div><div class="field"><label for="bt">Subah brief ka time</label><input id="bt" type="time" value="08:30"></div><div class="field"><label for="ht">Payment hold after (din)</label><input id="ht" type="number" value="90"></div></div></div></div></div>`}
-function scanHtml(){return`<div class="card" style="background:var(--bad-soft);border:0"><span class="tsub">6 mahine · 312 orders · 48 clients</span><div class="big num">₹18.6 L</div><p>ka business chhoota. <b>9 clients</b> ne usual time par reorder nahi kiya, aur <b>4 clients</b> poori tarah band ho gaye.</p><p class="muted" style="margin-top:6px;font-size:.8rem">Sabse bada: Sai Distributors (₹5.6 L), Bengal Medicorp (₹4.3 L), Ganga Pharmaceuticals (₹2.4 L)</p></div>`}
+ <div class="card stack"><h2>${T('Language','Bhasha')}</h2><div class="grid g2" style="gap:10px"><div class="field"><label for="appLang">${T('App language for this user','Is user ki app bhasha')}</label><select id="appLang"><option value="en" ${lang==='en'?'selected':''}>English</option><option value="hi" ${lang==='hi'?'selected':''}>Hinglish</option></select></div><div class="field"><label for="cliLang">${T('Client chat language','Client chat ki bhasha')}</label><select id="cliLang"><option>${T('Auto-detect from client','Client se apne aap pehchano')}</option></select></div></div></div>
+ <div class="card stack"><h2>${T('Company rules','Company ke rules')}</h2><div class="grid g2" style="gap:10px"><div class="field"><label for="dl">${T('Rep discount limit %','Rep discount limit %')}</label><input id="dl" type="number" value="5"></div><div class="field"><label for="gst">GST (HSN 3004)</label><input id="gst" value="5%"></div><div class="field"><label for="bt">${T('Morning brief time','Subah brief ka time')}</label><input id="bt" type="time" value="08:30"></div><div class="field"><label for="ht">${T('Hold orders after (days)','Itne din baad order hold')}</label><input id="ht" type="number" value="90"></div></div></div></div></div>`}
+function scanHtml(){return`<div class="card" style="background:var(--bad-soft);border:0"><span class="tsub">${T('6 months · 312 orders · 48 clients','6 mahine · 312 orders · 48 clients')}</span><div class="big num">₹18.6 L</div><p>${T('of business missed. <b>9 clients</b> did not reorder on their usual schedule, and <b>4 clients</b> stopped completely.','ka business chhoota. <b>9 clients</b> ne usual time par reorder nahi kiya, aur <b>4 clients</b> poori tarah band ho gaye.')}</p><p class="muted" style="margin-top:6px;font-size:.8rem">${T('Largest','Sabse bada')}: Sai Distributors (₹5.6 L), Bengal Medicorp (₹4.3 L), Ganga Pharmaceuticals (₹2.4 L)</p></div>`}
 
 /* ---------- nav + router ---------- */
-const NAV=[['Overview',[['dashboard','Dashboard'],['assistant','AI Assistant',()=>['5 aaj','ai']]]],
- ['Sell',[['leads','Leads',()=>[leads.filter(l=>l.stage==='New').length,'']],['quotes','Quotations'],['catalog','Products'],['campaigns','Campaigns']]],
- ['Deliver',[['orders','Orders',()=>[orders.filter(o=>o.block).length,'']],['documents','Documents',()=>[docs.filter(d=>d.left<30).length,'']]]],
- ['Grow',[['clients','Clients & reorders',()=>[atRisk().length,'']],['payments','Payments'],['tenders','Tenders',()=>[tenders.filter(t=>t.days<=7).length,'ai']]]],
- ['Manage',[['analytics','Analytics'],['team','Team & targets'],['setup','Setup']]]];
-const VIEWS={dashboard:vDashboard,assistant:vAssistant,leads:vLeads,quotes:vQuotes,catalog:vCatalog,orders:vOrders,clients:vClients,payments:vPayments,tenders:vTenders,documents:vDocuments,campaigns:vCampaigns,analytics:vAnalytics,team:vTeam,setup:vSetup};
+function NAV(){return[[T('Overview','Shuruaat'),[['dashboard','Dashboard'],['assistant','AI Assistant',()=>[T('5 today','5 aaj'),'ai']]]],
+ [T('Sell','Bechna'),[['chat','Client Chat',()=>[sum(convs,'unread'),'new']],['leads','Leads',()=>[leads.filter(l=>l.stage==='New').length,'']],['quotes',T('Quotations','Quotation')],['catalog','Products'],['campaigns','Campaigns']]],
+ [T('Deliver','Delivery'),[['orders','Orders',()=>[orders.filter(o=>o.block).length,'']],['documents','Documents',()=>[docs.filter(d=>d.left<30).length,'']]]],
+ [T('Grow','Badhao'),[['clients',T('Clients & reorders','Clients aur reorder'),()=>[atRisk().length,'']],['payments',T('Payments','Payment')],['tenders','Tenders',()=>[tenders.filter(t=>t.days<=7).length,'ai']]]],
+ [T('Manage','Manage'),[['analytics',T('Analytics','Report')],['team',T('Team & targets','Team aur target')],['setup','Setup']]]]}
+const VIEWS={dashboard:vDashboard,assistant:vAssistant,chat:vChat,leads:vLeads,quotes:vQuotes,catalog:vCatalog,orders:vOrders,clients:vClients,payments:vPayments,tenders:vTenders,documents:vDocuments,campaigns:vCampaigns,analytics:vAnalytics,team:vTeam,setup:vSetup};
 function cur(){const h=location.hash.slice(1);return VIEWS[h]?h:'dashboard'}
-function render(){const v=cur();
- $('#nav').innerHTML=NAV.map(([g,items])=>`<div class="navgrp"><span>${g}</span>${items.map(([k,l,b])=>{const bb=b&&b();return`<a class="nav ${k===v?'on':''}" href="#${k}" ${k===v?'aria-current="page"':''}>${l}${bb&&bb[0]?`<i class="${bb[1]}">${bb[0]}</i>`:''}</a>`}).join('')}</div>`).join('');
- $('#view').innerHTML=VIEWS[v]();
- if(v==='quotes')updQuote(); if(v==='catalog')updCat(); if(v==='assistant')scrollChat();
+function chrome(){
+ $('#brandLogo').innerHTML=logoSvg(36);
+ document.documentElement.lang=lang==='en'?'en':'hi-Latn';
+ $('#langSeg').innerHTML=`<button type="button" data-act="lang:en" aria-pressed="${lang==='en'}">English</button><button type="button" data-act="lang:hi" aria-pressed="${lang==='hi'}">Hinglish</button>`;
+ $('#demoTag').textContent=T('Sample data','Sample data');
+ $('#askIn').placeholder=T('Ask: which client has a pending reorder?','Poochiye: kis client ka reorder pending hai?');
+ $('#askBtn').textContent=T('Ask','Poocho');
+ $('#railFoot').innerHTML=T('Demo version · all data is sample<br>Plan: Growth · 4 sales users','Demo version · sab data sample hai<br>Plan: Growth · 4 sales users');
 }
+function render(){const v=cur();
+ // read the view first so it can clear unread counts before the nav badges are drawn
+ const html=VIEWS[v]();
+ $('#nav').innerHTML=NAV().map(([g,items])=>`<div class="navgrp"><span>${g}</span>${items.map(([k,l,b])=>{const bb=b&&b();return`<a class="nav ${k===v?'on':''}" href="#${k}" ${k===v?'aria-current="page"':''}>${l}${bb&&bb[0]?`<i class="${bb[1]}">${bb[0]}</i>`:''}</a>`}).join('')}</div>`).join('');
+ $('#view').innerHTML=html;
+ if(v==='quotes')updQuote(); if(v==='catalog')updCat(); if(v==='assistant')scrollEl('#waBody'); if(v==='chat'){scrollEl('#cBody');if(pending&&$('#chatIn')){$('#chatIn').value=pending.src;showPrev(pending.o)}}
+}
+function setLang(l){if(l===lang)return;lang=l;try{localStorage.setItem('vatave-lang',l)}catch(_){}if(chat)resetChat(chat.rep);pending=null;chrome();render();$('#askOut').hidden=true;closeDrawer();toast(T('Showing everything in English.','Ab sab kuch Hinglish mein dikhega.'))}
 let lastView=null;
-window.addEventListener('hashchange',()=>{closeDrawer();render();if(lastView!==cur()){window.scrollTo(0,0);document.querySelector('.nav.on')?.scrollIntoView({block:'nearest',inline:'nearest'})}lastView=cur()});
+window.addEventListener('hashchange',()=>{closeDrawer();if(lastView!==cur())pending=null;render();if(lastView!==cur()){window.scrollTo(0,0);document.querySelector('.nav.on')?.scrollIntoView({block:'nearest',inline:'nearest'})}lastView=cur()});
 
 function drawer(h){$('#drawer').innerHTML=h;$('#drawer').hidden=false;$('#scrim').hidden=false}
 function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true}
@@ -652,54 +827,65 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(!el)return;const[a,b,c]=el.dataset.act.split(':');
  const go=h=>{if(location.hash==='#'+h)render();else location.hash=h};
  switch(a){
+  case'lang':setLang(b);break;
   case'lead':openLead(+b);break;
   case'close':closeDrawer();break;
-  case'remind':{const cl=clients.find(x=>x.id==b);toast(`WhatsApp reminder bheja: ${cl.name}. Reply aate hi ${rep(cl.rep).name} ko alert jaayega.`);break}
+  case'remind':{const cl=clients.find(x=>x.id==b);toast(T(`WhatsApp reminder sent to ${cl.name} in ${LANGS[cl.lg][0]}. ${rep(cl.rep).name} is alerted when they reply.`,`${cl.name} ko ${LANGS[cl.lg][0]} mein WhatsApp reminder bheja. Reply aate hi ${rep(cl.rep).name} ko alert jaayega.`));break}
   case'quote':qs.client=+b;qs.p=+c;go('quotes');break;
   case'quotep':qs.p=+b;go('quotes');break;
   case'say':say(b);break;
   case'chatreset':resetChat(chat.rep);render();break;
+  case'conv':curConv=b;pending=null;render();break;
+  case'qr':{const q=conv().quick[+b];pushMine(q.en,q.hi,q.o);break}
+  case'csend':sendFree();break;
+  case'suggest':suggest();break;
+  case'testin':testIncoming();break;
   case'src':leadSrc=b;render();break;
-  case'stage':{const l=leads.find(x=>x.id==b);l.stage=STAGES[STAGES.indexOf(l.stage)+1];render();openLead(l.id);toast(`${l.name} → ${l.stage}`);break}
-  case'sendlead':{const l=leads.find(x=>x.id==b);if(l.stage==='New')l.stage='Contacted';render();closeDrawer();toast(`Message bheja: ${l.contact}. Lead ab "${l.stage}" mein hai.`);break}
-  case'newlead':{const n={id:Date.now(),name:'Lifeline Remedies',contact:'Sameer Khan',city:'Bhopal',src:'IndiaMART',need:'Third-party: Aceclo-P, 40,000 strips',score:86,stage:'New',age:'abhi',value:580000,rep:'amit',flash:true,why:['+30 Quantity MOQ se 4× zyada','+25 Product hamare top-5 mein','+18 GST verified','+13 Delivery date di hai']};leads.unshift(n);leadSrc='All';render();toast('Nayi IndiaMART lead aayi. Client ko 12 second mein auto-reply aur catalog chala gaya, Amit ko alert gaya.');break}
-  case'sendquote':toast(qs.disc>5?'Discount 5% se zyada hai, isliye approval request Rakesh Kumar ko gayi. Approve hote hi quote apne aap jaayega.':'Quote QT-2611-114 WhatsApp par bhej diya. Client ke kholte hi aapko pata chalega.');break;
-  case'emailquote':toast('Quote PDF email kar diya.');break;
+  case'stage':{const l=leads.find(x=>x.id==b);l.stage=STAGES[STAGES.indexOf(l.stage)+1];render();openLead(l.id);toast(`${l.name} → ${stageL(l.stage)}`);break}
+  case'sendlead':{const l=leads.find(x=>x.id==b);if(l.stage==='New')l.stage='Contacted';render();closeDrawer();toast(T(`Message sent to ${l.contact}. Lead is now "${stageL(l.stage)}".`,`${l.contact} ko message bheja. Lead ab "${stageL(l.stage)}" mein hai.`));break}
+  case'newlead':{leads.unshift({id:Date.now(),name:'Lifeline Remedies',contact:'Sameer Khan',city:'Bhopal',src:'IndiaMART',need:'Third-party: Aceclo-P, 40,000 strips',score:86,stage:'New',age:['now'],value:580000,rep:'amit',flash:true,why:[['+30','Quantity 4× above MOQ','Quantity MOQ se 4× zyada'],['+25','Product is in our top 5','Product hamare top-5 mein'],['+18','GST verified','GST verified'],['+13','Gave a delivery date','Delivery date di hai']]});leadSrc='All';render();toast(T('New IndiaMART lead. The client got an auto-reply and catalog in 12 seconds, and Amit was alerted.','Nayi IndiaMART lead aayi. Client ko 12 second mein auto-reply aur catalog chala gaya, Amit ko alert gaya.'));break}
+  case'sendquote':toast(qs.disc>5?T('Discount is above 5%, so an approval request went to Rakesh Kumar. The quote goes out once approved.','Discount 5% se zyada hai, isliye approval request Rakesh Kumar ko gayi. Approve hote hi quote apne aap jaayega.'):T('Quote QT-2611-114 sent on WhatsApp. You will know when the client opens it.','Quote QT-2611-114 WhatsApp par bhej diya. Client ke kholte hi aapko pata chalega.'));break;
+  case'emailquote':toast(T('Quote PDF emailed.','Quote PDF email kar diya.'));break;
   case'tl':{const t=document.getElementById('tl-'+b);t.hidden=!t.hidden;break}
-  case'track':{const txt=`Order ${b} ka live status: track.demo/${b}`;try{navigator.clipboard.writeText(txt).then(()=>toast('Tracking link copy ho gaya. Client ko WhatsApp par bhej sakte hain.'),()=>toast(txt))}catch(_){toast(txt)}break}
-  case'nudge':toast(`${b}: client ko artwork approval ka reminder bheja, saath mein artwork PDF bhi.`);break;
+  case'track':{const txt=`${T('Live status of order','Order ka live status')} ${b}: track.demo/${b}`;const ok=()=>toast(T('Tracking link copied. You can send it to the client on WhatsApp.','Tracking link copy ho gaya. Client ko WhatsApp par bhej sakte hain.'));try{navigator.clipboard.writeText(txt).then(ok,()=>toast(txt))}catch(_){toast(txt)}break}
+  case'nudge':toast(T(`${b}: artwork approval reminder sent to the client, with the artwork PDF.`,`${b}: client ko artwork approval ka reminder bheja, saath mein artwork PDF bhi.`));break;
   case'cf':cFilter=b;render();break;
-  case'remindall':toast(`${atRisk().length} clients ko personal reminder bheja. Kul ${inr(sum(atRisk(),'avg'))} ke orders wapas laane ki koshish.`);break;
-  case'pay':toast(`${b}: payment reminder bheja, invoice copy aur UPI/bank details ke saath.`);break;
-  case'payall':toast(`${payments.length} clients ko payment reminder bheja (${inr(sum(payments,'amt'))}).`);break;
-  case'bid':toast(`"${tenders[b].t}": ${tenders[b].have.filter(x=>!x).length?'jo document kam hai uska task bana diya, ':''}baaki documents ka ZIP taiyaar.`);break;
+  case'remindall':toast(T(`Personal reminders sent to ${atRisk().length} clients, each in their own language.`,`${atRisk().length} clients ko unki apni bhasha mein personal reminder bheja.`));break;
+  case'pay':toast(T(`${b}: payment reminder sent with invoice copy and UPI/bank details.`,`${b}: payment reminder bheja, invoice copy aur UPI/bank details ke saath.`));break;
+  case'payall':toast(T(`Payment reminders sent to ${payments.length} clients (${inr(sum(payments,'amt'))}).`,`${payments.length} clients ko payment reminder bheja (${inr(sum(payments,'amt'))}).`));break;
+  case'bid':{const t=tenders[b];toast(T(`"${L(t.t)}": ${t.have.filter(x=>!x).length?'task created for the missing document, ':''}ZIP of the other documents ready.`,`"${L(t.t)}": ${t.have.filter(x=>!x).length?'jo document kam hai uska task bana diya, ':''}baaki documents ka ZIP taiyaar.`));break}
   case'skip':tenders.splice(+b,1);render();break;
-  case'doc':toast(`${b}: client ko WhatsApp par bhej diya.`);break;
+  case'doc':toast(T(`${docs[b].n}: sent to the client on WhatsApp.`,`${docs[b].n}: client ko WhatsApp par bhej diya.`));break;
   case'tpl':camp.tpl=+b;render();break;
-  case'sendcamp':{const aud=segs[camp.seg][1]();campaignsSent.unshift({name:tpls[camp.tpl]+' (aaj)',aud:`${segs[camp.seg][0]} (${aud.length})`,del:aud.length,read:0,rep:0,orders:0,val:0,when:'abhi'});render();toast(`${aud.length} clients ko campaign bhej diya. Replies Leads aur Assistant mein aayenge.`);break}
-  case'integ':integ[b].on=!integ[b].on;render();toast(integ[b].on?`${integ[b].n} jud gaya.`:`${integ[b].n} hata diya.`);break;
+  case'sendcamp':{const aud=segs[camp.seg][1]();campaignsSent.unshift({name:[tpls[camp.tpl][0]+' (today)',tpls[camp.tpl][1]+' (aaj)'],aud:[`${segs[camp.seg][0][0]} (${aud.length})`,`${segs[camp.seg][0][1]} (${aud.length})`],del:aud.length,read:0,rep:0,orders:0,val:0,when:T('now','abhi')});render();toast(T(`Campaign sent to ${aud.length} clients. Replies arrive in Client Chat.`,`${aud.length} clients ko campaign bhej diya. Replies Client Chat mein aayenge.`));break}
+  case'integ':integ[b].on=!integ[b].on;render();toast(integ[b].on?T(`${L(integ[b].n)} connected.`,`${L(integ[b].n)} jud gaya.`):T(`${L(integ[b].n)} removed.`,`${L(integ[b].n)} hata diya.`));break;
   case'scan':scanned=true;render();break;
+  case'askclose':$('#askOut').hidden=true;break;
  }
 });
 document.addEventListener('input',e=>{const id=e.target.id;
  if(['qClient','qProd','qQty','qDisc','qPrint','qBrand'].includes(id)){qs={client:+$('#qClient').value,p:+$('#qProd').value,qty:Math.max(0,+$('#qQty').value||0),disc:Math.max(0,+$('#qDisc').value||0),print:$('#qPrint').checked,brand:$('#qBrand').checked};updQuote()}
  if(id==='catIn'){catQ=e.target.value;updCat()}
+ if(id==='chatIn'&&pending&&e.target.value.trim()!==pending.src){pending=null;$('#cPrev').innerHTML=''}
 });
 document.addEventListener('change',e=>{const id=e.target.id;
  if(id==='repSel'){resetChat(e.target.value);render()}
  if(id==='cSeg'){camp.seg=+e.target.value;render()}
- if(id==='xl'&&e.target.files.length){scanned=true;render();toast('File padhi gayi. Demo mein sample result dikh raha hai.')}
+ if(id==='appLang')setLang(e.target.value);
+ if(id==='xl'&&e.target.files.length){scanned=true;render();toast(T('File read. The demo shows a sample result.','File padhi gayi. Demo mein sample result dikh raha hai.'))}
 });
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='chatIn'){e.preventDefault();sendFree()}});
 
 $('#askForm').addEventListener('submit',e=>{e.preventDefault();const q=$('#askIn').value.toLowerCase().trim();if(!q)return;const o=$('#askOut');let a;
- if(/reorder|order|client/.test(q))a=`${atRisk().length} clients ka reorder chhoota hai, kul <b>${inr(sum(atRisk(),'avg'))}</b> per cycle: ${atRisk().map(c=>`${c.name} (${c.last} din)`).join(', ')}. <a href="#clients">Clients kholo</a>`;
- else if(/payment|outstanding|paisa|udhaar|baaki/.test(q))a=`Kul baaki: <b>${inr(sum(payments,'amt'))}</b>. Sabse purane: Sai Distributors (110 din), Bengal Medicorp (88 din). <a href="#payments">Payments kholo</a>`;
- else if(/target|sales|mahina/.test(q))a=`Is mahine ${inr(sum(reps,'achieved'))} / ${inr(sum(reps,'target'))}. Priya target se aage hain. Amit sabse peeche hain (54%), unke 2 bade reorder chhoote hain.`;
- else if(/tender|gem/.test(q))a=`Sabse achha tender: "${tenders[0].t}", ${tenders[0].match}% match, ${tenders[0].days} din bache. Non-conviction certificate abhi kam hai. <a href="#tenders">Tenders kholo</a>`;
- else if(/lead|inquiry/.test(q))a=`${leads.filter(l=>l.score>=75&&l.stage!=='Won').length} hot leads hain. Sabse upar: ${leads.filter(l=>l.stage!=='Won').sort((x,y)=>y.score-x.score)[0].name}. <a href="#leads">Leads kholo</a>`;
- else a='Ye poochh kar dekhiye: "kis client ka reorder pending hai?", "kitna payment baaki hai?", "target kitna hua?", "koi naya tender?"';
- o.innerHTML=`<div class="ch" style="margin:0 0 6px"><span class="ai-tag">AI jawab</span><button class="btn btn-sm" data-act="askclose">Band karo</button></div><p>${a}</p>`;o.hidden=false});
-document.addEventListener('click',e=>{if(e.target.closest('[data-act="askclose"]'))$('#askOut').hidden=true;if(e.target.closest('#askOut a'))$('#askOut').hidden=true});
+ if(/reorder|order|client/.test(q))a=T(`${atRisk().length} clients missed a reorder, ${inr(sum(atRisk(),'avg'))} per cycle: `,`${atRisk().length} clients ka reorder chhoota hai, kul <b>${inr(sum(atRisk(),'avg'))}</b> har cycle: `)+atRisk().map(c=>`${c.name} (${c.last} ${T('days','din')})`).join(', ')+`. <a href="#clients">${T('Open clients','Clients kholo')}</a>`;
+ else if(/payment|outstanding|paisa|udhaar|baaki|due/.test(q))a=T(`Total outstanding: <b>${inr(sum(payments,'amt'))}</b>. Oldest: Sai Distributors (110 days), Bengal Medicorp (88 days).`,`Kul baaki: <b>${inr(sum(payments,'amt'))}</b>. Sabse purane: Sai Distributors (110 din), Bengal Medicorp (88 din).`)+` <a href="#payments">${T('Open payments','Payments kholo')}</a>`;
+ else if(/target|sales|mahina|month/.test(q))a=T(`This month ${inr(sum(reps,'achieved'))} / ${inr(sum(reps,'target'))}. Priya is ahead of target. Amit is furthest behind (54%), with 2 big missed reorders.`,`Is mahine ${inr(sum(reps,'achieved'))} / ${inr(sum(reps,'target'))}. Priya target se aage hain. Amit sabse peeche hain (54%), unke 2 bade reorder chhoote hain.`);
+ else if(/tender|gem/.test(q))a=T(`Best tender: "${L(tenders[0].t)}", ${tenders[0].match}% match, ${tenders[0].days} days left. The non-conviction certificate is missing.`,`Sabse achha tender: "${L(tenders[0].t)}", ${tenders[0].match}% match, ${tenders[0].days} din bache. Non-conviction certificate abhi kam hai.`)+` <a href="#tenders">${T('Open tenders','Tenders kholo')}</a>`;
+ else if(/lead|inquiry/.test(q))a=T(`${leads.filter(l=>l.score>=75&&l.stage!=='Won').length} hot leads. Top: ${leads.filter(l=>l.stage!=='Won').sort((x,y)=>y.score-x.score)[0].name}.`,`${leads.filter(l=>l.score>=75&&l.stage!=='Won').length} hot leads hain. Sabse upar: ${leads.filter(l=>l.stage!=='Won').sort((x,y)=>y.score-x.score)[0].name}.`)+` <a href="#leads">${T('Open leads','Leads kholo')}</a>`;
+ else if(/chat|message|language|bhasha/.test(q))a=T(`${sum(convs,'unread')} unread client messages, in Tamil, Gujarati, Bengali, Telugu and Marathi. You read them all in English.`,`${sum(convs,'unread')} client messages padhne baaki hain: Tamil, Gujarati, Bangla, Telugu aur Marathi mein. Aap sab Hinglish mein padh sakte ho.`)+` <a href="#chat">${T('Open chat','Chat kholo')}</a>`;
+ else a=T('Try asking: "which client has a pending reorder?", "how much payment is due?", "how is the target?", "any new tender?"','Ye poochh kar dekhiye: "kis client ka reorder pending hai?", "kitna payment baaki hai?", "target kitna hua?", "koi naya tender?"');
+ o.innerHTML=`<div class="ch" style="margin:0 0 6px"><span class="ai-tag">${T('AI answer','AI jawab')}</span><button class="btn btn-sm" data-act="askclose">${T('Close','Band karo')}</button></div><p>${a}</p>`;o.hidden=false});
+document.addEventListener('click',e=>{if(e.target.closest('#askOut a'))$('#askOut').hidden=true});
 
-lastView=cur();render();
+lastView=cur();chrome();render();
 </script>
