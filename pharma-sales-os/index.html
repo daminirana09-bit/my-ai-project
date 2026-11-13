@@ -586,6 +586,7 @@ function vDashboard(){
   <div class="card"><div class="ch"><h2>${T('Top tasks today','Aaj ke top kaam')} <span class="ai-tag">AI</span></h2><span class="muted" style="font-size:.8rem">${T('Whole team, by priority','Poori team ke liye, priority ke hisaab se')}</span></div>${taskList(tasksFor().slice(0,6))}</div>
   <div class="stack">
    <div class="card"><h2>${T('Team target, this month','Team target, is mahine')}</h2>${reps.map(r=>{const p=r.achieved/r.target;return`<div class="hbar"><span>${r.name}<span class="tsub">${r.region}</span></span><span class="trk"><b class="${p>=.75?'over':''}" style="width:${Math.min(p,1)*100}%"></b><u style="left:calc(${13/30*100}% - 1px)"></u></span><span class="num mono">${Math.round(p*100)}%</span></div>`}).join('')}<p class="muted" style="font-size:.76rem;margin-top:6px">${T('Black line: expected progress by 13 Nov (43%)','Kaali line: 13 Nov tak expected progress (43%)')}</p></div>
+   <div class="card"><div class="ch"><h2>${T('Team today','Aaj team')}</h2><a class="btn btn-sm" href="#availability">${T('View','Dekho')}</a></div><p>${T(`<b>${roster.filter(r=>!away(r)).length}/${roster.length}</b> available · <b>${roster.filter(away).length}</b> away, AI is answering their WhatsApp · <b>${callbacks.length}</b> clients waiting for a call`,`<b>${roster.filter(r=>!away(r)).length}/${roster.length}</b> available · <b>${roster.filter(away).length}</b> bahar hain, unka WhatsApp AI sambhal raha hai · <b>${callbacks.length}</b> clients call ke intezaar mein`)}</p></div>
    <div class="card"><h2>${T('Stuck orders','Atke hue orders')}</h2>${attn.map(o=>`<div class="task"><span class="bar bad"></span><div><b>${o.id} · ${o.client}</b><small>${L(o.block)}</small></div><a class="btn btn-sm" href="#orders">${T('View','Dekho')}</a></div>`).join('')}</div>
   </div>
  </div>
@@ -649,10 +650,10 @@ function scrollEl(s){const b=$(s);if(b)b.scrollTop=b.scrollHeight}
 
 /* client chat with live translation */
 function conv(){return convs.find(c=>c.id===curConv)}
-function vChat(){const c=conv();c.unread=0;const lgN=LANGS[c.lg];const myL=native(lang);
+function vChat(){const c=conv();c.unread=0;const lgN=LANGS[c.lg];const myL=native(lang);const cl=clients.find(x=>x.name===c.client),rr=cl&&R(cl.rep);
  return head(T('Client Chat','Client Chat'),T('Clients write in their own language, any of the 22 Indian languages. Each salesperson reads every message in the language they picked at the top, replies in that language, and the AI sends it in the client\'s language.','Client apni bhasha mein likhta hai, 22 Indian bhashaon mein se koi bhi. Har salesperson message usi bhasha mein padhta hai jo usne upar chuni hai, usi mein reply likhta hai, aur AI use client ki bhasha mein badal kar bhejta hai.'))+
  `<div class="inbox"><div class="clist">${convs.map(x=>{const last=x.msgs[x.msgs.length-1];return`<button class="conv ${x.id===curConv?'on':''}" data-act="conv:${x.id}"><span class="t"><b>${esc(x.client)}</b><span class="lg">${LANGS[x.lg][1]}</span></span><small>${last.f==='r'?T('You: ','Aap: '):''}${esc(L([last.en,last.hi]))}</small>${x.unread?`<i>${x.unread}</i>`:''}</button>`}).join('')}</div>
- <div class="card cpane"><div class="chd"><div><b>${esc(c.client)}</b> <span class="muted">· ${esc(c.contact)}, ${esc(c.city)}</span><span class="tsub">${T('Client writes in','Client ki bhasha')}: <b>${lgN[1]}</b> (${lgN[0]}) · ${T('auto-detected','AI ne pehchani')}</span></div><div class="row"><span class="pill ai">${T(`You read & write in ${myL}`,`Aap ${myL} mein padhte/likhte ho`)}</span></div></div>
+ <div class="card cpane"><div class="chd"><div><b>${esc(c.client)}</b> <span class="muted">· ${esc(c.contact)}, ${esc(c.city)}</span><span class="tsub">${T('Client writes in','Client ki bhasha')}: <b>${lgN[1]}</b> (${lgN[0]}) · ${T('auto-detected','AI ne pehchani')}</span></div><div class="row">${rr&&away(rr)?`<span class="pill warn">${rr.name}: ${stPill(rr)[0]} · AI cover</span>`:''}<span class="pill ai">${T(`You read & write in ${myL}`,`Aap ${myL} mein padhte/likhte ho`)}</span></div></div>
   <div class="wa-body" id="cBody">${c.msgs.map(m=>msgHtml(m,c)).join('')}</div>
   <div class="cfoot">
    <div><span class="tsub" style="margin-bottom:6px">${T(`Ready replies (go to the client in ${lgN[0]})`,`Ready replies (client ko ${lgN[0]} mein jaayenge)`)}</span><div class="qr">${c.quick.map((q,i)=>`<button data-act="qr:${i}">${esc(L([q.en,q.hi]))}</button>`).join('')}</div></div>
@@ -833,6 +834,128 @@ function vTeam(){const coach={rahul:['Good call volume. Follow up on the Afro Me
  `<div class="card"><div class="tbl"><table><thead><tr><th>Rep</th><th>${T('App language','App ki bhasha')}</th><th>Target (MTD)</th><th class="r">Calls</th><th class="r">Visits</th><th class="r">Orders</th><th class="r">${T('Overdue','Pending')}</th><th>AI coaching</th></tr></thead><tbody>${reps.map(r=>{const p=r.achieved/r.target;return`<tr><td><b>${r.name}</b><span class="tsub">${r.region}</span></td><td><span class="pill ${r.lg!=='en'?'ai':''}" data-notr>${native(r.lg)}</span></td><td style="min-width:150px"><span class="num">${inr(r.achieved)} / ${inr(r.target)}</span><div class="meter"><b style="width:${p*100}%;${p>=.75?'background:var(--good)':''}"></b></div></td><td class="r num">${r.calls}</td><td class="r num">${r.visits}</td><td class="r num">${r.orders}</td><td class="r"><span class="pill ${r.overdue>3?'bad':r.overdue?'warn':'good'}">${r.overdue}</span></td><td style="min-width:240px">${L(coach[r.id])}</td></tr>`}).join('')}</tbody></table></div></div>
  <div class="grid g3"><div class="card kpi"><div class="lbl">${T('Team calls this week','Team calls, is hafte')}</div><div class="val">477</div><div class="sub">${T('12% more than last week','Pichhle hafte se 12% zyada')}</div></div><div class="card kpi"><div class="lbl">${T('Avg lead response','Avg lead jawab')}</div><div class="val">4 min</div><div class="sub">${T('Was 6 hours','Pehle 6 ghante')}</div></div><div class="card kpi"><div class="lbl">${T('Brief open rate','Brief open rate')}</div><div class="val">96%</div><div class="sub">${T('Morning WhatsApp brief','Subah ka WhatsApp brief')}</div></div></div>`}
 
+/* ---------- availability & AI cover: reps punch their status, AI answers their WhatsApp while they are away ---------- */
+const roster=[
+ ['rahul','Rahul Sharma','Delhi','4821'],['priya','Priya Nair','Kochi','7710'],['amit','Amit Verma','Ahmedabad','2041'],['sunita','Sunita Das','Kolkata','5532'],
+ ['vikas','Vikas Yadav','Lucknow','3308'],['neha','Neha Kulkarni','Pune','9184'],['arjun','Arjun Reddy','Hyderabad','6627'],['kavita','Kavita Joshi','Jaipur','1459'],
+ ['imran','Imran Khan','Bhopal','8023'],['deepak','Deepak Singh','Patna','3871'],['meera','Meera Iyer','Chennai','5146'],['sandeep','Sandeep Gill','Ludhiana','2290'],
+ ['pooja','Pooja Mehta','Surat','7355'],['rohit','Rohit Saxena','Delhi','6012'],['ananya','Ananya Ghosh','Kolkata','4478'],['manoj','Manoj Pillai','Coimbatore','9903'],
+ ['sneha','Sneha Patil','Nagpur','1167'],['karan','Karan Malhotra','Chandigarh','8540'],['farhan','Farhan Ali','Mumbai','3725'],['ritu','Ritu Bora','Guwahati','6281']
+].map(([id,name,city,ph])=>({id,name,city,ph,st:{type:'available',sal:'ji'},ai:0}));
+const R=id=>roster.find(x=>x.id===id);
+Object.assign(R('amit'),{st:{type:'half',back:'14:00',backup:'farhan',sal:'ji'},ai:6});
+Object.assign(R('sunita'),{st:{type:'leave',to:'2026-11-14',backup:'ananya',sal:'ji'},ai:9});
+Object.assign(R('vikas'),{st:{type:'full',backup:'rohit',sal:'ji'},ai:4});
+Object.assign(R('arjun'),{st:{type:'meeting',back:'16:00',backup:'meera',sal:'ji'},ai:2});
+const callbacks=[
+ {rep:'amit',client:'Shree Pharma',msg:['Paracetamol stock is running out; will the rate stay the same?','Paracetamol ka stock khatam ho raha hai, rate wahi rahega?'],t:'10:20 AM',pri:'high'},
+ {rep:'amit',client:'Healwell Biotech',msg:['Asked about the Pan-D quote','Pan-D quote ke baare mein poocha'],t:'11:05 AM',pri:'normal'},
+ {rep:'sunita',client:'Bengal Medicorp',msg:['Paying this week and wants to place a new order','Is hafte payment karenge, naya order dena hai'],t:'Yesterday',pri:'high'},
+ {rep:'sunita',client:'Ganga Pharmaceuticals',msg:['Asked if there is a scheme this month','Poocha ki is mahine koi scheme hai kya'],t:'9:40 AM',pri:'normal'},
+ {rep:'sunita',client:'Unity Healthcare',msg:['Follow-up on the Cefixime quote','Cefixime quote ka follow-up'],t:'10:55 AM',pri:'normal'},
+ {rep:'vikas',client:'Awadh Medicos',msg:['Wants samples of D3 60K','D3 60K ke samples chahiye'],t:'9:15 AM',pri:'normal'},
+ {rep:'arjun',client:'Zenlife Formulations',msg:['Asked when the Cefixime order will arrive','Poocha ki Cefixime order kab aayega'],t:'11:30 AM',pri:'normal'}
+];
+const CONTACT={'Shree Pharma':'Agarwal ji','Medilife Healthcare':'Saxena ji','Om Healthcare':'Bhavesh bhai','Sai Distributors':'Patil saheb','Kerala Medi Agencies':'Joseph','Zenlife Formulations':'Srinivas garu','Ganga Pharmaceuticals':'Sinha ji','Northstar Remedies':'Gill ji','City Care Hospital':'Dr. Mathur','Bengal Medicorp':'Subrata babu','Nilgiri Life Sciences':'Murugan','Afro Med Imports':'James'};
+const away=r=>r.st.type!=='available';
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmtDate=s=>{const d=new Date(s+'T00:00:00');return isNaN(d)?'—':d.getDate()+' '+MON[d.getMonth()]};
+const nextWork=s=>{const d=new Date(s+'T00:00:00');if(isNaN(d))return'—';d.setDate(d.getDate()+1);if(d.getDay()===0)d.setDate(d.getDate()+1);return d.getDate()+' '+MON[d.getMonth()]};
+const fmtTime=t=>{if(!t)return'—';const[h,m]=t.split(':').map(Number);return`${(h%12)||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`};
+const salHi=r=>{const f=r.name.split(' ')[0];return r.st.sal==='sir'?`${f} Sir`:r.st.sal==='madam'?`${f} Madam`:`${f} ji`};
+const salEn=r=>{const f=r.name.split(' ')[0];return r.st.sal==='sir'?`${f} Sir`:r.st.sal==='madam'?`${f} Ma'am`:f};
+function stLine(r){const s=r.st;return({
+ half:[`${salEn(r)} is on a half day today and will be available after ${fmtTime(s.back)}.`,`${salHi(r)} aaj half day par hain, ${fmtTime(s.back)} ke baad unse baat ho sakegi.`],
+ full:[`${salEn(r)} is on leave today and will be available from tomorrow morning.`,`${salHi(r)} aaj chhutti par hain, kal subah se unse baat ho sakegi.`],
+ leave:[`${salEn(r)} is on leave until ${fmtDate(s.to)} and will be available from ${nextWork(s.to)}.`,`${salHi(r)} ${fmtDate(s.to)} tak chhutti par hain, ${nextWork(s.to)} se unse baat ho sakegi.`],
+ meeting:[`${salEn(r)} is in a meeting or on a field visit and will be available after ${fmtTime(s.back)}.`,`${salHi(r)} abhi meeting ya field visit par hain, ${fmtTime(s.back)} ke baad unse baat ho sakegi.`],
+ available:[`${salEn(r)} is available.`,`${salHi(r)} available hain.`]})[s.type]}
+function stPill(r){const s=r.st;return({available:[T('Available','Available'),'good'],half:[T(`Half day · back ${fmtTime(s.back)}`,`Half day · ${fmtTime(s.back)} se`),'warn'],full:[T('On leave today','Aaj chhutti'),'bad'],leave:[T(`On leave till ${fmtDate(s.to)}`,`${fmtDate(s.to)} tak chhutti`),'bad'],meeting:[T(`In meeting · till ${fmtTime(s.back)}`,`Meeting mein · ${fmtTime(s.back)} tak`),'accent']})[s.type]}
+function autoReply(r,contact){const b=r.st.backup&&R(r.st.backup),l=stLine(r);
+ return[`Hello ${contact}, this is the AI assistant of ${CO}, replying on behalf of ${r.name}.\n${l[0]}\nAs soon as ${salEn(r)} is back, you will be the first person contacted.\nMeanwhile, if you need order status, the rate list or a COA, just write here and it will be sent right away.${b?` If it is urgent, reply URGENT and ${b.name} will call you.`:''}`,
+ `Namaste ${contact}, ye ${CO} ka AI assistant hai, ${r.name} ki taraf se.\n${l[1]}\n${salHi(r)} ke wapas aate hi sabse pehle aapki baat unse karwa di jaayegi.\nTab tak order status, rate list ya COA chahiye to yahin likhiye, turant bhej diya jaayega.${b?` Urgent ho to URGENT likhiye, ${b.name} se turant aapki baat karwa di jaayegi.`:''}`]}
+
+let avForm=null;
+const formFrom=id=>{const r=R(id);return{who:id,type:r.st.type,back:r.st.back||'14:00',to:r.st.to||'2026-11-16',backup:r.st.backup||'',sal:r.st.sal||'ji'}};
+const TYPES=[['available',['Available','Available']],['half',['Half day','Half day']],['full',['Full day leave','Aaj poore din chhutti']],['leave',['Leave for many days','Kai din ki chhutti']],['meeting',['Meeting / field visit','Meeting / field visit']]];
+function previewRep(){const r=R(avForm.who);return{...r,st:{type:avForm.type,back:avForm.back,to:avForm.to,backup:avForm.backup,sal:avForm.sal}}}
+function avPreviewHtml(){const r=previewRep();if(r.st.type==='available')return`<p class="muted">${T('While available, the AI does not reply. Client messages go straight to your phone.','Available rehne par AI reply nahi karta. Client ke message seedha aapke phone par aate hain.')}</p>`;
+ const a=autoReply(r,'Agarwal ji');return`<div style="background:var(--wa-bg);border-radius:10px;padding:12px"><div class="msg ai" style="max-width:100%;white-space:pre-wrap">${esc(L(a))}<time>${T('AI assistant · on your behalf','AI assistant · aapki taraf se')}</time></div></div>`}
+
+let sim={rep:'amit',client:1,msgs:[],greeted:false},sclock=40;
+const stime=()=>{const m=sclock++,h=11+Math.floor(m/60);return`${(h%12)||12}:${String(m%60).padStart(2,'0')} ${h<12?'AM':'PM'}`};
+const SIMQ=[['hello',['Hello, are you there?','Hello, aap hain?']],['order',['When will my order arrive?','Mera order kab tak aayega?']],['rate',['Please send the rate list.','Rate list bhej dijiye.']],['urgent',['URGENT: we received the wrong batch.','URGENT: dispatch mein galat batch aa gaya hai.']]];
+const trMemo={};
+async function trText(text,l){const k=l+'|'+text;if(trMemo[k])return trMemo[k];const s=await samplePromise;if(!s||trOff||sampleOff)throw{code:'not_granted'};
+ const r=await s.json(`Translate this WhatsApp message, sent by the AI assistant of ${CO} (an Indian pharmaceutical manufacturer) to a client, into ${LANGS[l][0]}, written in ${SCRIPT[l]||'its native'} script. Keep names, company names, product names, order numbers, dates, times, numbers and ₹ amounts unchanged. Polite business tone. Keep the line breaks.\nReply with only JSON: {"translation":"..."}\n\nMessage:\n${text}`,{modelTier:'quick'});
+ if(!r||typeof r.translation!=='string')throw{code:'upstream_error'};return trMemo[k]=r.translation}
+function addCallback(rep,client,msg,pri){const i=callbacks.findIndex(x=>x.rep===rep&&x.client===client);const e={rep,client,msg,t:T('just now','abhi'),pri};if(i>=0){if(callbacks[i].pri==='high')e.pri='high';callbacks[i]=e}else callbacks.unshift(e)}
+function simSay(k){const r=R(sim.rep),c=clients.find(x=>x.id==sim.client),q=SIMQ.find(x=>x[0]===k);
+ sim.msgs.push({f:'c',en:q[1][0],hi:q[1][1],t:stime()});
+ if(!away(r)){sim.msgs.push({f:'sys',en:`${r.name} is available, so the AI stays quiet. The message goes straight to ${r.name}'s phone.`,hi:`${r.name} available hain, isliye AI chup rehta hai. Message seedha ${r.name} ke phone par jaata hai.`});render();scrollEl('#avBody');return}
+ const parts=[];const contact=CONTACT[c.name]||'Sir';
+ if(!sim.greeted){parts.push(autoReply(r,contact));sim.greeted=true}
+ if(k==='order'){const o=orders.find(x=>x.client===c.name);parts.push(o?[`Your order ${o.id} (${P[o.p].s}, ${num(o.qty)} strips) is at the "${OSTAGES[o.stage][0]}" stage. Expected: ${o.eta[0]}.`,`Aapka order ${o.id} (${P[o.p].s}, ${num(o.qty)} strips) abhi "${OSTAGES[o.stage][1]}" stage par hai. Expected: ${o.eta[1]}.`]:[`There is no open order on your account right now. ${salEn(r)} will take your next order first thing after returning.`,`Abhi aapka koi open order nahi dikh raha. ${salHi(r)} ke wapas aate hi aapka naya order sabse pehle liya jaayega.`])}
+ if(k==='rate')parts.push(['Here is our rate list for November 2026.','Ye rahi hamari November 2026 ki rate list.']);
+ if(k==='urgent'){const b=r.st.backup&&R(r.st.backup);parts.push([`This is marked urgent. ${b?b.name:'Our sales head'} has been alerted and will call you within 15 minutes. Sales head Rakesh Kumar has been informed too.`,`Ye urgent hai. ${b?b.name:'Sales head'} ko abhi alert bhej diya gaya hai, 15 minute mein aapko call aayega. Sales head Rakesh Kumar ko bhi bata diya gaya hai.`])}
+ if(!parts.length)parts.push([`${stLine(r)[0]} Your message has been noted.`,`${stLine(r)[1]} Aapka message note kar liya gaya hai.`]);
+ const en=parts.map(p=>p[0]).join('\n\n'),hi=parts.map(p=>p[1]).join('\n\n');
+ const m={f:'ai',en,hi,o:c.lg==='hi'?hi:en,ol:c.lg==='hi'?'hi-Latn':'en',pdf:k==='rate',t:stime(),lg:c.lg};
+ sim.msgs.push(m);r.ai++;addCallback(r.id,c.name,q[1],k==='urgent'?'high':'normal');
+ render();scrollEl('#avBody');
+ if(c.lg!=='en'){$('#avStatus')&&($('#avStatus').textContent=T(`Translating into ${LANGS[c.lg][0]}…`,`${LANGS[c.lg][0]} mein translate ho raha hai…`));
+  trText(en,c.lg).then(t=>{m.o=t;m.ol=c.lg;m.note=''}).catch(()=>{m.note=T(`Sent in ${c.lg==='hi'?'Hinglish':'English'}. Sending in ${LANGS[c.lg][0]} needs Claude to be allowed (on claude.ai).`,`${c.lg==='hi'?'Hinglish':'English'} mein gaya. ${LANGS[c.lg][0]} mein bhejne ke liye Claude ki permission chahiye (claude.ai par).`)}).finally(()=>{if(cur()==='availability'){render();scrollEl('#avBody')}})}
+}
+function simHtml(){const c=clients.find(x=>x.id==sim.client);return sim.msgs.map(m=>{
+ if(m.f==='sys')return`<div class="note" style="align-self:center;max-width:92%"><span class="ai-tag">AI</span><span>${esc(L([m.en,m.hi]))}</span></div>`;
+ if(m.f==='c')return`<div class="msg me" style="align-self:flex-start;background:var(--wa-in)"><b style="font-size:.74rem;opacity:.7">${esc(c.name)}</b><div>${esc(L([m.en,m.hi]))}</div><time>${m.t}</time></div>`;
+ const showTr=m.ol!==(lang==='hing'?'hi-Latn':lang)&&!(m.ol==='en'&&lang==='en');
+ return`<div class="msg me"><span class="ai-tag" style="margin-bottom:4px;display:inline-block">${T('AI assistant · on behalf of','AI assistant · ki taraf se')} ${esc(R(sim.rep).name.split(' ')[0])}</span><div lang="${m.ol}" style="white-space:pre-wrap">${esc(m.o)}</div>${m.pdf?`<div class="qcard"><span class="pdf">PDF</span><b class="mono">Vatave_Rate_List_Nov2026.pdf</b></div>`:''}${showTr?`<div class="tr"><span>${T('Meaning','Matlab')} · <b data-notr>${native(lang)}</b></span><div style="white-space:pre-wrap">${esc(L([m.en,m.hi]))}</div></div>`:''}${m.note?`<div class="tr" data-notr>${esc(m.note)}</div>`:''}<time>${m.t} ✓✓</time></div>`}).join('')||`<p class="muted" style="text-align:center;margin:auto">${T('Pick a client message below.','Neeche se client ka koi message chuniye.')}</p>`}
+
+function vAvailability(){if(!avForm)avForm=formFrom('amit');
+ const awayN=roster.filter(away).length,aiSum=sum(roster,'ai');const simR=R(sim.rep),simC=clients.find(x=>x.id==sim.client);const sp=stPill(simR);
+ return head(T('Availability & AI cover','Haaziri aur AI cover'),T('Each of the 20 salespeople has their own WhatsApp number. When someone punches half day, leave or a meeting here, the AI answers clients on that person\'s number, in the client\'s language, and lines them up to be called first when the person is back.','Har salesperson ka apna WhatsApp number hai. Koi yahan half day, chhutti ya meeting punch kare, to AI usi ke number par clients ko unki bhasha mein jawab deta hai, aur wapas aane par sabse pehle unhi clients se baat karwata hai.'))+
+ `<div class="grid g4">
+  <div class="card kpi"><div class="lbl">${T('Available now','Abhi available')}</div><div class="val">${roster.length-awayN}/${roster.length}</div></div>
+  <div class="card kpi"><div class="lbl">${T('Away (AI covering)','Bahar (AI sambhal raha)')}</div><div class="val" style="color:var(--warn)">${awayN}</div></div>
+  <div class="card kpi"><div class="lbl">${T('AI replies today','Aaj AI ke reply')}</div><div class="val">${aiSum}</div></div>
+  <div class="card kpi"><div class="lbl">${T('Clients waiting for a call','Call ka intezaar')}</div><div class="val">${callbacks.length}</div><div class="sub">${callbacks.filter(x=>x.pri==='high').length} ${T('high priority','zaroori')}</div></div>
+ </div>
+ <div class="grid g12">
+  <div class="card stack" id="avFormCard"><h2>${T('Punch my status','Apna status punch karo')}</h2>
+   <div class="field"><label for="avWho">${T('Salesperson (logged in as)','Salesperson (login)')}</label><select id="avWho" data-notr>${roster.map(r=>`<option value="${r.id}" ${r.id===avForm.who?'selected':''}>${r.name} · ${r.city}</option>`).join('')}</select></div>
+   <div class="row">${TYPES.map(([k,l])=>`<button class="chip ${avForm.type===k?'on':''}" data-act="avtype:${k}">${L(l)}</button>`).join('')}</div>
+   <div class="grid g2" style="gap:10px">
+    ${avForm.type==='half'||avForm.type==='meeting'?`<div class="field"><label for="avBack">${T('Back at','Kitne baje wapas')}</label><input id="avBack" type="time" value="${avForm.back}"></div>`:''}
+    ${avForm.type==='leave'?`<div class="field"><label for="avTo">${T('On leave until','Kab tak chhutti')}</label><input id="avTo" type="date" value="${avForm.to}" min="2026-11-13"></div>`:''}
+    ${avForm.type!=='available'?`<div class="field"><label for="avBackup">${T('Backup for urgent work','Urgent kaam ke liye backup')}</label><select id="avBackup" data-notr><option value="">—</option>${roster.filter(r=>r.id!==avForm.who).map(r=>`<option value="${r.id}" ${r.id===avForm.backup?'selected':''}>${r.name}</option>`).join('')}</select></div>`:''}
+    <div class="field"><label for="avSal">${T('AI should call me','AI mujhe kaise bulaye')}</label><select id="avSal" data-notr>${[['ji',R(avForm.who).name.split(' ')[0]+' ji'],['sir',R(avForm.who).name.split(' ')[0]+' Sir'],['madam',R(avForm.who).name.split(' ')[0]+' Madam']].map(([k,l])=>`<option value="${k}" ${avForm.sal===k?'selected':''}>${l}</option>`).join('')}</select></div>
+   </div>
+   <div><span class="tsub" style="margin-bottom:6px">${T('Clients will get this reply (in their own language):','Clients ko ye reply jaayega (unki apni bhasha mein):')}</span><div id="avPrev">${avPreviewHtml()}</div></div>
+   <div class="row"><button class="btn btn-primary" data-act="avsave">${T('Save status','Status save karo')}</button><span class="muted" style="font-size:.78rem">${T('Leave approved in HR? Status updates by itself.','HR mein leave approve hui? Status apne aap badal jaata hai.')}</span></div>
+  </div>
+  <div class="card cpane"><div class="chd"><div><b data-notr>WhatsApp · +91 ••••• •${simR.ph}</b><span class="tsub">${simR.name} · ${T('client is messaging this number','client is number par message kar raha hai')}</span></div><span class="pill ${sp[1]}">${sp[0]}${away(simR)?' · '+T('AI cover on','AI cover on'):''}</span></div>
+   <div class="row" style="padding:10px 16px 0"><label class="sr" for="simRep">Salesperson</label><select id="simRep" class="btn" data-notr>${roster.map(r=>`<option value="${r.id}" ${r.id===sim.rep?'selected':''}>${r.name}${away(r)?' ●':''}</option>`).join('')}</select><label class="sr" for="simClient">Client</label><select id="simClient" class="btn" data-notr>${clients.map(c=>`<option value="${c.id}" ${c.id==sim.client?'selected':''}>${c.name} · ${LANGS[c.lg][1]}</option>`).join('')}</select><button class="btn btn-sm" data-act="simreset">${T('Clear','Saaf karo')}</button></div>
+   <div class="wa-body" id="avBody" style="margin-top:10px">${simHtml()}</div>
+   <div class="cfoot"><span class="tsub">${T(`${simC.name} writes (client language: ${LANGS[simC.lg][0]})`,`${simC.name} likhta hai (client ki bhasha: ${LANGS[simC.lg][0]})`)}</span><div class="qr">${SIMQ.map(([k,l])=>`<button data-act="sim:${k}">${esc(L(l))}</button>`).join('')}</div><div class="status" id="avStatus"></div></div>
+  </div>
+ </div>
+ <div class="card"><div class="ch"><h2>${T('Team status today (20)','Aaj team ka status (20)')}</h2><span class="muted" style="font-size:.8rem">${T('Each person uses their own WhatsApp Business number','Har insaan apna WhatsApp Business number use karta hai')}</span></div>
+  <div class="tbl"><table><thead><tr><th>${T('Salesperson','Salesperson')}</th><th>WhatsApp</th><th>Status</th><th>${T('Backup','Backup')}</th><th class="r">${T('AI replies','AI reply')}</th><th class="r">${T('Waiting','Intezaar')}</th><th></th></tr></thead><tbody>${roster.map(r=>{const p=stPill(r),cb=callbacks.filter(x=>x.rep===r.id).length;return`<tr><td><b>${r.name}</b><span class="tsub">${r.city}</span></td><td class="mono" data-notr>+91 ••••• •${r.ph}</td><td><span class="pill ${p[1]}">${p[0]}</span></td><td>${away(r)&&r.st.backup?R(r.st.backup).name:'—'}</td><td class="r num">${r.ai||'—'}</td><td class="r num">${cb||'—'}</td><td class="r">${away(r)?`<button class="btn btn-sm btn-primary" data-act="avback:${r.id}">${T('Back now','Wapas aa gaye')}</button>`:`<button class="btn btn-sm" data-act="avedit:${r.id}">${T('Change','Badlo')}</button>`}</td></tr>`}).join('')}</tbody></table></div></div>
+ <div class="grid g2">
+  <div class="card"><h2>${T('Call these clients first','Inse sabse pehle baat karni hai')}</h2>${callbacks.length?`<div class="tasks">${callbacks.slice().sort((a,b)=>(b.pri==='high')-(a.pri==='high')).map(x=>`<div class="task"><span class="bar ${x.pri==='high'?'bad':'warn'}"></span><div><b>${esc(x.client)}</b><small>${esc(L(x.msg))} · ${x.t} · ${T('for','kiske liye')}: ${R(x.rep).name}</small></div><span class="pill ${away(R(x.rep))?'warn':'good'}">${away(R(x.rep))?T('waiting','intezaar'):T('call now','abhi call')}</span></div>`).join('')}</div>`:`<p class="muted">${T('No one is waiting.','Koi intezaar nahi kar raha.')}</p>`}</div>
+  <div class="card"><h2>${T('AI cover rules','AI cover ke rules')}</h2>${[[T('Reply only when the salesperson is not available','Sirf tab reply jab salesperson available na ho'),1],[T('Also reply after office hours (7 PM – 9 AM) and on Sundays','Office time ke baad (7 PM – 9 AM) aur Sunday ko bhi reply'),1],[T('AI may share order status, rate list, COA and documents','AI order status, rate list, COA aur documents bhej sakta hai'),1],[T('AI never negotiates price or promises a discount','AI kabhi rate kam karne ya discount ka vaada nahi karta'),1],[T('URGENT, complaint or payment issue: alert backup + sales head','URGENT, complaint ya payment issue: backup + sales head ko alert'),1],[T('Every AI message is labelled "AI assistant"','Har AI message par "AI assistant" likha hota hai'),1],[T('When the salesperson is back, tell waiting clients','Salesperson wapas aaye to intezaar wale clients ko bata do'),1]].map((x,i)=>`<label class="check" style="padding:5px 0"><input type="checkbox" id="avr${i}" ${x[1]?'checked':''}> ${x[0]}</label>`).join('')}</div>
+ </div>`}
+function saveStatus(){const r=R(avForm.who),was=away(r);r.st={type:avForm.type,back:avForm.back,to:avForm.to,backup:avForm.type==='available'?'':avForm.backup,sal:avForm.sal};
+ if(was&&!away(r)){render();welcomeBack(r);return}
+ render();toast(away(r)?T(`${r.name}: ${stPill(r)[0]}. AI now answers clients on +91 ••••• •${r.ph}.`,`${r.name}: ${stPill(r)[0]}. Ab AI +91 ••••• •${r.ph} par clients ko jawab dega.`):T(`${r.name} is available. AI replies are off.`,`${r.name} available hain. AI reply band.`))}
+let wbRep=null;
+function welcomeBack(r){wbRep=r.id;const list=callbacks.map((x,i)=>({...x,i})).filter(x=>x.rep===r.id).sort((a,b)=>(b.pri==='high')-(a.pri==='high'));
+ drawer(`<div class="ch"><div><span class="pill good">${T('Back now','Wapas aa gaye')}</span><h2 style="margin-top:6px;font-size:1.2rem">${T(`Welcome back, ${r.name.split(' ')[0]}!`,`Welcome back, ${salHi(r)}!`)}</h2><p class="muted">${T(`While you were away, the AI answered ${r.ai} client messages on your WhatsApp.`,`Aapki absence mein AI ne aapke WhatsApp par ${r.ai} client messages ka jawab diya.`)}</p></div><button class="btn" data-act="close">${T('Close','Band karo')}</button></div>
+ <h3>${T(`Call these ${list.length} clients first`,`Sabse pehle in ${list.length} clients se baat karein`)}</h3>
+ ${list.length?`<div class="tasks">${list.map(x=>`<div class="task"><span class="bar ${x.pri==='high'?'bad':'warn'}"></span><div><b>${esc(x.client)}</b><small>${esc(L(x.msg))} · ${x.t}</small></div><span class="row"><button class="btn btn-sm btn-primary" data-act="cbcall:${x.i}">${T('Call','Call')}</button><button class="btn btn-sm" data-act="cbdone:${x.i}">${T('Done','Ho gaya')}</button></span></div>`).join('')}</div>`:`<p class="muted">${T('Nobody is waiting. All clear.','Koi intezaar nahi kar raha. Sab theek.')}</p>`}
+ <div class="note"><span class="ai-tag">AI</span><span>${T(`Waiting clients were told on WhatsApp that ${r.name.split(' ')[0]} is back and will call shortly.`,`Intezaar wale clients ko WhatsApp par bata diya gaya ki ${salHi(r)} wapas aa gaye hain aur thodi der mein call karenge.`)}</span></div>`)}
+
 let scanned=false;
 function vSetup(){return head('Setup',T('Getting started takes one day: upload your Excel, connect WhatsApp, add your team\'s numbers. No training needed.','Shuru karne mein 1 din lagta hai: Excel upload karo, WhatsApp jodo, team ke number daalo. Koi training nahi chahiye.'))+
  `<div class="grid g12"><div class="card"><h2>Integrations</h2>${integ.map((x,i)=>`<div class="integ"><div><b>${L(x.n)}</b><small>${L(x.d)}</small></div>${x.on?`<span class="row"><span class="pill good">${T('Connected','Juda hai')}</span><button class="btn btn-sm" data-act="integ:${i}">${T('Remove','Hatao')}</button></span>`:`<button class="btn btn-sm btn-primary" data-act="integ:${i}">${T('Connect','Jodo')}</button>`}</div>`).join('')}</div>
@@ -850,8 +973,8 @@ function NAV(){return[[T('Overview','Shuruaat'),[['dashboard','Dashboard'],['ass
  [T('Sell','Bechna'),[['chat','Client Chat',()=>[sum(convs,'unread'),'new']],['leads','Leads',()=>[leads.filter(l=>l.stage==='New').length,'']],['quotes',T('Quotations','Quotation')],['catalog','Products'],['campaigns','Campaigns']]],
  [T('Deliver','Delivery'),[['orders','Orders',()=>[orders.filter(o=>o.block).length,'']],['documents','Documents',()=>[docs.filter(d=>d.left<30).length,'']]]],
  [T('Grow','Badhao'),[['clients',T('Clients & reorders','Clients aur reorder'),()=>[atRisk().length,'']],['payments',T('Payments','Payment')],['tenders','Tenders',()=>[tenders.filter(t=>t.days<=7).length,'ai']]]],
- [T('Manage','Manage'),[['analytics',T('Analytics','Report')],['team',T('Team & targets','Team aur target')],['setup','Setup']]]]}
-const VIEWS={dashboard:vDashboard,assistant:vAssistant,chat:vChat,leads:vLeads,quotes:vQuotes,catalog:vCatalog,orders:vOrders,clients:vClients,payments:vPayments,tenders:vTenders,documents:vDocuments,campaigns:vCampaigns,analytics:vAnalytics,team:vTeam,setup:vSetup};
+ [T('Manage','Manage'),[['availability',T('Availability & AI cover','Haaziri aur AI cover'),()=>[roster.filter(away).length,'ai']],['analytics',T('Analytics','Report')],['team',T('Team & targets','Team aur target')],['setup','Setup']]]]}
+const VIEWS={availability:vAvailability,dashboard:vDashboard,assistant:vAssistant,chat:vChat,leads:vLeads,quotes:vQuotes,catalog:vCatalog,orders:vOrders,clients:vClients,payments:vPayments,tenders:vTenders,documents:vDocuments,campaigns:vCampaigns,analytics:vAnalytics,team:vTeam,setup:vSetup};
 function cur(){const h=location.hash.slice(1);return VIEWS[h]?h:'dashboard'}
 function chrome(){
  $('#brandLogo').innerHTML=logoSvg(36);
@@ -861,7 +984,7 @@ function chrome(){
  $('#demoTag').textContent=T('Sample data','Sample data');
  $('#askIn').placeholder=T('Ask: which client has a pending reorder?','Poochiye: kis client ka reorder pending hai?');
  $('#askBtn').textContent=T('Ask','Poocho');
- $('#railFoot').innerHTML=T('Demo version · all data is sample<br>Plan: Growth · 4 sales users','Demo version · sab data sample hai<br>Plan: Growth · 4 sales users');
+ $('#railFoot').innerHTML=T('Demo version · all data is sample<br>Plan: Growth · 20 sales users','Demo version · sab data sample hai<br>Plan: Growth · 20 sales users');
 }
 function render(){const v=cur();
  // read the view first so it can clear unread counts before the nav badges are drawn
@@ -876,7 +999,7 @@ let lastView=null;
 window.addEventListener('hashchange',()=>{closeDrawer();if(lastView!==cur())pending=null;render();if(lastView!==cur()){window.scrollTo(0,0);document.querySelector('.nav.on')?.scrollIntoView({block:'nearest',inline:'nearest'})}lastView=cur()});
 
 function drawer(h){$('#drawer').innerHTML=h;$('#drawer').hidden=false;$('#scrim').hidden=false;if(isAI())translateRoot($('#drawer'),lang,{onState:uiState})}
-function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true}
+function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true;if(typeof wbRep!=='undefined')wbRep=null}
 $('#scrim').addEventListener('click',closeDrawer);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 
@@ -917,9 +1040,18 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if
   case'integ':integ[b].on=!integ[b].on;render();toast(integ[b].on?T(`${L(integ[b].n)} connected.`,`${L(integ[b].n)} jud gaya.`):T(`${L(integ[b].n)} removed.`,`${L(integ[b].n)} hata diya.`));break;
   case'scan':scanned=true;render();break;
   case'askclose':$('#askOut').hidden=true;break;
+  case'avtype':avForm.type=b;render();break;
+  case'avsave':saveStatus();break;
+  case'avback':{avForm=formFrom(b);avForm.type='available';saveStatus();break}
+  case'avedit':avForm=formFrom(b);render();$('#avFormCard')?.scrollIntoView({block:'start'});break;
+  case'sim':simSay(b);break;
+  case'simreset':sim.msgs=[];sim.greeted=false;render();break;
+  case'cbcall':{const x=callbacks[+b];toast(T(`Calling ${x.client}…`,`${x.client} ko call lag raha hai…`));break}
+  case'cbdone':{callbacks.splice(+b,1);render();if(wbRep)welcomeBack(R(wbRep));break}
  }
 });
 document.addEventListener('input',e=>{const id=e.target.id;
+ if(['avBack','avTo','avBackup','avSal'].includes(id)&&avForm){avForm[{avBack:'back',avTo:'to',avBackup:'backup',avSal:'sal'}[id]]=e.target.value;$('#avPrev').innerHTML=avPreviewHtml();if(isAI())translateRoot($('#avPrev'),lang,{onState:uiState})}
  if(['qClient','qProd','qQty','qDisc','qPrint','qBrand','qLang'].includes(id)){const nc=+$('#qClient').value;qs={client:nc,p:+$('#qProd').value,qty:Math.max(0,+$('#qQty').value||0),disc:Math.max(0,+$('#qDisc').value||0),print:$('#qPrint').checked,brand:$('#qBrand').checked,pdf:$('#qLang').value};
   if(id==='qClient'){const o=$('#qLang').options[0];o.textContent='Client · '+native(clients.find(x=>x.id==nc).lg)}updQuote()}
  if(id==='catIn'){catQ=e.target.value;updCat()}
@@ -929,6 +1061,8 @@ document.addEventListener('change',e=>{const id=e.target.id;
  if(id==='repSel'){resetChat(e.target.value);render()}
  if(id==='cSeg'){camp.seg=+e.target.value;render()}
  if(id==='appLang'||id==='langSel')setLang(e.target.value);
+ if(id==='avWho'){avForm=formFrom(e.target.value);render()}
+ if(id==='simRep'||id==='simClient'){if(id==='simRep')sim.rep=e.target.value;else sim.client=+e.target.value;sim.msgs=[];sim.greeted=false;render()}
  if(id==='xl'&&e.target.files.length){scanned=true;render();toast(T('File read. The demo shows a sample result.','File padhi gayi. Demo mein sample result dikh raha hai.'))}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='chatIn'){e.preventDefault();sendFree()}});
