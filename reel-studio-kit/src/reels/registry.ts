@@ -5,6 +5,7 @@ import type { Word } from "../timing";
 import { PRESETS } from "../presets";
 import * as demo from "./demo/Reel";
 import * as r_website_zaroori from "./website-zaroori/Reel";
+import * as r_dentist_digital from "./dentist-digital/Reel";
 // <new-reel-imports>
 
 export type ReelEntry = {
@@ -28,6 +29,7 @@ export const REELS: ReelEntry[] = [
     ],
   },
   { id: "website-zaroori", Component: r_website_zaroori.Reel, durationInFrames: r_website_zaroori.durationInFrames },
+  { id: "dentist-digital", Component: r_dentist_digital.Reel, durationInFrames: r_dentist_digital.durationInFrames },
   // <new-reel-entries>
 ];
 
