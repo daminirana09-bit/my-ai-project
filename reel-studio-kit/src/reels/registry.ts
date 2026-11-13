@@ -32,7 +32,7 @@ export const REELS: ReelEntry[] = [
   { id: "website-zaroori", Component: r_website_zaroori.Reel, durationInFrames: r_website_zaroori.durationInFrames },
   { id: "dentist-digital", Component: r_dentist_digital.Reel, durationInFrames: r_dentist_digital.durationInFrames },
   { id: "desk-hiring", Component: r_desk.Hiring, durationInFrames: r_desk.durationInFrames },
-  { id: "desk-website", Component: r_desk.Website, durationInFrames: r_desk.durationInFrames },
+  ...r_desk.CLIENT_REELS.map((r) => ({ ...r, durationInFrames: r_desk.durationInFrames })),
   // <new-reel-entries>
 ];
 
