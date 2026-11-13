@@ -75,6 +75,11 @@ button,input,select,textarea{font:inherit;color:inherit}
 .who{display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap}
 .avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:var(--accent-fg);font-weight:600;font-size:.78rem;flex:none}
 .demo{font-size:.72rem;color:var(--warn);background:var(--warn-soft);padding:3px 9px;border-radius:999px;font-weight:600}
+.langsel{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 10px;font-size:.8rem;font-weight:600;max-width:190px}
+.trpill{font-size:.72rem;font-weight:600;color:var(--ai);background:var(--ai-soft);padding:3px 9px;border-radius:999px;white-space:nowrap}
+.trpill::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.trnote{font-size:.82rem;background:var(--warn-soft);border-radius:8px;padding:8px 12px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--surface)}
 .seg button{border:0;background:transparent;border-radius:999px;padding:4px 11px;font-size:.78rem;font-weight:600;cursor:pointer;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
@@ -295,11 +300,12 @@ details.test .compose{margin-top:8px}
           <button class="btn btn-primary btn-sm" type="submit" id="askBtn">Ask</button>
         </form>
         <div class="who">
-          <div class="seg" role="group" aria-label="App language" id="langSeg"></div>
+          <span class="trpill" id="trPill" data-notr hidden></span><label class="sr" for="langSel">Language</label><select id="langSel" class="langsel" data-notr></select>
           <span class="demo" id="demoTag"></span>
           <span class="avatar" title="Rakesh Kumar, Sales Head">RK</span>
         </div>
       </header>
+      <div id="trNote" class="trnote" data-notr hidden></div>
       <div id="askOut" class="card askout" hidden></div>
       <section id="view" class="stack" style="gap:18px"></section>
     </div>
@@ -311,18 +317,26 @@ details.test .compose{margin-top:8px}
 
 <script>
 /* ---------- language ---------- */
-let lang='hi';
-try{const s=localStorage.getItem('vatave-lang');if(s==='en'||s==='hi')lang=s}catch(_){}
-const T=(en,hi)=>lang==='en'?en:hi;
+/* English and Hinglish are written by hand. Every other language is translated from English by Claude,
+   once per sentence, and remembered in this browser. */
+const LANGS={en:['English','English'],hing:['Hinglish','Hinglish'],hi:['Hindi','हिन्दी'],bn:['Bengali','বাংলা'],mr:['Marathi','मराठी'],te:['Telugu','తెలుగు'],ta:['Tamil','தமிழ்'],gu:['Gujarati','ગુજરાતી'],ur:['Urdu','اردو'],kn:['Kannada','ಕನ್ನಡ'],or:['Odia','ଓଡ଼ିଆ'],ml:['Malayalam','മലയാളം'],pa:['Punjabi','ਪੰਜਾਬੀ'],as:['Assamese','অসমীয়া'],mai:['Maithili','मैथिली'],sat:['Santali','ᱥᱟᱱᱛᱟᱲᱤ'],ks:['Kashmiri','كٲشُر'],ne:['Nepali','नेपाली'],sd:['Sindhi','سنڌي'],kok:['Konkani','कोंकणी'],doi:['Dogri','डोगरी'],mni:['Manipuri','ꯃꯤꯇꯩꯂꯣꯟ'],brx:['Bodo','बड़ो'],sa:['Sanskrit','संस्कृतम्']};
+const SCRIPT={hi:'Devanagari',mr:'Devanagari',mai:'Devanagari',ne:'Devanagari',kok:'Devanagari',doi:'Devanagari',brx:'Devanagari',sa:'Devanagari',bn:'Bengali',as:'Bengali (Assamese)',te:'Telugu',ta:'Tamil',gu:'Gujarati',kn:'Kannada',or:'Odia',ml:'Malayalam',pa:'Gurmukhi',ur:'Perso-Arabic (Nastaliq)',ks:'Perso-Arabic',sd:'Perso-Arabic',sat:'Ol Chiki',mni:'Meitei Mayek'};
+const FONT={Devanagari:'Noto Sans Devanagari',Bengali:'Noto Sans Bengali','Bengali (Assamese)':'Noto Sans Bengali',Telugu:'Noto Sans Telugu',Tamil:'Noto Sans Tamil',Gujarati:'Noto Sans Gujarati',Kannada:'Noto Sans Kannada',Odia:'Noto Sans Oriya',Malayalam:'Noto Sans Malayalam',Gurmukhi:'Noto Sans Gurmukhi','Perso-Arabic (Nastaliq)':'Noto Naskh Arabic','Perso-Arabic':'Noto Naskh Arabic','Ol Chiki':'Noto Sans Ol Chiki','Meitei Mayek':'Noto Sans Meetei Mayek'};
+let lang='hing';
+try{const s=localStorage.getItem('vatave-ui-lang');if(s&&LANGS[s])lang=s}catch(_){}
+const T=(en,hi)=>lang==='hing'?hi:en;
+const isAI=()=>lang!=='en'&&lang!=='hing';
+const uiName=()=>lang==='hing'?'Hinglish (Hindi written in Roman letters)':LANGS[lang][0];
+const native=l=>LANGS[l]?LANGS[l][1]:l;
 const L=x=>Array.isArray(x)?T(x[0],x[1]):x;
 const CO='Vatave Healthcare';
 
 /* ---------- sample data ---------- */
 const reps=[
- {id:'rahul',name:'Rahul Sharma',region:'North',target:3500000,achieved:2140000,calls:142,visits:38,orders:21,overdue:3,lg:'English'},
- {id:'priya',name:'Priya Nair',region:'South',target:3000000,achieved:2380000,calls:126,visits:41,orders:24,overdue:0,lg:'English'},
- {id:'amit',name:'Amit Verma',region:'West',target:2800000,achieved:1520000,calls:98,visits:22,orders:13,overdue:6,lg:'Hinglish'},
- {id:'sunita',name:'Sunita Das',region:'East',target:2200000,achieved:1380000,calls:111,visits:30,orders:15,overdue:2,lg:'Hinglish'}
+ {id:'rahul',name:'Rahul Sharma',region:'North',target:3500000,achieved:2140000,calls:142,visits:38,orders:21,overdue:3,lg:'en'},
+ {id:'priya',name:'Priya Nair',region:'South',target:3000000,achieved:2380000,calls:126,visits:41,orders:24,overdue:0,lg:'ml'},
+ {id:'amit',name:'Amit Verma',region:'West',target:2800000,achieved:1520000,calls:98,visits:22,orders:13,overdue:6,lg:'hing'},
+ {id:'sunita',name:'Sunita Das',region:'East',target:2200000,achieved:1380000,calls:111,visits:30,orders:15,overdue:2,lg:'bn'}
 ];
 const P={
  1:{s:'PCM 650',c:'Paracetamol 650 mg',f:'Tablet',pk:'10×10 Blister',rate:9.8,moq:10000,cat:'Analgesic',st:'Available'},
@@ -431,7 +445,6 @@ const integ=[
 ];
 
 /* ---------- client chat data: client writes in own language, rep reads in theirs ---------- */
-const LANGS={hi:['Hindi','हिन्दी'],gu:['Gujarati','ગુજરાતી'],ta:['Tamil','தமிழ்'],te:['Telugu','తెలుగు'],bn:['Bengali','বাংলা'],mr:['Marathi','मराठी'],ml:['Malayalam','മലയാളം'],en:['English','English']};
 const convs=[
  {id:'nilgiri',client:'Nilgiri Life Sciences',contact:'Murugan',city:'Coimbatore',lg:'ta',unread:1,msgs:[
   {f:'c',t:'10:02 AM',o:'வணக்கம், மல்டிவைட்டமின் கேப்ஸ்யூல் 20,000 ஸ்ட்ரிப் எப்போது அனுப்ப முடியும்?',en:'Hello, when can you send 20,000 strips of the multivitamin capsules?',hi:'Namaste, Multivitamin capsule 20,000 strips kab tak bhej sakte ho?'},
@@ -492,7 +505,7 @@ function health(c){const r=c.last/c.cycle;if(r<.9)return['Healthy','good'];if(r<
 const healthL=h=>T(h,{Healthy:'Sab theek','Reorder due':'Reorder aane wala','Reorder missed':'Reorder chhoota','Churn risk':'Client ja sakta hai'}[h]);
 const atRisk=()=>clients.filter(c=>health(c)[1]==='bad');
 const scoreCls=s=>s>=75?'hot':s>=50?'warm':'cold';
-let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3400)}
+let toastT;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,4200);if(isAI())translateRoot(t,lang,{onState:uiState})}
 function head(t,p,act=''){return`<div class="vhead"><div><h1>${t}</h1>${p?`<p>${p}</p>`:''}</div><div class="row">${act}</div></div>`}
 const logoSvg=(s=36)=>`<svg class="logo" width="${s}" height="${s}" viewBox="0 0 40 40" aria-hidden="true"><rect class="bg" width="40" height="40" rx="10"/><rect class="l" x="8.2" y="7" width="8" height="25" rx="4" transform="rotate(-20 12.2 19.5)"/><rect class="r" x="23.8" y="7" width="8" height="25" rx="4" transform="rotate(20 27.8 19.5)"/><circle class="bg" cx="20" cy="31.2" r="2.2"/></svg>`;
 
@@ -501,6 +514,43 @@ const samplePromise=(window.claude&&window.claude.use)?window.claude.use('sample
 let sampleOff=false;
 function sampleErr(e){const c=e&&e.code;if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(c)){sampleOff=true;return T('Live AI translation is off in this view. Use the ready replies above.','Is view mein live AI translation band hai. Upar ke ready replies use karein.')}
  if(c==='rate_limited')return T('Too many requests. Try again in a minute.','Bahut zyada requests. Ek minute baad try karein.');if(c==='cancelled')return'';return T('Translation failed. Try again.','Translation nahi hua. Dobara try karein.')}
+
+/* ---------- UI translation engine ---------- */
+const trCache={},inflight={},origText=new WeakMap();let trBusy=0,trOff=false;
+function cacheFor(l){if(!trCache[l]){let o={};try{o=JSON.parse(localStorage.getItem('vatave-tr-'+l)||'{}')||{}}catch(_){}trCache[l]=o}return trCache[l]}
+function saveCache(l){try{localStorage.setItem('vatave-tr-'+l,JSON.stringify(trCache[l]))}catch(_){}}
+const fontsLoaded=new Set();
+function loadFont(l){const f=FONT[SCRIPT[l]];if(!f||fontsLoaded.has(f))return;fontsLoaded.add(f);const k=document.createElement('link');k.rel='stylesheet';k.href='https://fonts.googleapis.com/css2?family='+f.replace(/ /g,'+')+':wght@400;600&display=swap';document.head.appendChild(k);
+ document.body.style.fontFamily=`"IBM Plex Sans",${[...fontsLoaded].map(x=>`"${x}"`).join(',')},"Segoe UI",system-ui,"Noto Sans","Nirmala UI",sans-serif`}
+const wants=t=>{const k=t.trim();return k.length>1&&/[A-Za-z]/.test(k)&&!/^[A-Z]{2,4}-[\w-]+$/.test(k)};
+function collect(root,skip){const nodes=[],w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;if(!p||p.closest(skip))return NodeFilter.FILTER_REJECT;const src=origText.has(n)?origText.get(n):n.nodeValue;return wants(src)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}});
+ while(w.nextNode())nodes.push(w.currentNode);return nodes}
+async function callTr(list,l){const s=await samplePromise;if(!s||trOff)throw{code:'not_granted'};
+ const arr=await s.json(`Translate these user-interface strings of a sales app used by the sales team of ${CO}, an Indian pharmaceutical manufacturer, from English into ${LANGS[l][0]}, written in ${SCRIPT[l]||'its native'} script. Use simple, everyday words that a salesperson in India would use. Business words Indians normally say in English (order, invoice, GST, MOQ, strip, batch, target, lead, quote, WhatsApp, dispatch) may stay as those words, written in ${LANGS[l][0]} script. Keep company names, person names, city names, product names, drug compositions, numbers, ₹ amounts, codes, dates and units exactly as they are. Keep any leading or trailing punctuation.\nReply with only a JSON array of exactly ${list.length} strings, in the same order.\n\n${JSON.stringify(list)}`,{modelTier:'quick',cache:{gcTime:86400000}});
+ if(!Array.isArray(arr))throw{code:'upstream_error'};return arr}
+function fetchTr(list,l,onState){const cache=cacheFor(l),key=s=>l+'\u0001'+s;const waits=[];const todo=[];
+ for(const s of list){if(cache[s])continue;if(inflight[key(s)])waits.push(inflight[key(s)]);else todo.push(s)}
+ for(let i=0;i<todo.length;i+=40){const chunk=todo.slice(i,i+40);trBusy+=chunk.length;onState&&onState('busy');
+  const p=callTr(chunk,l).then(arr=>{chunk.forEach((s,j)=>{if(typeof arr[j]==='string'&&arr[j].trim())cache[s]=arr[j]});saveCache(l)})
+   .catch(e=>{if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(e&&e.code))trOff=true})
+   .finally(()=>{trBusy-=chunk.length;chunk.forEach(s=>delete inflight[key(s)])});
+  chunk.forEach(s=>inflight[key(s)]=p);waits.push(p)}
+ return Promise.all(waits)}
+async function translateRoot(root,l,opt={}){if(!root||!LANGS[l]||l==='en'||l==='hing')return;
+ const skip=opt.skip||'.orig,time,.mono,[data-notr],script,style,textarea,[lang]:not(html):not([data-trl])';
+ const nodes=collect(root,skip),phs=[...root.querySelectorAll('input[placeholder],textarea[placeholder]')].filter(e=>!e.closest('[data-notr]'));
+ const cache=cacheFor(l),need=new Set();
+ const apply=()=>{need.clear();for(const n of nodes){if(!n.isConnected)continue;if(!origText.has(n))origText.set(n,n.nodeValue);const src=origText.get(n),k=src.trim();if(cache[k])n.nodeValue=src.replace(k,cache[k]);else need.add(k)}
+  for(const e of phs){if(!e.isConnected)continue;if(e.dataset.ph==null)e.dataset.ph=e.placeholder;const k=e.dataset.ph.trim();if(!wants(k))continue;if(cache[k])e.placeholder=cache[k];else need.add(k)}};
+ apply();if(!need.size){opt.onState&&opt.onState('done');return}
+ const s=await samplePromise;if(!s||trOff){opt.onState&&opt.onState('off');return}
+ await fetchTr([...need],l,opt.onState);apply();opt.onState&&opt.onState(trOff?'off':'done')}
+function uiState(st){const pill=$('#trPill'),note=$('#trNote');
+ pill.hidden=!(trBusy>0&&isAI());if(!pill.hidden)pill.textContent=native(lang)+' …';
+ if(st==='off'&&isAI()){note.hidden=false;note.textContent=`${LANGS[lang][0]} (${native(lang)}): this language is translated by Claude. It works when the page is opened on claude.ai and Claude is allowed. Showing English until then. · Ye bhasha Claude translate karta hai: claude.ai par kholein aur Claude ko allow karein. Tab tak English dikh raha hai.`}
+ else if(st==='done'&&!trOff)note.hidden=true}
+function translateUI(){if(!isAI())return;const skip='.orig,time,.mono,[data-notr],[data-trl],script,style,textarea,[lang]:not(html)';
+ ['#nav','.top','#railFoot','#view'].forEach(q=>translateRoot($(q),lang,{skip,onState:uiState}))}
 
 function tasksFor(repId){
  const mine=x=>!repId||x.rep===repId,t=[];
@@ -551,7 +601,7 @@ function vAssistant(){
  if(!chat)resetChat('amit');
  const r=rep(chat.rep);
  return head(T('AI Sales Assistant','AI Sales Assistant'),T('Reps learn no new app. Every morning their task list arrives on WhatsApp. They reply by text or a Hindi voice note, and the AI updates orders, notes and reminders.','Sales rep ko koi naya app nahi seekhna. Roz subah WhatsApp par kaam ki list aati hai. Rep text ya Hindi voice note mein reply karta hai, aur AI order, notes aur reminders apne aap update kar deta hai.'),
-  `<label class="sr" for="repSel">Rep</label><select id="repSel" class="btn">${reps.map(x=>`<option value="${x.id}" ${x.id===chat.rep?'selected':''}>${x.name} (${x.region})</option>`).join('')}</select><button class="btn" data-act="chatreset">${T('Restart','Shuru se')}</button>`)+
+  `<label class="sr" for="repSel">Rep</label><select id="repSel" class="btn" data-notr>${reps.map(x=>`<option value="${x.id}" ${x.id===chat.rep?'selected':''}>${x.name} (${x.region})</option>`).join('')}</select><button class="btn" data-act="chatreset">${T('Restart','Shuru se')}</button>`)+
  `<div class="grid g12">
   <div class="phone"><div class="wa-h"><span class="avatar">AI</span><div><b>Vatave Sales AI</b><small>online</small></div></div>
    <div class="wa-body" id="waBody">${chatHtml()}</div>
@@ -562,7 +612,7 @@ function vAssistant(){
      <li><span>8:30</span>${T(`The AI read last night's data (orders, leads, payments, quotes) and picked the top ${chat.tasks.length} tasks for ${r.name}.`,`AI ne raat bhar ka data padha: orders, leads, payments, quotes. Fir ${r.name} ke liye top ${chat.tasks.length} kaam chune.`)}</li>
      <li><span>${T('Reply','Reply')}</span>${T('Tap the buttons below, the way a rep would reply on WhatsApp.','Neeche ke buttons dabaiye. Rep jaise WhatsApp par likhta hai, waise hi.')}</li>
      <li><span>Voice</span>${T('Hindi or Hinglish voice notes are transcribed and saved to the CRM.','Hindi ya Hinglish voice note likhit mein badal kar CRM mein save hota hai.')}</li>
-     <li><span>${T('Lang','Bhasha')}</span>${T('Each rep gets the brief in their own language. Switch English / Hinglish at the top to see it.','Har rep ko brief uski apni bhasha mein milta hai. Upar English / Hinglish badal kar dekhiye.')}</li>
+     <li><span>${T('Lang','Bhasha')}</span>${T('Each rep gets the brief in their own language. Pick any language at the top to see it.','Har rep ko brief uski apni bhasha mein milta hai. Upar koi bhi bhasha chun kar dekhiye.')}</li>
      <li><span>${T('Limit','Limit')}</span>${T('A discount above the rep\'s limit goes to the manager for approval automatically.','Discount rep ki limit se zyada ho to approval apne aap manager ke paas jaata hai.')}</li>
     </ul></div>
    <div class="card"><h2>${T(`${r.name}: today's score`,`${r.name}: aaj ka score`)}</h2>
@@ -599,40 +649,40 @@ function scrollEl(s){const b=$(s);if(b)b.scrollTop=b.scrollHeight}
 
 /* client chat with live translation */
 function conv(){return convs.find(c=>c.id===curConv)}
-function vChat(){const c=conv();c.unread=0;const lgN=LANGS[c.lg];const myL=T('English','Hinglish');
- return head(T('Client Chat','Client Chat'),T('Clients write in their own language: Tamil, Gujarati, Bengali, Marathi and more. Your team reads every message in English or Hinglish, replies the same way, and the AI sends it in the client\'s language.','Client apni bhasha mein likhta hai: Tamil, Gujarati, Bangla, Marathi ya koi bhi. Aapki team har message English ya Hinglish mein padhti hai, waise hi reply likhti hai, aur AI use client ki bhasha mein badal kar bhejta hai.'))+
+function vChat(){const c=conv();c.unread=0;const lgN=LANGS[c.lg];const myL=native(lang);
+ return head(T('Client Chat','Client Chat'),T('Clients write in their own language, any of the 22 Indian languages. Each salesperson reads every message in the language they picked at the top, replies in that language, and the AI sends it in the client\'s language.','Client apni bhasha mein likhta hai, 22 Indian bhashaon mein se koi bhi. Har salesperson message usi bhasha mein padhta hai jo usne upar chuni hai, usi mein reply likhta hai, aur AI use client ki bhasha mein badal kar bhejta hai.'))+
  `<div class="inbox"><div class="clist">${convs.map(x=>{const last=x.msgs[x.msgs.length-1];return`<button class="conv ${x.id===curConv?'on':''}" data-act="conv:${x.id}"><span class="t"><b>${esc(x.client)}</b><span class="lg">${LANGS[x.lg][1]}</span></span><small>${last.f==='r'?T('You: ','Aap: '):''}${esc(L([last.en,last.hi]))}</small>${x.unread?`<i>${x.unread}</i>`:''}</button>`}).join('')}</div>
  <div class="card cpane"><div class="chd"><div><b>${esc(c.client)}</b> <span class="muted">· ${esc(c.contact)}, ${esc(c.city)}</span><span class="tsub">${T('Client writes in','Client ki bhasha')}: <b>${lgN[1]}</b> (${lgN[0]}) · ${T('auto-detected','AI ne pehchani')}</span></div><div class="row"><span class="pill ai">${T(`You read & write in ${myL}`,`Aap ${myL} mein padhte/likhte ho`)}</span></div></div>
   <div class="wa-body" id="cBody">${c.msgs.map(m=>msgHtml(m,c)).join('')}</div>
   <div class="cfoot">
    <div><span class="tsub" style="margin-bottom:6px">${T(`Ready replies (go to the client in ${lgN[0]})`,`Ready replies (client ko ${lgN[0]} mein jaayenge)`)}</span><div class="qr">${c.quick.map((q,i)=>`<button data-act="qr:${i}">${esc(L([q.en,q.hi]))}</button>`).join('')}</div></div>
-   <div class="compose"><label for="chatIn" class="sr">${T('Your reply','Aapka reply')}</label><textarea id="chatIn" rows="2" placeholder="${T('Type in English or Hinglish…','English ya Hinglish mein likhiye…')}"></textarea><div class="stack" style="gap:6px"><button class="btn btn-ai btn-sm" data-act="suggest">${T('AI reply','AI reply')}</button><button class="btn btn-primary btn-sm" data-act="csend" id="cSendBtn">${T('Translate & send','Translate karke bhejo')}</button></div></div>
+   <div class="compose"><label for="chatIn" class="sr">${T('Your reply','Aapka reply')}</label><textarea id="chatIn" rows="2" placeholder="${T(`Type in ${LANGS[lang][0]}…`,'Hinglish mein likhiye…')}"></textarea><div class="stack" style="gap:6px"><button class="btn btn-ai btn-sm" data-act="suggest">${T('AI reply','AI reply')}</button><button class="btn btn-primary btn-sm" data-act="csend" id="cSendBtn">${T('Translate & send','Translate karke bhejo')}</button></div></div>
    <div id="cPrev"></div><div class="status" id="cStatus"></div>
    <details class="test"><summary>${T('Test: write as the client, in any language','Test: client ki taraf se kisi bhi bhasha mein likho')}</summary><div class="compose"><label for="testIn" class="sr">Client message</label><textarea id="testIn" rows="2" placeholder="${T('e.g. type in Tamil, Gujarati, Bengali, Arabic…','jaise Tamil, Gujarati, Bangla, Arabic mein likho…')}"></textarea><button class="btn btn-sm" data-act="testin">${T('Receive','Receive karo')}</button></div></details>
   </div></div></div>
- <div class="card"><h2>${T('Languages supported','Kaunsi bhashayein chalti hain')}</h2><div class="langs">${['हिन्दी Hindi','ગુજરાતી Gujarati','मराठी Marathi','বাংলা Bengali','தமிழ் Tamil','తెలుగు Telugu','ಕನ್ನಡ Kannada','മലയാളം Malayalam','ਪੰਜਾਬੀ Punjabi','ଓଡ଼ିଆ Odia','অসমীয়া Assamese','اردو Urdu','English','العربية Arabic','Français','Kiswahili'].map(x=>`<span class="pill">${x}</span>`).join('')}</div><p class="muted" style="font-size:.8rem;margin-top:10px">${T('Voice notes from clients are transcribed and translated too. Every message keeps the original, so nothing is lost in translation.','Client ke voice note bhi likhit aur translate hote hain. Har message ka original bhi saath rehta hai, taaki kuch galat na samjha jaaye.')}</p></div>`;
+ <div class="card"><h2>${T('Languages supported','Kaunsi bhashayein chalti hain')}</h2><div class="langs">${Object.keys(LANGS).filter(k=>k!=='hing').map(k=>`<span class="pill" data-notr>${LANGS[k][1]} · ${LANGS[k][0]}</span>`).join('')}<span class="pill" data-notr>العربية · Français · Kiswahili …</span></div><p class="muted" style="font-size:.8rem;margin-top:10px">${T('Voice notes from clients are transcribed and translated too. Every message keeps the original, so nothing is lost in translation.','Client ke voice note bhi likhit aur translate hote hain. Har message ka original bhi saath rehta hai, taaki kuch galat na samjha jaaye.')}</p></div>`;
 }
 function msgHtml(m,c){const lgN=LANGS[m.lg||c.lg];
- if(m.f==='c'){const showTr=!(c.lg==='en'&&lang==='en')&&!m.same;return`<div class="msg ai"><div class="orig" lang="${c.lg}">${esc(m.o)}</div>${showTr?`<div class="tr"><span>${T('Translation','Matlab')} · ${T('English','Hinglish')}${m.det?` · ${T('detected','pehchani')}: ${esc(m.det)}`:''}</span>${esc(L([m.en,m.hi]))}</div>`:''}<time>${m.t}</time></div>`}
+ if(m.f==='c'){const showTr=c.lg!==lang;return`<div class="msg ai"><div class="orig" lang="${c.lg}">${esc(m.o)}</div>${showTr?`<div class="tr"><span>${T('Translation','Matlab')} · <b data-notr>${native(lang)}</b>${m.det?` · ${T('detected','pehchani')}: ${esc(m.det)}`:''}</span>${esc(L([m.en,m.hi]))}</div>`:''}<time>${m.t}</time></div>`}
  const mine=L([m.en,m.hi]);const showO=m.o!==mine;
- return`<div class="msg me"><div>${esc(mine)}</div>${showO?`<div class="tr"><span>${T('Client received','Client ko gaya')} · ${lgN[1]}</span><span lang="${c.lg}" style="font-family:inherit;font-size:.9rem;text-transform:none;letter-spacing:0;opacity:1;display:inline">${esc(m.o)}</span></div>`:''}<time>${m.t} ✓✓</time></div>`}
+ return`<div class="msg me"><div ${m.typed?'data-notr':''}>${esc(mine)}</div>${showO?`<div class="tr"><span>${T('Client received','Client ko gaya')} · ${lgN[1]}</span><span lang="${c.lg}" style="font-family:inherit;font-size:.9rem;text-transform:none;letter-spacing:0;opacity:1;display:inline">${esc(m.o)}</span></div>`:''}<time>${m.t} ✓✓</time></div>`}
 let cclock=12;function ctime(){return`12:${String(cclock++).padStart(2,'0')} PM`}
-function pushMine(en,hi,o){const c=conv();c.msgs.push({f:'r',t:ctime(),o,en,hi});pending=null;render();scrollEl('#cBody');toast(T(`Sent to ${c.client} in ${LANGS[c.lg][0]}.`,`${c.client} ko ${LANGS[c.lg][0]} mein bhej diya.`))}
+function pushMine(en,hi,o,typed){const c=conv();c.msgs.push({f:'r',t:ctime(),o,en,hi,typed});pending=null;render();scrollEl('#cBody');toast(T(`Sent to ${c.client} in ${LANGS[c.lg][0]}.`,`${c.client} ko ${LANGS[c.lg][0]} mein bhej diya.`))}
 function setStatus(s){const el=$('#cStatus');if(el)el.textContent=s}
 async function translateOut(text){const c=conv();const s=await samplePromise;if(!s||sampleOff)throw{code:'not_granted'};
- const r=await s.json(`You translate WhatsApp messages from an Indian pharmaceutical manufacturer's sales rep to their client. The rep wrote in ${T('English','Hinglish (Hindi in Roman letters)')}. Translate it into ${LANGS[c.lg][0]}${c.lg==='en'?'':' using its native script'}. Keep product names, strengths, numbers, ₹ amounts and units unchanged. Polite, natural business tone, as a native speaker would write it.\nReply with only JSON: {"translation":"..."}\n\nMessage:\n${text}`,{modelTier:'quick'});
+ const r=await s.json(`You translate WhatsApp messages from an Indian pharmaceutical manufacturer's sales rep to their client. The rep wrote in ${uiName()}. Translate it into ${LANGS[c.lg][0]}${c.lg==='en'?'':' using its native script'}. Keep product names, strengths, numbers, ₹ amounts and units unchanged. Polite, natural business tone, as a native speaker would write it.\nReply with only JSON: {"translation":"..."}\n\nMessage:\n${text}`,{modelTier:'quick'});
  if(!r||typeof r.translation!=='string')throw{code:'upstream_error'};return r.translation}
 async function sendFree(){const box=$('#chatIn');const text=box.value.trim();if(!text)return;const c=conv();
- if(pending&&pending.src===text){pushMine(text,text,pending.o);return}
- if(c.lg==='en'&&lang==='en'){pushMine(text,text,text);return}
+ if(pending&&pending.src===text){pushMine(text,text,pending.o,1);return}
+ if(c.lg===lang){pushMine(text,text,text,1);return}
  const btn=$('#cSendBtn');btn.disabled=true;setStatus(T('Translating…','Translate ho raha hai…'));
- try{const o=await translateOut(text);pushMine(text,text,o)}catch(e){setStatus(sampleErr(e))}finally{const b=$('#cSendBtn');if(b)b.disabled=false}}
+ try{const o=await translateOut(text);pushMine(text,text,o,1)}catch(e){setStatus(sampleErr(e))}finally{const b=$('#cSendBtn');if(b)b.disabled=false}}
 async function suggest(){const c=conv();const s=await samplePromise;
  const fallback=()=>{const q=c.quick[0];$('#chatIn').value=L([q.en,q.hi]);pending={src:L([q.en,q.hi]),o:q.o};showPrev(q.o);setStatus(T('Suggested from ready replies.','Ready replies se suggest kiya.'))};
  if(!s||sampleOff){fallback();return}
  setStatus(T('AI is writing a reply…','AI reply likh raha hai…'));
  const hist=c.msgs.slice(-6).map(m=>`${m.f==='c'?'Client':'Rep'}: ${m.en}`).join('\n');
- try{const r=await s.json(`You help a sales rep at ${CO}, an Indian pharmaceutical manufacturer, reply to a client on WhatsApp. Conversation so far (English translation):\n${hist}\n\nWrite the rep's next reply: short, polite, helpful, no medical claims, no promises about price beyond what is said above. Give it twice: once in ${T('English','Hinglish (Hindi in Roman letters)')} for the rep, and once in ${LANGS[c.lg][0]}${c.lg==='en'?'':' in its native script'} for the client. Keep product names and numbers unchanged.\nReply with only JSON: {"rep":"...","client":"..."}`,{modelTier:'quick',cache:false});
+ try{const r=await s.json(`You help a sales rep at ${CO}, an Indian pharmaceutical manufacturer, reply to a client on WhatsApp. Conversation so far (English translation):\n${hist}\n\nWrite the rep's next reply: short, polite, helpful, no medical claims, no promises about price beyond what is said above. Give it twice: once in ${uiName()}${isAI()?' (native script)':''} for the rep, and once in ${LANGS[c.lg][0]}${c.lg==='en'?'':' in its native script'} for the client. Keep product names and numbers unchanged.\nReply with only JSON: {"rep":"...","client":"..."}`,{modelTier:'quick',cache:false});
   if(!r||typeof r.rep!=='string'||typeof r.client!=='string')throw{code:'upstream_error'};
   $('#chatIn').value=r.rep;pending={src:r.rep,o:r.client};showPrev(r.client);setStatus(T('Edit if needed, then send.','Zaroorat ho to badlo, fir bhejo.'))}
  catch(e){const m=sampleErr(e);if(sampleOff)fallback();else setStatus(m)}}
@@ -669,21 +719,22 @@ function openLead(id){const l=leads.find(x=>x.id===id),r=rep(l.rep);l.flash=fals
  <div class="row"><button class="btn btn-primary" data-act="sendlead:${l.id}">${T('Send on WhatsApp','WhatsApp par bhejo')}</button>${i<4?`<button class="btn" data-act="stage:${l.id}">${T('Next stage','Agla stage')}: ${stageL(STAGES[i+1])}</button>`:''}<a class="btn" href="#quotes" data-act="close">${T('Make quote','Quote banao')}</a></div>
  <p class="muted" style="font-size:.78rem">${T('Est. deal value','Andazan deal value')}: ${inr(l.value)}</p>`)}
 
-let qs={client:3,p:4,qty:25000,print:true,brand:true,disc:3};
+let qs={client:3,p:4,qty:25000,print:true,brand:true,disc:3,pdf:'client'};
 function vQuotes(){
  return head(T('Quotation generator','Quotation banao'),T('Pick the product, quantity and packing. Rate, GST and terms fill in automatically, and a PDF quote reaches the client on WhatsApp in 2 minutes.','Product, quantity aur packing chuniye. Rate, GST aur terms apne aap lag jaate hain, aur PDF quote 2 minute mein client ke WhatsApp par.'))+
  `<div class="grid g12"><div class="card stack">
   <h2>${T('New quote','Naya quote')}</h2>
-  <div class="field"><label for="qClient">Client</label><select id="qClient">${clients.map(c=>`<option value="${c.id}" ${c.id==qs.client?'selected':''}>${c.name}, ${c.city}</option>`).join('')}</select></div>
-  <div class="field"><label for="qProd">Product</label><select id="qProd">${Object.entries(P).map(([k,p])=>`<option value="${k}" ${k==qs.p?'selected':''}>${p.c} · ${p.f} · ${p.pk}</option>`).join('')}</select></div>
+  <div class="field"><label for="qClient">Client</label><select id="qClient" data-notr>${clients.map(c=>`<option value="${c.id}" ${c.id==qs.client?'selected':''}>${c.name}, ${c.city}</option>`).join('')}</select></div>
+  <div class="field"><label for="qProd">Product</label><select id="qProd" data-notr>${Object.entries(P).map(([k,p])=>`<option value="${k}" ${k==qs.p?'selected':''}>${p.c} · ${p.f} · ${p.pk}</option>`).join('')}</select></div>
   <div class="grid g2" style="gap:10px"><div class="field"><label for="qQty">${T('Quantity (strips/units)','Quantity (strips/units)')}</label><input id="qQty" type="number" min="0" step="1000" value="${qs.qty}"></div>
   <div class="field"><label for="qDisc">Discount %</label><input id="qDisc" type="number" min="0" max="20" step="0.5" value="${qs.disc}"></div></div>
+  <div class="field"><label for="qLang">${T('Quote PDF language','Quote PDF ki bhasha')}</label><select id="qLang" data-notr><option value="client" ${qs.pdf==='client'?'selected':''}>Client · ${native(clients.find(x=>x.id==qs.client).lg)}</option>${Object.keys(LANGS).filter(k=>k!=='hing').map(k=>`<option value="${k}" ${qs.pdf===k?'selected':''}>${LANGS[k][1]} · ${LANGS[k][0]}</option>`).join('')}</select></div>
   <label class="check"><input type="checkbox" id="qPrint" ${qs.print?'checked':''}> ${T('Printed carton (+₹0.45/strip)','Printed carton (+₹0.45/strip)')}</label>
   <label class="check"><input type="checkbox" id="qBrand" ${qs.brand?'checked':''}> ${T('Foil printed with client\'s brand (+₹0.30/strip)','Client ke brand naam ka printed foil (+₹0.30/strip)')}</label>
   <div id="qNotes" class="stack"></div>
   <div class="row"><button class="btn btn-primary" data-act="sendquote">${T('Send on WhatsApp','WhatsApp par bhejo')}</button><button class="btn" data-act="emailquote">${T('Email','Email karo')}</button></div>
  </div>
- <div class="stack"><div id="qDoc"></div>
+ <div class="stack"><div id="qDoc" data-trl></div><div id="qDocNote" class="status"></div>
  <div class="card"><h2>${T('Recent quotes','Haal ke quotes')}</h2><div class="tbl"><table><thead><tr><th>Quote</th><th>Client</th><th class="r">Value</th><th>Status</th></tr></thead><tbody>${quotes.map(q=>`<tr><td class="mono">${q.id}<span class="tsub">${ageL(q.when)}</span></td><td>${q.client}<span class="tsub">${P[q.p].s}</span></td><td class="r num">${inr(q.val)}</td><td><span class="pill ${q.st[1]}">${L(q.st[0])}</span></td></tr>`).join('')}</tbody></table></div></div></div></div>`;
 }
 function updQuote(){
@@ -698,14 +749,16 @@ function updQuote(){
  if(p.st==='Booked')notes.push(['bad',T('Production capacity is booked till 5 Dec. Delivery date moves a week later.','Production capacity 5 Dec tak booked hai. Delivery date 1 hafta aage dikhegi.')]);
  if(c.lg!=='en')notes.push(['',T(`The WhatsApp message with this quote goes to the client in ${LANGS[c.lg][0]}.`,`Is quote ka WhatsApp message client ko ${LANGS[c.lg][0]} mein jaayega.`)]);
  $('#qNotes').innerHTML=notes.map(([cl,t])=>`<div class="note ${cl}"><span class="ai-tag">AI</span><span>${t}</span></div>`).join('');
- $('#qDoc').innerHTML=`<div class="qdoc"><div class="hd"><div class="lt">${logoSvg(34)}<div><h3>${CO}</h3><small>${T('Address · GSTIN · Drug licence no. (your real details go here)','Address · GSTIN · Drug licence no. (aapki asli details yahan aayengi)')}</small></div></div><div style="text-align:right"><b class="mono">QT-2611-114</b><br><small>13 Nov 2026 · ${T('valid 15 days','15 din valid')}</small></div></div>
+ $('#qDoc').innerHTML=`<div class="qdoc"><div class="hd"><div class="lt">${logoSvg(34)}<div><h3>${CO}</h3><small>Address · GSTIN · Drug licence no. (your real details go here)</small></div></div><div style="text-align:right"><b class="mono">QT-2611-114</b><br><small>13 Nov 2026 · valid for 15 days</small></div></div>
  <p><small>To</small><br><b>${esc(c.name)}</b>, ${esc(c.city)}</p>
  <div class="tbl" style="margin:10px 0 0;padding:0"><table><thead><tr><th>Product</th><th>HSN</th><th class="r">Qty</th><th class="r">Rate</th><th class="r">Amount</th></tr></thead><tbody>
  <tr><td>${esc(p.c)}<br><small>${p.f} · ${p.pk}${qs.print?' · printed carton':''}${qs.brand?' · client brand foil':''}</small></td><td class="mono">3004</td><td class="r num">${num(qs.qty)}</td><td class="r num">₹${unit.toFixed(2)}</td><td class="r num">₹${num(sub)}</td></tr>
  <tr><td colspan="4" class="r">GST 5%</td><td class="r num">₹${num(gst)}</td></tr>
  <tr><td colspan="4" class="r">Freight</td><td class="r num">${fr?'₹'+num(fr):'Free (FOR)'}</td></tr>
  <tr class="tot"><td colspan="4" class="r">Total</td><td class="r num">₹${num(tot)}</td></tr></tbody></table></div>
- <p style="margin-top:10px"><small>${T('Terms: 50% advance, balance before dispatch · Delivery: 21–28 days after artwork approval · COA with every batch · Shelf life 24 months','Terms: 50% advance, baaki dispatch se pehle · Delivery: artwork approval ke 21–28 din baad · Har batch ke saath COA · Shelf life 24 mahine')}</small></p></div>`;
+ <p style="margin-top:10px"><small>Terms: 50% advance, balance before dispatch · Delivery: 21–28 days after artwork approval · COA with every batch · Shelf life 24 months</small></p></div>`;
+ const pl=qs.pdf==='client'?c.lg:qs.pdf,note=$('#qDocNote');note.textContent='';
+ if(pl!=='en'){const d=$('#qDoc');d.setAttribute('lang',pl);translateRoot(d,pl,{onState:st=>{if(!note.isConnected)return;note.textContent=st==='busy'?T(`Translating the quote into ${LANGS[pl][0]}…`,`Quote ${LANGS[pl][0]} mein translate ho raha hai…`):st==='off'?T(`Quote shown in English. ${LANGS[pl][0]} translation needs Claude to be allowed (on claude.ai).`,`Quote English mein dikh raha hai. ${LANGS[pl][0]} translation ke liye Claude ki permission chahiye (claude.ai par).`):''}})}else $('#qDoc').removeAttribute('lang');
 }
 
 let catQ='aceclofenac paracetamol alu alu';
@@ -758,7 +811,7 @@ function campMsg(){const t=camp.tpl;return t===0?T(`Hello {name},\n\nYour last o
 function vCampaigns(){const aud=segs[camp.seg][1]();const c=aud[0];const lgs=[...new Set(aud.map(x=>LANGS[x.lg][0]))];
  return head(T('WhatsApp campaigns','WhatsApp campaigns'),T('The right message to the right clients in one click. The AI fills in each client\'s name, product and days, and sends it in the client\'s own language, so it never reads like a broadcast.','Ek click mein sahi clients ko sahi message. AI har message mein client ka naam, product aur din khud bharta hai, aur client ki apni bhasha mein bhejta hai, isliye wo broadcast jaisa nahi lagta.'))+
  `<div class="grid g12"><div class="card stack"><h2>${T('New campaign','Naya campaign')}</h2>
- <div class="field"><label for="cSeg">${T('Send to','Kisko bhejna hai')}</label><select id="cSeg">${segs.map((s,i)=>`<option value="${i}" ${i==camp.seg?'selected':''}>${L(s[0])} (${s[1]().length})</option>`).join('')}</select></div>
+ <div class="field"><label for="cSeg">${T('Send to','Kisko bhejna hai')}</label><select id="cSeg" data-notr>${segs.map((s,i)=>`<option value="${i}" ${i==camp.seg?'selected':''}>${L(s[0])} (${s[1]().length})</option>`).join('')}</select></div>
  <div class="row">${tpls.map((t,i)=>`<button class="chip ${i==camp.tpl?'on':''}" data-act="tpl:${i}">${L(t)}</button>`).join('')}</div>
  <div class="field"><label for="cMsg">Message <span class="ai-tag">AI</span></label><textarea id="cMsg">${esc(campMsg())}</textarea></div>
  <div class="note"><span class="ai-tag">AI</span><span>${T(`Will be sent in each client's language: ${lgs.join(', ')}.`,`Har client ko uski bhasha mein jaayega: ${lgs.join(', ')}.`)}</span></div>
@@ -777,7 +830,7 @@ function vAnalytics(){const prodRev=[[2,2850000],[4,2140000],[7,1720000],[1,1310
 
 function vTeam(){const coach={rahul:['Good call volume. Follow up on the Afro Med LC before 20 Nov.','Calls achhi hain, par Afro Med ka LC follow-up 20 Nov se pehle karo.'],priya:['Ahead of target. Zenlife\'s reorder is due, lock it in.','Target se aage. Zenlife ka reorder due hai, use pakka karo.'],amit:['Two big clients missed reorders (₹3.3 L). Call them before new leads.','2 bade clients ka reorder chhoota hai (₹3.3 L). Pehle wahi call karo, nayi leads baad mein.'],sunita:['Bengal Medicorp has been silent 74 days. Visit with a scheme to win them back.','Bengal Medicorp 74 din se band hai. Visit + scheme se wapas lao.']};
  return head(T('Team & targets','Team aur target'),T('Who is doing how much, whose follow-ups are pending, and what the AI suggests each rep improves. Each rep picks their own app language.','Kaun kitna kaam kar raha hai, kiske follow-ups pending hain, aur AI har rep ko kya sudhaarne ki salah de raha hai. Har rep apni app ki bhasha khud chunta hai.'))+
- `<div class="card"><div class="tbl"><table><thead><tr><th>Rep</th><th>${T('App language','App ki bhasha')}</th><th>Target (MTD)</th><th class="r">Calls</th><th class="r">Visits</th><th class="r">Orders</th><th class="r">${T('Overdue','Pending')}</th><th>AI coaching</th></tr></thead><tbody>${reps.map(r=>{const p=r.achieved/r.target;return`<tr><td><b>${r.name}</b><span class="tsub">${r.region}</span></td><td><span class="pill ${r.lg==='Hinglish'?'ai':''}">${r.lg}</span></td><td style="min-width:150px"><span class="num">${inr(r.achieved)} / ${inr(r.target)}</span><div class="meter"><b style="width:${p*100}%;${p>=.75?'background:var(--good)':''}"></b></div></td><td class="r num">${r.calls}</td><td class="r num">${r.visits}</td><td class="r num">${r.orders}</td><td class="r"><span class="pill ${r.overdue>3?'bad':r.overdue?'warn':'good'}">${r.overdue}</span></td><td style="min-width:240px">${L(coach[r.id])}</td></tr>`}).join('')}</tbody></table></div></div>
+ `<div class="card"><div class="tbl"><table><thead><tr><th>Rep</th><th>${T('App language','App ki bhasha')}</th><th>Target (MTD)</th><th class="r">Calls</th><th class="r">Visits</th><th class="r">Orders</th><th class="r">${T('Overdue','Pending')}</th><th>AI coaching</th></tr></thead><tbody>${reps.map(r=>{const p=r.achieved/r.target;return`<tr><td><b>${r.name}</b><span class="tsub">${r.region}</span></td><td><span class="pill ${r.lg!=='en'?'ai':''}" data-notr>${native(r.lg)}</span></td><td style="min-width:150px"><span class="num">${inr(r.achieved)} / ${inr(r.target)}</span><div class="meter"><b style="width:${p*100}%;${p>=.75?'background:var(--good)':''}"></b></div></td><td class="r num">${r.calls}</td><td class="r num">${r.visits}</td><td class="r num">${r.orders}</td><td class="r"><span class="pill ${r.overdue>3?'bad':r.overdue?'warn':'good'}">${r.overdue}</span></td><td style="min-width:240px">${L(coach[r.id])}</td></tr>`}).join('')}</tbody></table></div></div>
  <div class="grid g3"><div class="card kpi"><div class="lbl">${T('Team calls this week','Team calls, is hafte')}</div><div class="val">477</div><div class="sub">${T('12% more than last week','Pichhle hafte se 12% zyada')}</div></div><div class="card kpi"><div class="lbl">${T('Avg lead response','Avg lead jawab')}</div><div class="val">4 min</div><div class="sub">${T('Was 6 hours','Pehle 6 ghante')}</div></div><div class="card kpi"><div class="lbl">${T('Brief open rate','Brief open rate')}</div><div class="val">96%</div><div class="sub">${T('Morning WhatsApp brief','Subah ka WhatsApp brief')}</div></div></div>`}
 
 let scanned=false;
@@ -787,7 +840,8 @@ function vSetup(){return head('Setup',T('Getting started takes one day: upload y
   <div class="field"><label for="xl">${T('Orders Excel / CSV','Orders ki Excel / CSV')}</label><input type="file" id="xl" accept=".xlsx,.xls,.csv"></div>
   <button class="btn btn-ai" data-act="scan">${T('Scan sample data','Sample data se scan karo')}</button>
   <div id="scanOut">${scanned?scanHtml():''}</div></div>
- <div class="card stack"><h2>${T('Language','Bhasha')}</h2><div class="grid g2" style="gap:10px"><div class="field"><label for="appLang">${T('App language for this user','Is user ki app bhasha')}</label><select id="appLang"><option value="en" ${lang==='en'?'selected':''}>English</option><option value="hi" ${lang==='hi'?'selected':''}>Hinglish</option></select></div><div class="field"><label for="cliLang">${T('Client chat language','Client chat ki bhasha')}</label><select id="cliLang"><option>${T('Auto-detect from client','Client se apne aap pehchano')}</option></select></div></div></div>
+ <div class="card stack"><h2>${T('Language','Bhasha')}</h2><div class="grid g2" style="gap:10px"><div class="field"><label for="appLang">${T('App language for this user','Is user ki app bhasha')}</label><select id="appLang" data-notr>${Object.keys(LANGS).map(k=>`<option value="${k}" ${lang===k?'selected':''}>${LANGS[k][1]} · ${LANGS[k][0]}</option>`).join('')}</select></div><div class="field"><label for="cliLang">${T('Client language','Client ki bhasha')}</label><select id="cliLang"><option>${T('Auto-detect from client','Client se apne aap pehchano')}</option></select></div></div>
+ <p class="muted" style="font-size:.82rem">${T('Every salesperson picks their own app language (English, Hinglish or any of the 22 Indian languages). Every client gets chats, quotes, reminders and campaigns in their own language, detected automatically.','Har salesperson apni app ki bhasha khud chunta hai (English, Hinglish ya 22 Indian bhashaon mein se koi bhi). Har client ko chat, quote, reminder aur campaign uski apni bhasha mein milta hai, jo AI apne aap pehchanta hai.')}</p></div>
  <div class="card stack"><h2>${T('Company rules','Company ke rules')}</h2><div class="grid g2" style="gap:10px"><div class="field"><label for="dl">${T('Rep discount limit %','Rep discount limit %')}</label><input id="dl" type="number" value="5"></div><div class="field"><label for="gst">GST (HSN 3004)</label><input id="gst" value="5%"></div><div class="field"><label for="bt">${T('Morning brief time','Subah brief ka time')}</label><input id="bt" type="time" value="08:30"></div><div class="field"><label for="ht">${T('Hold orders after (days)','Itne din baad order hold')}</label><input id="ht" type="number" value="90"></div></div></div></div></div>`}
 function scanHtml(){return`<div class="card" style="background:var(--bad-soft);border:0"><span class="tsub">${T('6 months · 312 orders · 48 clients','6 mahine · 312 orders · 48 clients')}</span><div class="big num">₹18.6 L</div><p>${T('of business missed. <b>9 clients</b> did not reorder on their usual schedule, and <b>4 clients</b> stopped completely.','ka business chhoota. <b>9 clients</b> ne usual time par reorder nahi kiya, aur <b>4 clients</b> poori tarah band ho gaye.')}</p><p class="muted" style="margin-top:6px;font-size:.8rem">${T('Largest','Sabse bada')}: Sai Distributors (₹5.6 L), Bengal Medicorp (₹4.3 L), Ganga Pharmaceuticals (₹2.4 L)</p></div>`}
 
@@ -801,8 +855,9 @@ const VIEWS={dashboard:vDashboard,assistant:vAssistant,chat:vChat,leads:vLeads,q
 function cur(){const h=location.hash.slice(1);return VIEWS[h]?h:'dashboard'}
 function chrome(){
  $('#brandLogo').innerHTML=logoSvg(36);
- document.documentElement.lang=lang==='en'?'en':'hi-Latn';
- $('#langSeg').innerHTML=`<button type="button" data-act="lang:en" aria-pressed="${lang==='en'}">English</button><button type="button" data-act="lang:hi" aria-pressed="${lang==='hi'}">Hinglish</button>`;
+ document.documentElement.lang=lang==='hing'?'hi-Latn':lang;
+ $('#langSel').innerHTML=Object.keys(LANGS).map(k=>`<option value="${k}" ${k===lang?'selected':''}>${LANGS[k][1]}${k==='en'||k==='hing'?'':' · '+LANGS[k][0]}</option>`).join('');
+ loadFont(lang);delete $('#askIn').dataset.ph;$('#trNote').hidden=true;
  $('#demoTag').textContent=T('Sample data','Sample data');
  $('#askIn').placeholder=T('Ask: which client has a pending reorder?','Poochiye: kis client ka reorder pending hai?');
  $('#askBtn').textContent=T('Ask','Poocho');
@@ -814,12 +869,13 @@ function render(){const v=cur();
  $('#nav').innerHTML=NAV().map(([g,items])=>`<div class="navgrp"><span>${g}</span>${items.map(([k,l,b])=>{const bb=b&&b();return`<a class="nav ${k===v?'on':''}" href="#${k}" ${k===v?'aria-current="page"':''}>${l}${bb&&bb[0]?`<i class="${bb[1]}">${bb[0]}</i>`:''}</a>`}).join('')}</div>`).join('');
  $('#view').innerHTML=html;
  if(v==='quotes')updQuote(); if(v==='catalog')updCat(); if(v==='assistant')scrollEl('#waBody'); if(v==='chat'){scrollEl('#cBody');if(pending&&$('#chatIn')){$('#chatIn').value=pending.src;showPrev(pending.o)}}
+ translateUI();
 }
-function setLang(l){if(l===lang)return;lang=l;try{localStorage.setItem('vatave-lang',l)}catch(_){}if(chat)resetChat(chat.rep);pending=null;chrome();render();$('#askOut').hidden=true;closeDrawer();toast(T('Showing everything in English.','Ab sab kuch Hinglish mein dikhega.'))}
+function setLang(l){if(l===lang||!LANGS[l])return;lang=l;try{localStorage.setItem('vatave-ui-lang',l)}catch(_){}if(chat)resetChat(chat.rep);pending=null;chrome();render();$('#askOut').hidden=true;closeDrawer();toast(T(`App language: ${LANGS[l][0]}.`,'Ab sab kuch Hinglish mein dikhega.'))}
 let lastView=null;
 window.addEventListener('hashchange',()=>{closeDrawer();if(lastView!==cur())pending=null;render();if(lastView!==cur()){window.scrollTo(0,0);document.querySelector('.nav.on')?.scrollIntoView({block:'nearest',inline:'nearest'})}lastView=cur()});
 
-function drawer(h){$('#drawer').innerHTML=h;$('#drawer').hidden=false;$('#scrim').hidden=false}
+function drawer(h){$('#drawer').innerHTML=h;$('#drawer').hidden=false;$('#scrim').hidden=false;if(isAI())translateRoot($('#drawer'),lang,{onState:uiState})}
 function closeDrawer(){$('#drawer').hidden=true;$('#scrim').hidden=true}
 $('#scrim').addEventListener('click',closeDrawer);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
@@ -864,14 +920,15 @@ document.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if
  }
 });
 document.addEventListener('input',e=>{const id=e.target.id;
- if(['qClient','qProd','qQty','qDisc','qPrint','qBrand'].includes(id)){qs={client:+$('#qClient').value,p:+$('#qProd').value,qty:Math.max(0,+$('#qQty').value||0),disc:Math.max(0,+$('#qDisc').value||0),print:$('#qPrint').checked,brand:$('#qBrand').checked};updQuote()}
+ if(['qClient','qProd','qQty','qDisc','qPrint','qBrand','qLang'].includes(id)){const nc=+$('#qClient').value;qs={client:nc,p:+$('#qProd').value,qty:Math.max(0,+$('#qQty').value||0),disc:Math.max(0,+$('#qDisc').value||0),print:$('#qPrint').checked,brand:$('#qBrand').checked,pdf:$('#qLang').value};
+  if(id==='qClient'){const o=$('#qLang').options[0];o.textContent='Client · '+native(clients.find(x=>x.id==nc).lg)}updQuote()}
  if(id==='catIn'){catQ=e.target.value;updCat()}
  if(id==='chatIn'&&pending&&e.target.value.trim()!==pending.src){pending=null;$('#cPrev').innerHTML=''}
 });
 document.addEventListener('change',e=>{const id=e.target.id;
  if(id==='repSel'){resetChat(e.target.value);render()}
  if(id==='cSeg'){camp.seg=+e.target.value;render()}
- if(id==='appLang')setLang(e.target.value);
+ if(id==='appLang'||id==='langSel')setLang(e.target.value);
  if(id==='xl'&&e.target.files.length){scanned=true;render();toast(T('File read. The demo shows a sample result.','File padhi gayi. Demo mein sample result dikh raha hai.'))}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='chatIn'){e.preventDefault();sendFree()}});
@@ -884,7 +941,7 @@ $('#askForm').addEventListener('submit',e=>{e.preventDefault();const q=$('#askIn
  else if(/lead|inquiry/.test(q))a=T(`${leads.filter(l=>l.score>=75&&l.stage!=='Won').length} hot leads. Top: ${leads.filter(l=>l.stage!=='Won').sort((x,y)=>y.score-x.score)[0].name}.`,`${leads.filter(l=>l.score>=75&&l.stage!=='Won').length} hot leads hain. Sabse upar: ${leads.filter(l=>l.stage!=='Won').sort((x,y)=>y.score-x.score)[0].name}.`)+` <a href="#leads">${T('Open leads','Leads kholo')}</a>`;
  else if(/chat|message|language|bhasha/.test(q))a=T(`${sum(convs,'unread')} unread client messages, in Tamil, Gujarati, Bengali, Telugu and Marathi. You read them all in English.`,`${sum(convs,'unread')} client messages padhne baaki hain: Tamil, Gujarati, Bangla, Telugu aur Marathi mein. Aap sab Hinglish mein padh sakte ho.`)+` <a href="#chat">${T('Open chat','Chat kholo')}</a>`;
  else a=T('Try asking: "which client has a pending reorder?", "how much payment is due?", "how is the target?", "any new tender?"','Ye poochh kar dekhiye: "kis client ka reorder pending hai?", "kitna payment baaki hai?", "target kitna hua?", "koi naya tender?"');
- o.innerHTML=`<div class="ch" style="margin:0 0 6px"><span class="ai-tag">${T('AI answer','AI jawab')}</span><button class="btn btn-sm" data-act="askclose">${T('Close','Band karo')}</button></div><p>${a}</p>`;o.hidden=false});
+ o.hidden=false;if(isAI())setTimeout(()=>translateRoot(o,lang,{onState:uiState}));o.innerHTML=`<div class="ch" style="margin:0 0 6px"><span class="ai-tag">${T('AI answer','AI jawab')}</span><button class="btn btn-sm" data-act="askclose">${T('Close','Band karo')}</button></div><p>${a}</p>`;o.hidden=false});
 document.addEventListener('click',e=>{if(e.target.closest('#askOut a'))$('#askOut').hidden=true});
 
 lastView=cur();chrome();render();
