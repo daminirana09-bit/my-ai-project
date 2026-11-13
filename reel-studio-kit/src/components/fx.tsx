@@ -192,7 +192,7 @@ export const SearchMock: React.FC<{ at: number; query: string; typeTo: number; m
   const b = useBrand();
   const { frame, sp, fade } = useT();
   const s = sp(at);
-  const n = Math.round(interpolate(frame, [at + 4, typeTo], [0, query.length], CL));
+  const n = typeTo <= at + 4 ? query.length : Math.round(interpolate(frame, [at + 4, typeTo], [0, query.length], CL)); // typeTo at/before start = already typed
   const caret = frame < missAt && Math.floor(frame / 8) % 2 === 0;
   const miss = sp(missAt);
   const shake = frame >= missAt ? Math.sin((frame - missAt) * 1.7) * 16 * Math.max(0, 1 - (frame - missAt) / 16) : 0;
@@ -223,20 +223,20 @@ export const SearchMock: React.FC<{ at: number; query: string; typeTo: number; m
           <span style={{ opacity: caret ? 1 : 0, color: b.colors.accent }}>|</span>
         </span>
       </div>
-      <div style={{ ...row, opacity: fade(missAt), transform: `translateX(${shake}px) scale(${0.9 + 0.1 * miss})`, border: `3px dashed ${DANGER}66`, background: `${DANGER}0D` }}>
+      {you ? <div style={{ ...row, opacity: fade(missAt), transform: `translateX(${shake}px) scale(${0.9 + 0.1 * miss})`, border: `3px dashed ${DANGER}66`, background: `${DANGER}0D` }}>
         <Icon ok={false} draw={interpolate(frame - missAt, [2, 10], [0, 1], CL)} />
         <div>
           <div style={{ fontSize: 42, fontWeight: 800 }}>{you}</div>
           <div style={{ fontSize: 30, fontWeight: 600, color: DANGER }}>Koi result nahi mila</div>
         </div>
-      </div>
-      <div style={{ ...row, opacity: fade(hitAt), transform: `translateX(${-(1 - hit) * 260}px)`, background: `${WHATSAPP}14`, border: `3px solid ${WHATSAPP}55` }}>
+      </div> : null}
+      {them ? <div style={{ ...row, opacity: fade(hitAt), transform: `translateX(${-(1 - hit) * 260}px)`, background: `${WHATSAPP}14`, border: `3px solid ${WHATSAPP}55` }}>
         <Icon ok draw={interpolate(frame - hitAt, [3, 12], [0, 1], CL)} />
         <div>
           <div style={{ fontSize: 42, fontWeight: 800 }}>{them}</div>
           <div style={{ fontSize: 30, fontWeight: 600, opacity: 0.65 }}>4.8 ★ · Open now · Website</div>
         </div>
-      </div>
+      </div> : null}
     </div>
   );
 };
@@ -300,7 +300,29 @@ export const Burst: React.FC<{ at: number; x: number; y: number; radius?: number
 type SiteKey = "nav" | "hero" | "rates" | "whatsapp" | "map";
 
 /** A phone that slides in and assembles a small business website, section by section. `focus` pulses a section on a word. */
-export const PhoneSite: React.FC<{ at: number; build: Record<SiteKey, number>; focus?: { at: number; key: SiteKey | "phone" }[]; name: string }> = ({ at, build, focus = [], name }) => {
+export const PhoneSite: React.FC<{
+  at: number;
+  build: Record<SiteKey, number>;
+  focus?: { at: number; key: SiteKey | "phone" }[];
+  name: string;
+  heroTitle?: string;
+  heroSub?: string;
+  rows?: [string, string][];
+  button?: string;
+}> = ({
+  at,
+  build,
+  focus = [],
+  name,
+  heroTitle = "Taaza mithai, roz",
+  heroSub = "Since 1998 · Home delivery",
+  rows = [
+    ["Kaju katli", "₹880/kg"],
+    ["Rasgulla", "₹320/kg"],
+    ["Samosa", "₹20"],
+  ],
+  button = "WhatsApp karo",
+}) => {
   const b = useBrand();
   const { frame, sp, fade } = useT();
   const s = sp(at, { damping: 16, stiffness: 120, mass: 0.9 });
@@ -358,18 +380,14 @@ export const PhoneSite: React.FC<{ at: number; build: Record<SiteKey, number>; f
       {section(
         "hero",
         <div style={{ height: 150, borderRadius: 16, background: `linear-gradient(135deg, ${b.colors.accent}, ${b.colors.accent2})`, color: "#fff", padding: 18, display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
-          <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.1 }}>Taaza mithai, roz</div>
-          <div style={{ fontSize: 16, fontWeight: 600, opacity: 0.85 }}>Since 1998 · Home delivery</div>
+          <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.1 }}>{heroTitle}</div>
+          <div style={{ fontSize: 16, fontWeight: 600, opacity: 0.85 }}>{heroSub}</div>
         </div>,
       )}
       {section(
         "rates",
         <div style={{ border: `2px solid ${b.colors.text}18`, borderRadius: 16, padding: "10px 14px", fontSize: 17, fontWeight: 600 }}>
-          {[
-            ["Kaju katli", "₹880/kg"],
-            ["Rasgulla", "₹320/kg"],
-            ["Samosa", "₹20"],
-          ].map(([a, r]) => (
+          {rows.map(([a, r]) => (
             <div key={a} style={{ display: "flex", justifyContent: "space-between", padding: "3px 0" }}>
               <span>{a}</span>
               <span style={{ color: b.colors.accent, fontWeight: 800 }}>{r}</span>
@@ -379,7 +397,7 @@ export const PhoneSite: React.FC<{ at: number; build: Record<SiteKey, number>; f
       )}
       {section(
         "whatsapp",
-        <div style={{ background: WHATSAPP, color: "#fff", borderRadius: 999, padding: "13px 0", textAlign: "center", fontSize: 20, fontWeight: 800 }}>WhatsApp karo</div>,
+        <div style={{ background: WHATSAPP, color: "#fff", borderRadius: 999, padding: "13px 0", textAlign: "center", fontSize: 20, fontWeight: 800 }}>{button}</div>,
       )}
       {section(
         "map",
@@ -404,13 +422,13 @@ export const PhoneSite: React.FC<{ at: number; build: Record<SiteKey, number>; f
 };
 
 /** One checklist row: the tick draws, the text slides in. */
-export const Tick: React.FC<{ at: number; children: React.ReactNode; first?: boolean }> = ({ at, children, first }) => {
+export const Tick: React.FC<{ at: number; children: React.ReactNode; first?: boolean; ok?: boolean }> = ({ at, children, first, ok = true }) => {
   const b = useBrand();
   const { frame, sp, fade } = useT();
   const s = sp(at);
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: first ? 0 : 26, opacity: fade(at), transform: `translateX(${(1 - s) * -50}px)`, fontSize: 40, fontWeight: 800, lineHeight: 1.12, color: b.colors.text }}>
-      <Icon ok size={50} draw={interpolate(frame - at, [3, 12], [0, 1], CL)} />
+      <Icon ok={ok} size={50} draw={interpolate(frame - at, [3, 12], [0, 1], CL)} />
       <span>{children}</span>
     </div>
   );
@@ -682,6 +700,39 @@ export const CommentsCTA: React.FC<{ at: number; keyword: string; dmAt: number; 
           {tag}
         </div>
       </div>
+    </div>
+  );
+};
+
+
+/** "Today's appointments" card: slots pop in one by one, empty ones shake a little. */
+export const ScheduleCard: React.FC<{ at: number; title: string; slots: { time: string; who?: string }[]; stagger?: number }> = ({ at, title, slots, stagger = 5 }) => {
+  const b = useBrand();
+  const { frame, sp, fade } = useT();
+  const s = sp(at);
+  return (
+    <div
+      data-el="card"
+      data-kind="content"
+      style={{ opacity: fade(at), transform: `translateY(${(1 - s) * 40}px)`, background: b.colors.surface, borderRadius: b.radius, boxShadow: b.boxShadow, padding: "30px 34px", fontFamily: b.fontFamily, color: b.colors.text }}
+    >
+      <div style={{ fontSize: 32, fontWeight: 800, marginBottom: 12 }}>{title}</div>
+      {slots.map((sl, i) => {
+        const a = at + 6 + i * stagger;
+        const r = sp(a);
+        const empty = !sl.who;
+        const wob = empty && frame > a + 8 ? Math.sin((frame - a) / 3) * 3 * Math.max(0, 1 - (frame - a - 8) / 30) : 0;
+        return (
+          <div key={i} style={{ display: "flex", alignItems: "center", gap: 22, padding: "14px 0", borderTop: i ? `2px solid ${b.colors.text}10` : "none", opacity: fade(a, 4), transform: `translateX(${-(1 - r) * 40 + wob}px)` }}>
+            <span style={{ fontFamily: MONO, fontSize: 28, opacity: 0.6, width: 120 }}>{sl.time}</span>
+            {empty ? (
+              <span style={{ flex: 1, height: 44, borderRadius: 10, border: `3px dashed ${DANGER}66`, display: "grid", placeItems: "center", fontSize: 26, fontWeight: 800, color: DANGER }}>khaali</span>
+            ) : (
+              <span style={{ flex: 1, fontSize: 32, fontWeight: 800 }}>{sl.who}</span>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };
