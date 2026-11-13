@@ -1,497 +1,497 @@
 [
   {
     "word": "Doctor",
-    "start": 0.25,
-    "end": 0.669
+    "start": 0,
+    "end": 0.32
   },
   {
     "word": "sahab,",
-    "start": 0.716,
-    "end": 1.135
+    "start": 0.4,
+    "end": 1.12
   },
   {
     "word": "kaam",
-    "start": 1.181,
-    "end": 1.536
+    "start": 1.2,
+    "end": 1.44
   },
   {
     "word": "aapka",
-    "start": 1.575,
-    "end": 1.962
+    "start": 1.52,
+    "end": 1.76
   },
   {
     "word": "best",
-    "start": 2.005,
-    "end": 2.359
+    "start": 1.92,
+    "end": 2.16
   },
   {
-    "word": "hai—",
-    "start": 2.399,
-    "end": 2.753
+    "word": "hai",
+    "start": 2.24,
+    "end": 2.4
   },
   {
     "word": "par",
-    "start": 2.792,
-    "end": 3.115
+    "start": 2.933,
+    "end": 3.12
   },
   {
     "word": "naye",
-    "start": 3.15,
-    "end": 3.505
+    "start": 3.28,
+    "end": 3.44
   },
   {
     "word": "patient",
-    "start": 3.544,
-    "end": 3.996
+    "start": 3.52,
+    "end": 3.84
   },
   {
     "word": "kam",
-    "start": 4.046,
-    "end": 4.368
+    "start": 3.92,
+    "end": 4.08
   },
   {
     "word": "kyun?",
-    "start": 4.404,
-    "end": 4.79
+    "start": 4.12,
+    "end": 4.4
   },
   {
     "word": "Kyunki",
-    "start": 5.133,
-    "end": 5.538
+    "start": 4.96,
+    "end": 5.28
   },
   {
     "word": "aaj",
-    "start": 5.583,
-    "end": 5.898
+    "start": 5.36,
+    "end": 5.6
   },
   {
     "word": "patient",
-    "start": 5.933,
-    "end": 6.368
+    "start": 5.68,
+    "end": 6.08
   },
   {
     "word": "pehle",
-    "start": 6.417,
-    "end": 6.792
+    "start": 6.16,
+    "end": 6.48
   },
   {
     "word": "Google",
-    "start": 6.833,
-    "end": 7.238
+    "start": 6.56,
+    "end": 6.88
   },
   {
     "word": "karta",
-    "start": 7.283,
-    "end": 7.658
+    "start": 6.92,
+    "end": 7.2
   },
   {
-    "word": "hai—",
-    "start": 7.7,
-    "end": 8.045
+    "word": "hai",
+    "start": 7.28,
+    "end": 7.36
   },
   {
     "word": "dentist",
-    "start": 8.083,
-    "end": 8.518
+    "start": 7.92,
+    "end": 8.4
   },
   {
     "word": "near",
-    "start": 8.567,
-    "end": 8.912
+    "start": 8.48,
+    "end": 8.68
   },
   {
     "word": "me.",
-    "start": 8.95,
-    "end": 9.265
+    "start": 8.72,
+    "end": 9.32
   },
   {
     "word": "Ek",
     "start": 9.6,
-    "end": 9.89
+    "end": 9.774
   },
   {
     "word": "US",
-    "start": 9.923,
-    "end": 10.213
+    "start": 9.774,
+    "end": 9.947
   },
   {
     "word": "survey",
-    "start": 10.245,
-    "end": 10.666
+    "start": 9.947,
+    "end": 10.468
   },
   {
     "word": "mein",
-    "start": 10.713,
-    "end": 11.069
+    "start": 10.468,
+    "end": 10.815
   },
   {
     "word": "84%",
-    "start": 11.109,
-    "end": 11.432
+    "start": 10.815,
+    "end": 11.075
   },
   {
     "word": "patients",
-    "start": 11.468,
-    "end": 11.954
+    "start": 11.075,
+    "end": 11.769
   },
   {
     "word": "ne",
-    "start": 12.008,
-    "end": 12.299
+    "start": 11.769,
+    "end": 11.942
   },
   {
-    "word": "kaha—",
-    "start": 12.331,
-    "end": 12.719
+    "word": "kaha",
+    "start": 11.942,
+    "end": 12.289
   },
   {
     "word": "doctor",
-    "start": 12.762,
-    "end": 13.184
+    "start": 12.289,
+    "end": 12.81
   },
   {
     "word": "chunne",
-    "start": 13.23,
-    "end": 13.651
+    "start": 12.81,
+    "end": 13.33
   },
   {
     "word": "se",
-    "start": 13.698,
-    "end": 13.989
+    "start": 13.33,
+    "end": 13.504
   },
   {
     "word": "pehle",
-    "start": 14.021,
-    "end": 14.409
+    "start": 13.504,
+    "end": 13.938
   },
   {
     "word": "woh",
-    "start": 14.453,
-    "end": 14.776
+    "start": 13.938,
+    "end": 14.198
   },
   {
     "word": "online",
-    "start": 14.812,
-    "end": 15.233
+    "start": 14.198,
+    "end": 14.718
   },
   {
     "word": "reviews",
-    "start": 15.279,
-    "end": 15.733
+    "start": 14.718,
+    "end": 15.326
   },
   {
     "word": "padhte",
-    "start": 15.784,
-    "end": 16.205
+    "start": 15.326,
+    "end": 15.846
   },
   {
     "word": "hain.",
-    "start": 16.252,
-    "end": 16.64
+    "start": 15.846,
+    "end": 16.28
   },
   {
     "word": "Wahan",
-    "start": 16.983,
-    "end": 17.351
+    "start": 16.56,
+    "end": 16.76
   },
   {
     "word": "aapka",
-    "start": 17.391,
-    "end": 17.759
+    "start": 16.8,
+    "end": 17.04
   },
   {
     "word": "clinic",
-    "start": 17.799,
-    "end": 18.195
+    "start": 17.12,
+    "end": 17.44
   },
   {
     "word": "nahi",
-    "start": 18.239,
-    "end": 18.578
+    "start": 17.48,
+    "end": 17.64
   },
   {
     "word": "dikha,",
-    "start": 18.616,
-    "end": 19.011
+    "start": 17.68,
+    "end": 18.24
   },
   {
     "word": "toh",
-    "start": 19.055,
-    "end": 19.366
+    "start": 18.28,
+    "end": 18.4
   },
   {
     "word": "patient",
-    "start": 19.4,
-    "end": 19.824
+    "start": 18.44,
+    "end": 18.88
   },
   {
     "word": "doosre",
-    "start": 19.871,
-    "end": 20.267
+    "start": 18.9,
+    "end": 19.2
   },
   {
     "word": "clinic",
-    "start": 20.311,
-    "end": 20.707
+    "start": 19.28,
+    "end": 19.52
   },
   {
     "word": "chala",
-    "start": 20.751,
-    "end": 21.118
+    "start": 19.6,
+    "end": 19.76
   },
   {
     "word": "gaya.",
-    "start": 21.159,
-    "end": 21.526
+    "start": 19.84,
+    "end": 20.56
   },
   {
     "word": "Aur",
-    "start": 21.867,
-    "end": 22.173
+    "start": 20.6,
+    "end": 20.72
   },
   {
     "word": "galat",
-    "start": 22.208,
-    "end": 22.569
+    "start": 20.8,
+    "end": 21.04
   },
   {
     "word": "promotion",
-    "start": 22.609,
-    "end": 23.08
+    "start": 21.12,
+    "end": 21.52
   },
   {
     "word": "kiya,",
-    "start": 23.132,
-    "end": 23.493
+    "start": 21.6,
+    "end": 22.08
   },
   {
     "word": "toh",
-    "start": 23.533,
-    "end": 23.84
+    "start": 22.12,
+    "end": 22.24
   },
   {
     "word": "National",
-    "start": 23.874,
-    "end": 24.317
+    "start": 22.28,
+    "end": 22.64
   },
   {
     "word": "Dental",
-    "start": 24.367,
-    "end": 24.755
+    "start": 22.72,
+    "end": 23
   },
   {
     "word": "Commission",
-    "start": 24.798,
-    "end": 25.296
+    "start": 23.04,
+    "end": 23.52
   },
   {
     "word": "action",
-    "start": 25.352,
-    "end": 25.74
+    "start": 23.6,
+    "end": 23.92
   },
   {
     "word": "le",
-    "start": 25.783,
-    "end": 26.063
+    "start": 23.96,
+    "end": 24.04
   },
   {
     "word": "sakta",
-    "start": 26.094,
-    "end": 26.455
+    "start": 24.08,
+    "end": 24.4
   },
   {
     "word": "hai.",
-    "start": 26.495,
-    "end": 26.83
+    "start": 24.44,
+    "end": 25.12
   },
   {
     "word": "Isliye",
-    "start": 27.167,
-    "end": 27.578
+    "start": 25.16,
+    "end": 25.6
   },
   {
     "word": "hum",
-    "start": 27.624,
-    "end": 27.942
+    "start": 25.64,
+    "end": 25.84
   },
   {
     "word": "dentists",
-    "start": 27.977,
-    "end": 28.45
+    "start": 25.867,
+    "end": 26.32
   },
   {
     "word": "ke",
-    "start": 28.503,
-    "end": 28.79
+    "start": 26.4,
+    "end": 26.453
   },
   {
     "word": "liye",
-    "start": 28.822,
-    "end": 29.171
+    "start": 26.48,
+    "end": 26.88
   },
   {
     "word": "rules",
-    "start": 29.21,
-    "end": 29.59
+    "start": 26.92,
+    "end": 27.2
   },
   {
     "word": "ke",
-    "start": 29.632,
-    "end": 29.919
+    "start": 27.28,
+    "end": 27.36
   },
   {
     "word": "andar",
-    "start": 29.951,
-    "end": 30.331
+    "start": 27.413,
+    "end": 27.76
   },
   {
     "word": "digital",
-    "start": 30.374,
-    "end": 30.816
+    "start": 27.787,
+    "end": 28.16
   },
   {
     "word": "setup",
-    "start": 30.865,
-    "end": 31.245
+    "start": 28.24,
+    "end": 28.56
   },
   {
     "word": "banate",
-    "start": 31.287,
-    "end": 31.699
+    "start": 28.6,
+    "end": 28.96
   },
   {
-    "word": "hain—",
-    "start": 31.744,
-    "end": 32.124
+    "word": "hain",
+    "start": 29,
+    "end": 29.32
   },
   {
     "word": "website,",
-    "start": 32.467,
-    "end": 32.858
+    "start": 29.6,
+    "end": 30.32
   },
   {
     "word": "Google",
-    "start": 32.901,
-    "end": 33.251
+    "start": 30.4,
+    "end": 30.64
   },
   {
     "word": "profile,",
-    "start": 33.29,
-    "end": 33.681
+    "start": 30.72,
+    "end": 31.52
   },
   {
     "word": "online",
-    "start": 33.724,
-    "end": 34.074
+    "start": 31.56,
+    "end": 31.92
   },
   {
     "word": "appointment,",
-    "start": 34.113,
-    "end": 34.587
+    "start": 31.96,
+    "end": 32.72
   },
   {
     "word": "aur",
-    "start": 34.64,
-    "end": 34.927
+    "start": 32.76,
+    "end": 32.88
   },
   {
     "word": "patient",
-    "start": 34.959,
-    "end": 35.329
+    "start": 32.96,
+    "end": 33.28
   },
   {
     "word": "education",
-    "start": 35.371,
-    "end": 35.782
+    "start": 33.36,
+    "end": 33.92
   },
   {
     "word": "posts.",
-    "start": 35.828,
-    "end": 36.178
+    "start": 34,
+    "end": 34.96
   },
   {
     "word": "Aap",
-    "start": 36.517,
-    "end": 36.806
+    "start": 35.04,
+    "end": 35.2
   },
   {
     "word": "patient",
-    "start": 36.838,
-    "end": 37.213
+    "start": 35.28,
+    "end": 35.6
   },
   {
     "word": "sambhaliye,",
-    "start": 37.255,
-    "end": 37.715
+    "start": 35.64,
+    "end": 36.4
   },
   {
     "word": "online",
-    "start": 37.767,
-    "end": 38.12
+    "start": 36.44,
+    "end": 36.96
   },
   {
     "word": "hum",
-    "start": 38.16,
-    "end": 38.449
+    "start": 37,
+    "end": 37.12
   },
   {
     "word": "sambhalenge.",
-    "start": 38.481,
-    "end": 38.963
+    "start": 37.2,
+    "end": 38.24
   },
   {
     "word": "Comment",
-    "start": 39.317,
-    "end": 39.731
+    "start": 38.32,
+    "end": 38.64
   },
   {
     "word": "karo",
-    "start": 39.777,
-    "end": 40.11
+    "start": 38.68,
+    "end": 38.88
   },
   {
-    "word": "DENTIST—",
-    "start": 40.147,
-    "end": 40.589
+    "word": "DENTIST",
+    "start": 39.04,
+    "end": 39.52
   },
   {
     "word": "aapke",
-    "start": 40.638,
-    "end": 40.998
+    "start": 40,
+    "end": 40.32
   },
   {
     "word": "clinic",
-    "start": 41.038,
-    "end": 41.425
+    "start": 40.4,
+    "end": 40.72
   },
   {
     "word": "ka",
-    "start": 41.468,
-    "end": 41.747
+    "start": 40.76,
+    "end": 40.96
   },
   {
     "word": "free",
-    "start": 41.778,
-    "end": 42.112
+    "start": 41.04,
+    "end": 41.28
   },
   {
     "word": "online",
-    "start": 42.149,
-    "end": 42.536
+    "start": 41.36,
+    "end": 41.76
   },
   {
     "word": "check-up",
-    "start": 42.579,
-    "end": 43.02
+    "start": 41.84,
+    "end": 42.32
   },
   {
     "word": "hum",
-    "start": 43.069,
-    "end": 43.376
+    "start": 42.36,
+    "end": 42.56
   },
   {
     "word": "karenge.",
-    "start": 43.41,
-    "end": 43.851
+    "start": 42.6,
+    "end": 43.36
   }
 ]

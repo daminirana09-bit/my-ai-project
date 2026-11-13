@@ -7,3 +7,4 @@ tools/.venv
 __pycache__
 *.zip
 .git
+/public/broll/*.mp4

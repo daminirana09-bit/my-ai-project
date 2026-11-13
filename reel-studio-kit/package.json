@@ -18,7 +18,8 @@
     "setup:captions": "bash tools/setup-captions.sh",
     "demo:assets": "node tools/demo/make-demo.mjs",
     "demo": "node tools/render.mjs Demo",
-    "sprites:placeholders": "node tools/make-placeholder-sprites.mjs"
+    "sprites:placeholders": "node tools/make-placeholder-sprites.mjs",
+    "broll": "NODE_USE_ENV_PROXY=1 node tools/broll.mjs"
   },
   "dependencies": {
     "@remotion/bundler": "4.0.538",
