@@ -102,8 +102,33 @@ itself. Internal notes, margins and other clients' data never go into a WhatsApp
 | Bhashini (government API) | **Not used by default**, because data would leave the client's server. |
 | Live AI translation in the demo | Demo only. The real software translates on the client's own server. |
 
-## Hosting needed
+## Hosting and editions
 
-Because translation runs on the client's own server, **shared cPanel hosting is not enough.**
-The software needs a VPS or the client's own server with at least about 4–8 GB RAM, an
-encrypted disk and root access, so the firewall, VPN and translation model can be set up.
+The software is sold to many pharma companies. **Each company gets its own separate
+installation on its own hosting, with its own database.** No two companies ever share a
+server, a database or a login, so one company's data can never reach another company.
+
+| | Standard edition | Pro edition |
+|---|---|---|
+| Hosting | Shared hosting (e.g. Hostinger: PHP + MySQL + cron) | VPS or the company's own server, about 4–8 GB RAM, root access |
+| CRM, WhatsApp inbox, absence auto-reply, quotes, orders, reminders | Yes | Yes |
+| Client's language detected, request type detected (order, rate, payment, sample, COA, complaint…) | Yes, on the server | Yes, on the server |
+| Suggested replies in the client's language | Yes: pre-written replies in all 22 languages, filled with that client's data | Yes |
+| Word-for-word translation of any free-text message | **No.** The rep sees the original message plus the detected request type. | Yes: IndicTrans2 on the company's own server |
+| CRM screens closed to the public internet | IP allow-list in `.htaccess` | Firewall + self-hosted VPN |
+
+**Extra care on shared hosting.** Other customers' websites run on the same machine and the
+host's staff can reach it. So on shared hosting:
+- phone numbers, rates, bank details and message text are encrypted inside the database,
+  field by field;
+- the encryption key sits outside the public web folder and never in Git;
+- login uses an authenticator-app code (TOTP), which works offline and costs nothing;
+- backups are encrypted before they are downloaded.
+
+A VPS is still the safer choice, and the Pro edition needs one.
+
+## Licence and updates
+
+- A licence check sends only the licence key and a hash of the domain to the vendor's
+  licence server. **Never any client data.**
+- Updates are downloaded by the installation itself. Nothing is uploaded.
