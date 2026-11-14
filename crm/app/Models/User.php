@@ -16,11 +16,14 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     public const LOCALES = ['en' => 'English', 'hing' => 'Hinglish', 'hi' => 'हिन्दी'];
+
+    /** Colour theme: follow the phone/computer, or always light / always dark. */
+    public const THEMES = ['system' => 'Same as my device', 'light' => 'Light', 'dark' => 'Dark'];
     public const ROLES = ['admin' => 'Admin', 'manager' => 'Manager', 'rep' => 'Sales rep'];
 
     protected $fillable = [
         'name', 'email', 'password', 'role', 'manager_id', 'phone', 'active',
-        'office_start', 'office_end', 'lunch_start', 'lunch_end', 'locale',
+        'office_start', 'office_end', 'lunch_start', 'lunch_end', 'locale', 'theme',
         'away_type', 'away_until', 'backup_user_id', 'salutation',
     ];
 

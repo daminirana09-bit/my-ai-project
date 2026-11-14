@@ -64,6 +64,31 @@ class IntegrationController extends Controller
                 return back()->withErrors(['api_url' => $e->getMessage()])->withInput();
             }
         }
+        if ($platform === 'email') {
+            $host = strtolower(trim((string) ($config['imap_host'] ?? '')));
+            $port = (int) ($config['imap_port'] ?? 993);
+            if ($host !== '' && ! preg_match('/^[a-z0-9.\-]{3,100}$/', $host)) {
+                return back()->withErrors(['api_url' => __('Write only the server name, e.g. imap.hostinger.com')])->withInput();
+            }
+            if ($host !== '') {
+                try {
+                    Puller::assertSafeUrl('https://'.$host.'/');
+                } catch (PullFailed $e) {
+                    return back()->withErrors(['api_url' => __('The email server address is not reachable or not allowed.')])->withInput();
+                }
+            }
+            if (! in_array($port, [993, 143], true)) {
+                return back()->withErrors(['api_url' => __('Use port 993 (SSL) or 143 (TLS).')])->withInput();
+            }
+            if (filled($config['imap_user'] ?? null) && ! filter_var($config['imap_user'], FILTER_VALIDATE_EMAIL)) {
+                return back()->withErrors(['api_url' => __('Write the full mailbox address, e.g. leads@yourcompany.com')])->withInput();
+            }
+            $config['imap_host'] = $host ?: null;
+            $config['imap_port'] = (string) $port;
+            if (($i->config['imap_user'] ?? null) !== ($config['imap_user'] ?? null)) {
+                unset($config['uidvalidity'], $config['last_uid']); // another mailbox: start again
+            }
+        }
         if ($platform === 'other_portal') {
             $config['source_name'] = mb_substr(trim((string) ($config['source_name'] ?? '')), 0, 40) ?: null;
         }

@@ -10,6 +10,11 @@
     <h2>{{ __('Language') }}</h2>
     <div class="field"><label for="locale">{{ __('Show the app in') }}</label><select id="locale" name="locale" data-autosubmit>@foreach(\App\Models\User::LOCALES as $k => $l)<option value="{{ $k }}" @selected($me->locale === $k)>{{ $l }}</option>@endforeach</select></div>
   </form>
+  <form method="post" action="{{ route('profile.theme') }}" class="card form">
+    @csrf
+    <h2>{{ __('Colour theme') }}</h2>
+    <div class="field"><label for="theme">{{ __('Show the app in') }}</label><select id="theme" name="theme" data-autosubmit>@foreach(\App\Models\User::THEMES as $k => $l)<option value="{{ $k }}" @selected($me->theme === $k)>{{ __($l) }}</option>@endforeach</select></div>
+  </form>
   <form method="post" action="{{ route('profile.password') }}" class="card form">
     @csrf
     <h2>{{ __('Change password') }}</h2>

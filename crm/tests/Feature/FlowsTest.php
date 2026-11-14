@@ -286,4 +286,22 @@ class FlowsTest extends CrmTestCase
         $res = $this->post('/tasks', ['title' => '']);
         $res->assertRedirect(url('/leads'));
     }
+    public function test_each_person_chooses_light_dark_or_device_theme(): void
+    {
+        $this->actingAs($this->repA)->get('/')->assertOk()->assertDontSee('data-theme="', false);
+        $this->post('/profile/theme', ['theme' => 'dark'])->assertRedirect()->assertCookie('crm_theme', 'dark');
+        $this->assertSame('dark', $this->repA->fresh()->theme);
+        $this->get('/')->assertSee('data-theme="dark"', false);
+        $this->post('/profile/theme', ['theme' => 'light']);
+        $this->get('/leads')->assertSee('data-theme="light"', false);
+        $this->post('/profile/theme', ['theme' => 'purple'])->assertSessionHasErrors('theme');
+        $this->post('/profile/theme', ['theme' => 'system']);
+        $this->get('/')->assertDontSee('data-theme="', false);
+        $this->actingAs($this->repB)->get('/')->assertDontSee('data-theme="', false); // one person's choice is only theirs
+        // The login page follows the last choice made on this device
+        auth()->logout();
+        $this->withCookie('crm_theme', 'dark')->get('/login')->assertSee('data-theme="dark"', false);
+        $this->withCookie('crm_theme', '"><script>')->get('/login')->assertDontSee('<script>"', false)->assertDontSee('data-theme="', false);
+    }
 }
+

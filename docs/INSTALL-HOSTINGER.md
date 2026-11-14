@@ -123,6 +123,8 @@ can send one platform's leads to chosen people; otherwise the Automations settin
 | Facebook / Instagram lead ads | Meta app → Webhooks → *Page* → field `leadgen`, with the callback URL and verify token shown. Enter Page ID, a Page access token (System user, `leads_retrieval`, `pages_manage_metadata`, `pages_show_list`) and the app secret, save, press **Connect Page**. Instagram leads are tagged Instagram Ads. |
 | Google Ads lead forms | Lead form asset → Lead delivery → Webhook: paste URL and key, press *Send test data* (a test proves the link and makes no lead). |
 | Any other portal | If a portal gives an API link returning JSON, paste it (with `{from}`/`{to}`) and the name to show as source. |
+| Email inbox | For portals and clients that send enquiries by email (Sulekha, pharma franchise portals, Alibaba, IndiaMART mails…). hPanel → **Emails** → create a mailbox such as `leads@company.com`; forward enquiry mails to it (portal settings, or a Gmail filter "forward to"). In the card enter server `imap.hostinger.com`, port 993, the address and its password (Gmail: an app password). Read every 10 minutes; nothing in the mailbox is changed. Add your own portals as rules: `pharmafranchisemart = PharmaFranchiseMart`. |
+| Website forms (Elementor, Contact Form 7, WPForms) | Use the website form code, or the form's "Webhook" action with the Other apps receiving link. Field names such as "Mobile Number" or `your-email` are understood. |
 | Other apps | Zapier, Pabbly, LinkedIn lead forms (via Zapier), IVR / missed-call systems: POST `name`, `phone`, `email`, `firm`, `city`, `message`, optional `source` and `tags` to the receiving link. |
 
 The **receiving links are secret** (like a password): "Create a new link" stops the old one.

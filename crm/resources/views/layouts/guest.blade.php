@@ -1,6 +1,6 @@
 @php $company = \App\Models\CompanySetting::current(); @endphp
 <!doctype html>
-<html lang="{{ app()->getLocale() === 'hing' ? 'hi-Latn' : app()->getLocale() }}">
+<html lang="{{ app()->getLocale() === 'hing' ? 'hi-Latn' : app()->getLocale() }}"@if(in_array(request()->cookie('crm_theme'), ['light', 'dark'], true)) data-theme="{{ request()->cookie('crm_theme') }}"@endif>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

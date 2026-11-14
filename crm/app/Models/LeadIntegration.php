@@ -28,6 +28,9 @@ class LeadIntegration extends Model
         'google_ads' => ['name' => 'Google Ads lead forms', 'source' => 'Google Ads', 'pull' => false, 'fields' => []],
         'other_portal' => ['name' => 'Any other portal (API link)', 'source' => 'Other apps', 'pull' => true,
             'fields' => ['source_name' => ['Name to show as source', false], 'api_url' => ['API link given by the portal', true]]],
+        'email' => ['name' => 'Email inbox (enquiries that come by email)', 'source' => 'Email', 'pull' => true,
+            'fields' => ['imap_host' => ['Email server (IMAP)', false], 'imap_port' => ['Port (993 = SSL)', false], 'imap_user' => ['Lead mailbox address', false],
+                'imap_password' => ['Mailbox password (Gmail: app password)', true], 'sender_rules' => ['Extra sender rules, e.g. pharmafranchisemart = PharmaFranchiseMart', false]]],
         'custom' => ['name' => 'Other apps (Zapier, Pabbly, LinkedIn, IVR…)', 'source' => 'Other apps', 'pull' => false, 'fields' => []],
     ];
 
@@ -60,6 +63,7 @@ class LeadIntegration extends Model
             'config' => match ($platform) {
                 'facebook' => ['verify_token' => Str::random(32)],
                 'google_ads' => ['google_key' => Str::random(32)],
+                'email' => ['imap_host' => 'imap.hostinger.com', 'imap_port' => '993'],
                 default => [],
             },
         ]);
@@ -94,6 +98,7 @@ class LeadIntegration extends Model
             'indiamart' => filled($this->conf('crm_key')),
             'tradeindia' => filled($this->conf('user_id')) && filled($this->conf('profile_id')) && filled($this->conf('key')),
             'exportersindia', 'other_portal' => filled($this->conf('api_url')),
+            'email' => filled($this->conf('imap_host')) && filled($this->conf('imap_user')) && filled($this->conf('imap_password')),
             default => false,
         };
     }

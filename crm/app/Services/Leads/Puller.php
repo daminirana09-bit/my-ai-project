@@ -20,7 +20,7 @@ class Puller
     public const INDIAMART_URL = 'https://mapi.indiamart.com/wservce/crm/crmListing/v2/';
     public const TRADEINDIA_URL = 'https://www.tradeindia.com/utils/my_inquiry.html';
 
-    public function __construct(private Normalizer $normalizer, private LeadIntake $intake) {}
+    public function __construct(private Normalizer $normalizer, private LeadIntake $intake, private EmailLeadParser $emails, private ImapMailbox $mailbox) {}
 
     /** @return array{ok: bool, message: string, counts: array<string,int>} */
     public function pull(LeadIntegration $i): array
@@ -32,6 +32,9 @@ class Puller
             return ['ok' => false, 'message' => __('Fetched less than 5 minutes ago. The portal allows one fetch every 5 minutes.'), 'counts' => []];
         }
         $i->forceFill(['last_pulled_at' => now()])->save();
+        if ($i->platform === 'email') {
+            return $this->pullEmail($i);
+        }
 
         // Overlap the last window a little: anything seen twice is ignored.
         $from = $i->last_success_at ? $i->last_success_at->copy()->subMinutes(30) : now()->subDay();
@@ -66,6 +69,45 @@ class Puller
         if ($counts['skipped'] === 0) {
             $i->forceFill(['last_error' => null, 'last_error_at' => null])->save();
         }
+
+        return ['ok' => true, 'message' => 'Fetched', 'counts' => $counts];
+    }
+
+    /** New mail in the lead mailbox → leads. The mailbox itself is never changed. */
+    private function pullEmail(LeadIntegration $i): array
+    {
+        try {
+            $r = $this->mailbox->fetchNew((string) $i->conf('imap_host'), (int) $i->conf('imap_port', 993), (string) $i->conf('imap_user'),
+                (string) $i->conf('imap_password'), (int) $i->conf('uidvalidity', 0), (int) $i->conf('last_uid', 0));
+        } catch (PullFailed $e) {
+            $i->failed($e->getMessage());
+
+            return ['ok' => false, 'message' => $e->getMessage(), 'counts' => []];
+        } catch (Throwable $e) {
+            Log::warning('Lead mailbox failed', ['error' => $e->getMessage()]);
+            $i->failed('Could not read the mailbox: '.mb_substr($e->getMessage(), 0, 200));
+
+            return ['ok' => false, 'message' => 'Could not read the mailbox.', 'counts' => []];
+        }
+        $counts = ['created' => 0, 'existing' => 0, 'duplicate' => 0, 'skipped' => 0, 'test' => 0];
+        foreach ($r['messages'] as $raw) {
+            try {
+                [$d] = $this->emails->parse(MimeMessage::parse($raw), (string) $i->conf('imap_user'), (string) $i->conf('sender_rules', ''));
+            } catch (Throwable $e) {
+                Log::warning('Lead mail could not be read', ['error' => $e->getMessage()]);
+                $d = null;
+            }
+            if ($d === null) {
+                $counts['skipped']++;
+
+                continue;
+            }
+            $counts[$this->intake->receive('email', $i, $d, 'Email')]++;
+        }
+        $config = $i->config ?? [];
+        $config['uidvalidity'] = $r['uidvalidity'];
+        $config['last_uid'] = $r['last_uid'];
+        $i->forceFill(['config' => $config, 'last_success_at' => now(), 'last_error' => null, 'last_error_at' => null])->save();
 
         return ['ok' => true, 'message' => 'Fetched', 'counts' => $counts];
     }

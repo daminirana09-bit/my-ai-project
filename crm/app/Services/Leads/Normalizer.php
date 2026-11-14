@@ -11,15 +11,17 @@ class Normalizer
 {
     private const KEYS = [
         'externalId' => ['unique_query_id', 'rfi_id', 'inquiry_id', 'enquiry_id', 'inq_id', 'leadid', 'lead_id', 'query_id', 'id'],
-        'name' => ['sender_name', 'full_name', 'fullname', 'name', 'contact_name', 'contact_person', 'buyer_name', 'customer_name', 'your_name'],
+        'name' => ['sender_name', 'full_name', 'fullname', 'name', 'contact_name', 'contact_person', 'buyer_name', 'customer_name', 'your_name', 'client_name', 'person_name'],
         'phone' => ['sender_mobile', 'mobile', 'mobile_number', 'mobileno', 'mobile_no', 'phone_number', 'phone', 'sender_phone', 'contact_number',
-            'buyer_mobile', 'whatsapp', 'whatsapp_number', 'sender_mobile_alt', 'phone_no', 'contact_no', 'work_phone'],
-        'email' => ['sender_email', 'email', 'email_address', 'email_id', 'emailid', 'buyer_email', 'work_email', 'sender_email_alt'],
-        'firm' => ['sender_company', 'sender_co', 'company', 'company_name', 'firm', 'firm_name', 'organisation', 'organization', 'business_name', 'buyer_company'],
-        'city' => ['sender_city', 'city', 'buyer_city', 'location', 'area'],
+            'buyer_mobile', 'whatsapp', 'whatsapp_number', 'whatsapp_no', 'sender_mobile_alt', 'phone_no', 'contact_no', 'work_phone', 'your_phone', 'your_mobile',
+            'mobile_phone', 'cell', 'contact', 'callfrom', 'call_from', 'caller', 'caller_number', 'caller_id', 'customer_number', 'from_number', 'cli', 'msisdn'],
+        'email' => ['sender_email', 'email', 'email_address', 'email_id', 'emailid', 'e_mail', 'mail', 'buyer_email', 'work_email', 'sender_email_alt', 'your_email'],
+        'firm' => ['sender_company', 'sender_co', 'company', 'company_name', 'firm', 'firm_name', 'organisation', 'organization', 'business_name', 'buyer_company', 'your_company', 'shop_name'],
+        'city' => ['sender_city', 'city', 'buyer_city', 'your_city', 'location', 'district', 'area'],
         'state' => ['sender_state', 'state', 'region', 'buyer_state'],
-        'product' => ['query_product_name', 'product_name', 'product', 'product_interested', 'query_mcat_name', 'subject', 'category', 'service'],
-        'message' => ['query_message', 'message', 'enquiry', 'inquiry', 'enquiry_message', 'inquiry_message', 'requirement', 'description', 'comments', 'comment', 'query', 'details'],
+        'product' => ['query_product_name', 'product_name', 'product', 'products', 'product_interested', 'products_interested', 'interested_in', 'query_mcat_name', 'subject', 'your_subject', 'category', 'service', 'enquiry_for', 'looking_for'],
+        'message' => ['query_message', 'message', 'enquiry', 'inquiry', 'enquiry_message', 'inquiry_message', 'requirement', 'requirements', 'description', 'comments', 'comment',
+            'query', 'details', 'your_message', 'enquiry_details', 'buyer_requirement', 'additional_details'],
         'campaign' => ['campaign_name', 'campaign', 'utm_campaign', 'form_name', 'ad_name', 'adset_name'],
     ];
 
@@ -156,15 +158,21 @@ class Normalizer
             if (is_array($v) && ! array_is_list($v)) {
                 foreach ($v as $k2 => $v2) {
                     if (! is_array($v2)) {
-                        $out[strtolower((string) $k2)] ??= $v2;
+                        $out[self::key((string) $k2)] ??= $v2;
                     }
                 }
             } else {
-                $out[strtolower(trim((string) $k))] = $v;
+                $out[self::key((string) $k)] = $v;
             }
         }
 
         return $out;
+    }
+
+    /** "Mobile No." → mobile_no, "your-email" → your_email, "SENDER_MOBILE" → sender_mobile */
+    public static function key(string $k): string
+    {
+        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower(trim($k))) ?? '', '_');
     }
 
     private function clean(mixed $v, int $max): ?string

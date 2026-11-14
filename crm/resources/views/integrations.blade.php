@@ -10,6 +10,7 @@
     'facebook' => __('For Facebook and Instagram lead forms. In your Meta app add Webhooks → Page → leadgen with the callback URL and verify token below. Enter the Page ID, a Page access token with leads_retrieval permission and the app secret, save, then press Connect Page.'),
     'google_ads' => __('In Google Ads open the lead form asset → Lead delivery → Webhook. Paste the URL and key below and press "Send test data".'),
     'other_portal' => __('For any other portal that gives an API link returning a list of enquiries. Put {from} and {to} where the dates go.'),
+    'email' => __('For portals and clients that send enquiries by email (Sulekha, pharma franchise portals, Alibaba, IndiaMART mails, direct client mails). Create a mailbox such as leads@yourcompany.com, forward enquiry mails to it, and enter it here. Every 10 minutes new mails become leads, tagged with the portal. The mailbox is only read: nothing is deleted or marked read.'),
     'custom' => __('For Zapier, Pabbly Connect, LinkedIn lead forms (through Zapier), IVR and missed-call systems: send name, phone, email, firm, city, message to the receiving link. Optional: source (e.g. LinkedIn Ads) and tags.'),
   ];
   $form = url('/webhook/lead/'.$c->lead_capture_token);
@@ -29,6 +30,27 @@
     @empty
       <tr><td colspan="4" class="empty">{{ __('No leads this month yet.') }}</td></tr>
     @endforelse
+    </tbody>
+  </table></div>
+</section>
+
+
+<section class="card flush">
+  <div class="ch"><h2>{{ __('Which way for which platform') }}</h2></div>
+  <div class="tbl"><table class="guide">
+    <thead><tr><th>{{ __('Where the lead comes from') }}</th><th>{{ __('How to connect') }}</th></tr></thead>
+    <tbody>
+      <tr><td>IndiaMART · TradeIndia</td><td>{{ __('API key below (fetched every 10 minutes). Their enquiry mails also work through the Email inbox.') }}</td></tr>
+      <tr><td>ExportersIndia · {{ __('other B2B portals with an API') }}</td><td>{{ __('API link below, or the Email inbox.') }}</td></tr>
+      <tr><td>JustDial</td><td>{{ __('Receiving link below (ask your JustDial manager), or the Email inbox.') }}</td></tr>
+      <tr><td>Sulekha · Alibaba · Go4WorldBusiness · {{ __('pharma franchise portals') }}</td><td>{{ __('Email inbox: forward their enquiry mails to your lead mailbox.') }}</td></tr>
+      <tr><td>Facebook · Instagram</td><td>{{ __('Facebook & Instagram lead ads card below.') }}</td></tr>
+      <tr><td>Google Ads · YouTube</td><td>{{ __('Google Ads lead forms card below.') }}</td></tr>
+      <tr><td>{{ __('Your website (WordPress, Elementor, Contact Form 7, WPForms…)') }}</td><td>{{ __('Website form code below, or in the form builder add a "Webhook" action with the Other apps receiving link.') }}</td></tr>
+      <tr><td>LinkedIn · {{ __('IVR / missed call (Exotel, Knowlarity, MyOperator)') }} · Zapier · Pabbly</td><td>{{ __('Other apps receiving link: send the caller or form details to it.') }}</td></tr>
+      <tr><td>WhatsApp</td><td>{{ __('Already built in: a new chat becomes a lead (WhatsApp settings).') }}</td></tr>
+      <tr><td>{{ __('Any portal that lets you download Excel / CSV / Google Sheet') }}</td><td><a href="{{ route('leads.import') }}">{{ __('Leads → Import') }}</a></td></tr>
+      <tr><td>{{ __('Reference · walk-in · exhibition · Google Maps calls') }}</td><td>{{ __('Added by your team: pick the source on the lead.') }}</td></tr>
     </tbody>
   </table></div>
 </section>
@@ -75,7 +97,7 @@
       <dl class="dl"><dt>{{ __('Callback URL') }}</dt><dd class="mono">{{ $i->receiveUrl() }}</dd><dt>{{ __('Verify token') }}</dt><dd class="mono">{{ $i->conf('verify_token') }}</dd><dt>{{ __('Subscribe to') }}</dt><dd class="mono">leadgen</dd></dl>
     @elseif($p === 'google_ads')
       <dl class="dl"><dt>{{ __('Webhook URL') }}</dt><dd class="mono">{{ $i->receiveUrl() }}</dd><dt>{{ __('Key') }}</dt><dd class="mono">{{ $i->conf('google_key') }}</dd></dl>
-    @elseif(! in_array($p, ['other_portal'], true))
+    @elseif(! in_array($p, ['other_portal', 'email'], true))
       <div class="field"><span class="small muted">{{ __('Receiving link') }}</span><p class="secret sm">{{ $i->receiveUrl() }}</p></div>
     @endif
     @if($i->last_fields)<details class="small muted"><summary>{{ __('Fields received last time') }}</summary><p class="mono">{{ $i->last_fields }}</p></details>@endif
@@ -83,7 +105,7 @@
     <div class="row">
       @if($i->info('pull'))<form method="post" action="{{ route('integrations.fetch', $p) }}">@csrf<button class="btn sm" @disabled(! $i->enabled || ! $i->canPull())><x-icon name="download"/>{{ __('Fetch now') }}</button></form>@endif
       @if($p === 'facebook')<form method="post" action="{{ route('integrations.facebook') }}">@csrf<button class="btn sm" @disabled(! $i->conf('page_token'))>{{ __('Connect Page') }}</button></form>@endif
-      @if($p !== 'other_portal')<form method="post" action="{{ route('integrations.rotate', $p) }}">@csrf<button class="btn sm" data-confirm="{{ __('The old link will stop working. Continue?') }}">{{ __('Create a new link') }}</button></form>@endif
+      @if(! in_array($p, ['other_portal', 'email'], true))<form method="post" action="{{ route('integrations.rotate', $p) }}">@csrf<button class="btn sm" data-confirm="{{ __('The old link will stop working. Continue?') }}">{{ __('Create a new link') }}</button></form>@endif
     </div>
   </section>
 @endforeach

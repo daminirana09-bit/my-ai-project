@@ -39,6 +39,8 @@ One installation per company. Each company sets its own name, logo, timings and 
   Facebook & Instagram lead ads, Google Ads lead forms, any portal API link, and other apps
   (Zapier, Pabbly, LinkedIn, IVR). Every lead is tagged with its platform; repeats are ignored;
   a known client gets a note instead of a second lead.
+- **Email inbox:** enquiry mails from any portal or client become leads (IMAP, read-only), tagged with the portal.
+- **Light / dark theme:** each person picks light, dark or same as their device.
 - **Website enquiry form:** a secret link; tags Google Ads, Google search, Facebook/Instagram ads.
 - **Tags:** source and tags on every lead (reference, walk-in…), filter by source or tag, in export/import.
 - **System check** page for hosting (PHP, extensions, HTTPS, cron, queue, WhatsApp, 2-step login).
@@ -61,4 +63,4 @@ php artisan test
 **Install for a company:** build the zip with `tools/make-release.sh` (includes `vendor/`, no
 tests, no `.env`), then follow `../docs/INSTALL-HOSTINGER.md`.
 
-**Tests:** `php artisan test` (104 feature tests) and the browser run in `tests/e2e/README.md`.
+**Tests:** `php artisan test` (114 feature tests) and the browser run in `tests/e2e/README.md`.

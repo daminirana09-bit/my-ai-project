@@ -10,13 +10,26 @@
   --font:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans","Nirmala UI","Mangal",sans-serif;
   --mono:ui-monospace,Menlo,Consolas,monospace;color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root{
+/* Dark: chosen by the user (data-theme="dark"), or the device is dark and the user did not pick light. */
+:root[data-theme="dark"]{
+  --bg:#0b110e;--surface:#121a16;--surface-2:#18231d;--line:#25332b;--fg:#e3ece7;--muted:#90a39a;
+  --brand:#22c55e;--brand-2:#4ade80;--brand-soft:#123222;--brand-fg:#06120b;
+  --side:#070b09;--side-2:#101813;
+  --info:#7aa7f7;--info-soft:#16233d;--warn:#e5b54a;--warn-soft:#33280e;--bad:#f2786c;--bad-soft:#3a1714;
+  --good:#4ade80;--good-soft:#123222;--violet:#b49af7;--violet-soft:#251a3d;--cyan:#5ec8dc;--cyan-soft:#0f2c33;
+  --shadow:none;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0b110e;--surface:#121a16;--surface-2:#18231d;--line:#25332b;--fg:#e3ece7;--muted:#90a39a;
   --brand:#22c55e;--brand-2:#4ade80;--brand-soft:#123222;--brand-fg:#06120b;
   --side:#070b09;--side-2:#101813;
   --info:#7aa7f7;--info-soft:#16233d;--warn:#e5b54a;--warn-soft:#33280e;--bad:#f2786c;--bad-soft:#3a1714;
   --good:#4ade80;--good-soft:#123222;--violet:#b49af7;--violet-soft:#251a3d;--cyan:#5ec8dc;--cyan-soft:#0f2c33;
   --shadow:none;color-scheme:dark}}
+:root[data-theme="light"]{color-scheme:light}
+/* Theme button shows a moon in light mode and a sun in dark mode */
+.i-sun{display:none}:root[data-theme="dark"] .i-sun{display:contents}:root[data-theme="dark"] .i-moon{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme]) .i-sun{display:contents}:root:not([data-theme]) .i-moon{display:none}}
+.i-moon{display:contents}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;line-height:1.5}
 a{color:var(--info);text-decoration:none}a:hover{text-decoration:underline}

@@ -31,6 +31,16 @@ class ProfileController extends Controller
         return back();
     }
 
+    /** Light / dark / same as device. Also kept in a cookie so the login page matches. */
+    public function theme(Request $request)
+    {
+        $data = $request->validate(['theme' => ['required', Rule::in(array_keys(User::THEMES))]]);
+        $request->user()->update($data);
+        cookie()->queue(cookie('crm_theme', $data['theme'], 60 * 24 * 365, null, null, null, true, false, 'lax'));
+
+        return back();
+    }
+
     public function password(Request $request)
     {
         $request->validate([

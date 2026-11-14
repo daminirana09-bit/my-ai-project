@@ -12,7 +12,7 @@
     $initials = collect(explode(' ', $me->name))->map(fn ($w) => mb_substr($w, 0, 1))->take(2)->join('');
 @endphp
 <!doctype html>
-<html lang="{{ app()->getLocale() === 'hing' ? 'hi-Latn' : app()->getLocale() }}">
+<html lang="{{ app()->getLocale() === 'hing' ? 'hi-Latn' : app()->getLocale() }}"@if(in_array(auth()->user()?->theme, ['light', 'dark'], true)) data-theme="{{ auth()->user()->theme }}"@endif>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -96,6 +96,7 @@
         <input type="hidden" name="type" value="{{ $nextPunch }}">
         <button class="btn {{ $nextPunch === 'in' ? 'good' : 'bad' }}"><x-icon name="clock"/>{{ $nextPunch === 'in' ? __('Punch in') : __('Punch out') }}</button>
       </form>
+      <form method="post" action="{{ route('profile.theme') }}" data-theme-toggle>@csrf<input type="hidden" name="theme" value="{{ $me->theme === 'dark' ? 'light' : 'dark' }}"><button class="iconbtn" aria-label="{{ __('Light / dark') }}" title="{{ __('Light / dark') }}"><span class="i-moon"><x-icon name="moon"/></span><span class="i-sun"><x-icon name="sun"/></span></button></form>
       <a class="iconbtn" href="{{ route('notifications') }}" aria-label="{{ __('Alerts') }}" title="{{ __('Alerts') }}"><x-icon name="bell"/>@if($unread)<span class="count">{{ $unread }}</span>@endif</a>
       <a class="userchip" href="{{ route('profile') }}" title="{{ __('My profile') }}"><span class="avatar">{{ mb_strtoupper($initials) }}</span><span><b>{{ $me->name }}</b><small>{{ __(\App\Models\User::ROLES[$me->role]) }}</small></span></a>
       <form method="post" action="{{ route('logout') }}">@csrf<button class="iconbtn" aria-label="{{ __('Log out') }}" title="{{ __('Log out') }}"><x-icon name="logout"/></button></form>

@@ -100,6 +100,18 @@ for(const u of ['/','/leads','/customers','/tasks','/products','/analytics','/se
 await logout(p);
 await login(p,'sohan@e2e.in');await p.goto(B+'/leads');expect(await has(p,'/leads/export'),'rep export button appears after admin allows it');await logout(p);
 await p.goto(B+'/login');await p.fill('#email','rita@e2e.in');await p.fill('#password',PW);await p.click('form button.p');await p.waitForLoadState();expect(await has(p,'flash bad'),'deactivated Rita cannot log in');
+// Theme: the moon/sun button switches light and dark and remembers it
+await login(p,'owner@e2e.in');
+const th0=await p.evaluate(()=>document.documentElement.getAttribute('data-theme'));
+await Promise.all([p.waitForNavigation(),p.click('form[data-theme-toggle] button')]);
+const th1=await p.evaluate(()=>document.documentElement.getAttribute('data-theme'));
+expect(th0===null&&th1==='dark','theme button switches to dark (was '+th0+', now '+th1+')');
+const bg=await p.evaluate(()=>getComputedStyle(document.body).backgroundColor);expect(bg==='rgb(11, 17, 14)','dark background applied, got '+bg);
+await p.goto(B+'/leads');expect(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='dark','dark kept on other pages');
+await Promise.all([p.waitForNavigation(),p.click('form[data-theme-toggle] button')]);
+expect(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='light','theme button switches back to light');
+await logout(p);expect(await p.evaluate(()=>document.documentElement.getAttribute('data-theme'))==='light','login page follows the choice');step();
+
 // 9. WhatsApp, website form, away cover, inbox, quotation, marketing
 const crypto=require('crypto');
 await login(p,'owner@e2e.in');

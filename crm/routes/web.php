@@ -101,6 +101,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
     Route::post('/profile/language', [ProfileController::class, 'language'])->name('profile.language');
+    Route::post('/profile/theme', [ProfileController::class, 'theme'])->name('profile.theme');
     Route::post('/profile/password', [ProfileController::class, 'password'])->name('profile.password');
     Route::post('/profile/2fa/start', [ProfileController::class, 'startTwoFactor'])->name('profile.2fa.start');
     Route::post('/profile/2fa/confirm', [ProfileController::class, 'confirmTwoFactor'])->name('profile.2fa.confirm');

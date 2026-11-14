@@ -23,3 +23,11 @@ document.addEventListener('change', function (e) {
   if (o && o.dataset.gst && g && !g.value) g.value = o.dataset.gst;
   if (q && !q.value) q.focus();
 });
+// Light / dark button: switch to the opposite of what is on screen now (even when following the device).
+document.addEventListener('submit', function (e) {
+  var f = e.target.closest('form[data-theme-toggle]');
+  if (!f) return;
+  var set = document.documentElement.getAttribute('data-theme');
+  var dark = set ? set === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  f.querySelector('input[name="theme"]').value = dark ? 'light' : 'dark';
+});
