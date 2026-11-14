@@ -51,20 +51,32 @@ class Client
 
     public function sendDocument(WhatsappNumber $from, string $to, string $path, string $filename, string $caption = ''): array
     {
+        return $this->sendFile($from, $to, $path, $filename, 'application/pdf', 'document', $caption);
+    }
+
+    /** Uploads the file to WhatsApp, then sends it as a document or an image. */
+    public function sendFile(WhatsappNumber $from, string $to, string $path, string $filename, string $mime, string $kind, string $caption = ''): array
+    {
+        if (! $this->configured()) {
+            return ['ok' => false, 'id' => null, 'error' => 'WhatsApp is not set up yet (WhatsApp settings).'];
+        }
         $c = CompanySetting::current();
         try {
-            $up = Http::withToken((string) $c->wa('access_token'))->timeout(30)
-                ->attach('file', fopen($path, 'r'), $filename, ['Content-Type' => 'application/pdf'])
-                ->post($this->url($from->phone_number_id.'/media'), ['messaging_product' => 'whatsapp', 'type' => 'application/pdf']);
+            $up = Http::withToken((string) $c->wa('access_token'))->timeout(60)
+                ->attach('file', fopen($path, 'r'), $filename, ['Content-Type' => $mime])
+                ->post($this->url($from->phone_number_id.'/media'), ['messaging_product' => 'whatsapp', 'type' => $mime]);
             if (! $up->successful() || ! $up->json('id')) {
                 return ['ok' => false, 'id' => null, 'error' => $this->error($up->json(), $up->status())];
             }
         } catch (Throwable $e) {
             return ['ok' => false, 'id' => null, 'error' => 'Could not reach WhatsApp: '.class_basename($e)];
         }
+        $media = ['id' => $up->json('id')] + ($caption !== '' ? ['caption' => mb_substr($caption, 0, 1000)] : []);
+        if ($kind === 'document') {
+            $media['filename'] = $filename;
+        }
 
-        return $this->post($from, ['messaging_product' => 'whatsapp', 'to' => $to, 'type' => 'document',
-            'document' => ['id' => $up->json('id'), 'filename' => $filename, 'caption' => $caption]]);
+        return $this->post($from, ['messaging_product' => 'whatsapp', 'to' => $to, 'type' => $kind, $kind => $media]);
     }
 
     private function post(WhatsappNumber $from, array $payload): array

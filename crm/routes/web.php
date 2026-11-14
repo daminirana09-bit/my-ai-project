@@ -64,6 +64,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/analytics', AnalyticsController::class)->name('analytics');
 
     Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/catalogue', [\App\Http\Controllers\CatalogueController::class, 'index'])->name('catalogue.index');
+    Route::post('/catalogue', [\App\Http\Controllers\CatalogueController::class, 'store'])->middleware('throttle:20,1')->name('catalogue.store');
+    Route::get('/catalogue/{file}/download', [\App\Http\Controllers\CatalogueController::class, 'download'])->name('catalogue.download');
+    Route::post('/catalogue/{file}/replace', [\App\Http\Controllers\CatalogueController::class, 'replace'])->middleware('throttle:20,1')->name('catalogue.replace');
+    Route::delete('/catalogue/{file}', [\App\Http\Controllers\CatalogueController::class, 'destroy'])->name('catalogue.destroy');
+    Route::post('/catalogue/{file}/share', [\App\Http\Controllers\CatalogueController::class, 'share'])->name('catalogue.share');
+    Route::post('/catalogue/{file}/unshare', [\App\Http\Controllers\CatalogueController::class, 'unshare'])->name('catalogue.unshare');
+    Route::post('/catalogue/{file}/import', [\App\Http\Controllers\CatalogueController::class, 'importProducts'])->middleware('throttle:10,1')->name('catalogue.import');
+    Route::post('/leads/{lead}/send-file', [\App\Http\Controllers\CatalogueController::class, 'sendToLead'])->middleware('throttle:20,1')->name('leads.send-file');
+    Route::get('/share', [\App\Http\Controllers\SharingController::class, 'index'])->name('share');
+    Route::post('/share', [\App\Http\Controllers\SharingController::class, 'update'])->name('share.update');
+    Route::post('/leads/{lead}/share/{kind}', [\App\Http\Controllers\SharingController::class, 'send'])->middleware('throttle:30,1')->name('leads.share')->where('kind', 'profile|review');
     Route::get('/products/new', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
     Route::get('/products/export', [ProductController::class, 'export'])->middleware('throttle:10,1')->name('products.export');

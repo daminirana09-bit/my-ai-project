@@ -45,6 +45,8 @@
         <a class="sb-link {{ $on('clashes.*') }}" href="{{ route('clashes.index') }}"><x-icon name="clash"/><span class="sp">{{ __('Lead clashes') }}</span>@if($openClashes)<span class="count">{{ $openClashes }}</span>@endif</a>
       @endif
       <a class="sb-link {{ $on('products.*') }}" href="{{ route('products.index') }}"><x-icon name="products"/>{{ __('Products') }}</a>
+      <a class="sb-link {{ $on('catalogue.*') }}" href="{{ route('catalogue.index') }}"><x-icon name="folder"/>{{ __('Catalogue & files') }}</a>
+      <a class="sb-link {{ $on('share') }}" href="{{ route('share') }}"><x-icon name="star"/>{{ __('Share & reviews') }}</a>
       @if($me->allows('view_analytics'))
         <a class="sb-link {{ $on('analytics') }}" href="{{ route('analytics') }}"><x-icon name="analytics"/>{{ __('Analytics') }}</a>
       @endif

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Campaign extends Model
 {
     /** What can fill a template's {{1}}, {{2}}… */
-    public const VARIABLES = ['contact_name' => 'Contact name', 'firm_name' => 'Firm name', 'city' => 'City', 'owner_name' => 'Salesperson name', 'company' => 'Your company name'];
+    public const VARIABLES = ['contact_name' => 'Contact name', 'firm_name' => 'Firm name', 'city' => 'City', 'owner_name' => 'Salesperson name', 'company' => 'Your company name', 'review_link' => 'Google review link', 'website' => 'Website'];
 
     protected $fillable = ['name', 'whatsapp_number_id', 'template_name', 'template_language', 'filters', 'variables', 'status', 'total', 'created_by', 'started_at'];
 

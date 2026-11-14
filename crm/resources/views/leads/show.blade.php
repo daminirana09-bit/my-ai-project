@@ -55,6 +55,30 @@
     </section>
     @endif
 
+    @php $shareFiles = \App\Models\ProductFile::orderBy('title')->get(['id', 'title', 'extension']); @endphp
+    <section class="card form" id="share">
+      <div class="ch"><h2>{{ __('Share with this client') }}</h2>@if($lead->review_requested_at)<span class="pill good">{{ __('Review asked :d', ['d' => $lead->review_requested_at->format('d M')]) }}</span>@endif</div>
+      @error('share')<p class="flash bad">{{ $message }}</p>@enderror
+      <div class="sharegrid">
+        @foreach(['profile' => __('Company profile & links'), 'review' => __('Ask for Google review')] as $k => $label)
+          <div class="sharebox"><b>{{ $label }}</b>
+            <div class="row">
+              <form method="post" action="{{ route('leads.share', [$lead, $k]) }}">@csrf<button class="btn sm p"><x-icon name="chat"/>{{ __('Send on WhatsApp') }}</button></form>
+              <form method="post" action="{{ route('leads.share', [$lead, $k]) }}" target="_blank">@csrf<input type="hidden" name="own" value="1"><button class="btn sm">{{ __('Open in my WhatsApp') }}</button></form>
+            </div>
+          </div>
+        @endforeach
+      </div>
+      @if($shareFiles->isNotEmpty())
+        <form method="post" action="{{ route('leads.send-file', $lead) }}" class="row">@csrf
+          <div class="field grow"><label for="file_id">{{ __('Price list / catalogue') }}</label><select id="file_id" name="file_id" required>@foreach($shareFiles as $f)<option value="{{ $f->id }}">{{ $f->title }} ({{ strtoupper($f->extension) }})</option>@endforeach</select></div>
+          <button class="btn"><x-icon name="chat"/>{{ __('Send file on WhatsApp') }}</button>
+        </form>
+      @else
+        <p class="small muted">{{ __('Upload price lists and catalogues under Catalogue & files to send them from here.') }}</p>
+      @endif
+    </section>
+
     <div class="card"><h2>{{ __('History') }}</h2>
       <div class="timeline">
         @forelse($lead->activities as $a)

@@ -160,7 +160,7 @@ class LeadController extends Controller
     {
         $me = $request->user();
         abort_unless($this->canExport($me), 403, __('Export is turned off for your role. Ask your admin.'));
-        $format = $request->query('format') === 'csv' ? 'csv' : 'xlsx';
+        $format = \App\Services\Sheets::format($request->query('format'));
         $query = $this->filtered($request);
         $count = (clone $query)->count();
         AuditLog::record('lead.export', $format, ['rows' => $count, 'filters' => $request->only(['status', 'source', 'owner', 'q'])]);
@@ -181,11 +181,11 @@ class LeadController extends Controller
         $me = $request->user();
         abort_unless($me->allows('import_leads'), 403);
         $request->validate([
-            'file' => ['required', 'file', 'max:5120', 'mimes:xlsx,csv,txt'],
+            'file' => ['required', 'file', 'max:10240', 'extensions:'.implode(',', \App\Services\Sheets::IMPORT)],
             'owner_id' => ['nullable', 'integer'],
-        ]);
+        ], ['file.extensions' => __('Use an Excel (.xlsx), CSV or ODS file. An old .xls file: open it and save as .xlsx.')]);
         $file = $request->file('file');
-        $ext = strtolower($file->getClientOriginalExtension()) === 'xlsx' ? 'xlsx' : 'csv';
+        $ext = strtolower($file->getClientOriginalExtension());
         $assignTo = $me->canManage() && $request->filled('owner_id')
             ? User::active()->visibleTo($me)->findOrFail((int) $request->owner_id) : null;
 

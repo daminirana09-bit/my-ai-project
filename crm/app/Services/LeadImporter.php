@@ -4,11 +4,9 @@ namespace App\Services;
 
 use App\Models\Lead;
 use App\Models\User;
-use OpenSpout\Reader\CSV\Reader as CsvReader;
-use OpenSpout\Reader\XLSX\Reader as XlsxReader;
 
 /**
- * Reads leads from an Excel (.xlsx) or CSV file. A Google Sheet is imported by
+ * Reads leads from Excel (.xlsx), CSV or OpenDocument (.ods) files. A Google Sheet is imported by
  * downloading it as .xlsx or .csv first: the sheet never has to be made public.
  */
 class LeadImporter
@@ -138,21 +136,7 @@ class LeadImporter
     /** @return iterable<int, array<int, mixed>> */
     private function readRows(string $path, string $extension): iterable
     {
-        $reader = strtolower($extension) === 'xlsx' ? new XlsxReader : new CsvReader;
-        $reader->open($path);
-        $rows = [];
-        foreach ($reader->getSheetIterator() as $sheet) {
-            foreach ($sheet->getRowIterator() as $row) {
-                $rows[] = array_map(fn ($v) => $v instanceof \DateTimeInterface ? $v->format('Y-m-d') : $v, $row->toArray());
-                if (count($rows) > self::MAX_ROWS + 2) {
-                    break;
-                }
-            }
-            break; // first sheet only
-        }
-        $reader->close();
-
-        return $rows;
+        return Sheets::rows($path, $extension, self::MAX_ROWS + 2);
     }
 
     /** @return array<string,int> field => column index */

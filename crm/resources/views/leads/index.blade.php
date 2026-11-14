@@ -8,6 +8,7 @@
     @if($canExport)
       <a class="btn" href="{{ route('leads.export', array_merge($q, ['format' => 'xlsx'])) }}"><x-icon name="download"/>{{ __('Export Excel') }}</a>
       <a class="btn" href="{{ route('leads.export', array_merge($q, ['format' => 'csv'])) }}"><x-icon name="download"/>{{ __('Export CSV') }}</a>
+      <a class="btn" href="{{ route('leads.export', array_merge($q, ['format' => 'ods'])) }}"><x-icon name="download"/>ODS</a>
     @endif
     @if($me->allows('import_leads'))<a class="btn" href="{{ route('leads.import') }}"><x-icon name="upload"/>{{ __('Import') }}</a>@endif
     <a class="btn p" href="{{ route('leads.create') }}"><x-icon name="plus"/>{{ __('New lead') }}</a>

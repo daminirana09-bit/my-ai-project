@@ -41,6 +41,7 @@ class Lead extends Model
             'last_contact_at' => 'datetime',
             'next_follow_up_on' => 'date',
             'whatsapp_opt_out' => 'boolean',
+            'review_requested_at' => 'datetime',
             'tags' => 'array',
         ];
     }

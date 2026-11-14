@@ -16,7 +16,11 @@ class LeadExporter
     public function write(Builder $leads, string $format): string
     {
         $path = tempnam(sys_get_temp_dir(), 'leads');
-        $writer = $format === 'csv' ? new CsvWriter : new XlsxWriter;
+        $writer = match ($format) {
+            'csv' => new CsvWriter,
+            'ods' => new \OpenSpout\Writer\ODS\Writer,
+            default => new XlsxWriter,
+        };
         $writer->openToFile($path);
         $writer->addRow(Row::fromValues(self::HEADER));
 

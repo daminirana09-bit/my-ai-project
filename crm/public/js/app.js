@@ -31,3 +31,12 @@ document.addEventListener('submit', function (e) {
   var dark = set ? set === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
   f.querySelector('input[name="theme"]').value = dark ? 'light' : 'dark';
 });
+// Copy buttons (links and ready messages)
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('[data-copy]');
+  if (!b) return;
+  var text = b.getAttribute('data-copy'), done = function () { var t = b.textContent; b.textContent = '✓'; setTimeout(function () { b.textContent = t; }, 1200); };
+  if (navigator.clipboard && window.isSecureContext) { navigator.clipboard.writeText(text).then(done); return; }
+  var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.className = 'sr'; document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch (x) {} document.body.removeChild(ta);
+});

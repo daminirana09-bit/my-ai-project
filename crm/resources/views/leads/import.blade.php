@@ -2,7 +2,7 @@
 @section('title', __('Import leads'))
 @section('content')
 @php $r = session('import'); @endphp
-<div class="head"><div><h1>{{ __('Import leads') }}</h1><p>{{ __('Upload an Excel (.xlsx) or CSV file. Column names are matched automatically, for example Firm name, Contact, Mobile, City, GST, Source, Status.') }}</p></div>
+<div class="head"><div><h1>{{ __('Import leads') }}</h1><p>{{ __('Upload an Excel (.xlsx), CSV or ODS file. Column names are matched automatically, for example Firm name, Contact, Mobile, City, GST, Source, Status.') }}</p></div>
   <a class="btn" href="{{ route('leads.template') }}">{{ __('Download sample file') }}</a></div>
 
 @if($r)
@@ -21,7 +21,7 @@
 
 <form method="post" action="{{ route('leads.import.run') }}" enctype="multipart/form-data" class="card form">
   @csrf
-  <div class="field"><label for="file">{{ __('File (.xlsx or .csv, up to 5 MB)') }}</label><input type="file" id="file" name="file" accept=".xlsx,.csv" required></div>
+  <div class="field"><label for="file">{{ __('File (.xlsx, .csv or .ods, up to 10 MB)') }}</label><input type="file" id="file" name="file" accept=".xlsx,.csv,.ods,.tsv,.txt" required></div>
   @if($owners->isNotEmpty())
     <div class="field"><label for="owner_id">{{ __('Give these leads to') }}</label><select id="owner_id" name="owner_id"><option value="">{{ __('Me, or the "Salesperson" column in the file') }}</option>@foreach($owners as $o)<option value="{{ $o->id }}">{{ $o->name }}</option>@endforeach</select></div>
   @else

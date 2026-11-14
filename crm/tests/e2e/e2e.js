@@ -128,6 +128,19 @@ r=await p.request.get(B+'/webhook/whatsapp?hub.mode=subscribe&hub.verify_token=w
 r=await p.request.post(formUrl,{form:{name:'Web Visitor',phone:'+91 97000 11122',firm:'Web Enquiry Firm',city:'Pune',message:'Need PCD franchise list',website:''}});expect(r.status()===200,'website form accepted '+r.status());
 r=await p.request.post(B+'/webhook/lead/wrongtoken',{form:{name:'X',phone:'9999999999'}});expect(r.status()===404,'website form with wrong token refused '+r.status());
 await p.goto(B+'/leads?q=Web+Enquiry');expect(await has(p,'Web Enquiry Firm'),'website enquiry became a lead');
+// Catalogue, share link, company links
+fs.writeFileSync(SP+'/e2e-price-list.pdf','%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n');
+await p.goto(B+'/catalogue');await p.setInputFiles('#file',SP+'/e2e-price-list.pdf');await p.fill('#title','E2E Price list');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/catalogue"] button.p')]);expect(await has(p,'E2E Price list'),'catalogue file uploaded');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/share"] button')]);
+const shareUrl=await p.$eval('p.secret',e=>e.textContent.trim());
+{const anon=await b.newContext();const rr=await anon.request.get(shareUrl);expect(rr.status()===200&&(await rr.body()).slice(0,4).toString()==='%PDF','share link works without login');await anon.close();}
+r=await p.request.get(B+'/products/export?format=pdf');expect(r.status()===200&&(await r.body()).slice(0,4).toString()==='%PDF','price list PDF');
+await p.goto(B+'/share');await p.fill('#link_website','https://e2e-pharma.example');await p.fill('#link_google_review','https://g.page/r/e2e/review');await p.fill('#link_facebook','https://facebook.com/e2epharma');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/share"] button.p')]);expect(await has(p,'flash ok')&&await has(p,'https://facebook.com/e2epharma'),'company links saved and shown');
+expect(await has(p,'https://g.page/r/e2e/review'),'review link in ready message');
+{const m=await newPage({width:390,height:844});await login(m.p,'owner@e2e.in');for(const u of ['/catalogue','/share','/products']){await m.p.goto(B+u);const o=await overflow(m.p);expect(o<=0,'mobile overflow '+u+' '+o)}await m.c.close();}
+step();
 // Lead integrations: JustDial push, Google Ads lead form, other app with its own source; tags on leads
 await p.goto(B+'/integrations');
 for(const pf of ['justdial','google_ads','custom']){await p.check(`#i-${pf} input[name="enabled"]`);await Promise.all([p.waitForNavigation(),p.click(`#i-${pf} form[action$="/integrations/${pf}"] button.p`)]);expect(await has(p,'flash ok'),'integration saved '+pf);}
@@ -171,6 +184,10 @@ expect(await has(p,'कृपया रेट लिस्ट'),'client message 
 expect(/[ऀ-ॿ]/.test(await p.$eval('form.sug .o',e=>e.textContent).catch(()=>'')),'suggestion is in Hindi (client language)');
 const bubbles=await p.$$eval('.bubble',e=>e.map(x=>x.className));expect(bubbles.length===2&&bubbles.some(c=>c.includes('auto')),'one inbound + one auto-reply (duplicate ignored), got '+bubbles.join('|'));
 await p.fill('#body','Ji, rate list bhej raha hoon');await Promise.all([p.waitForNavigation(),p.click('form.compose button')]);expect(await has(p,'Ji, rate list bhej raha hoon'),'reply recorded (fake token: failed, shown)');
+// Share card on the lead page: WhatsApp not reachable with the fake token, so a clear error, never a crash
+await p.goto(B+'/leads');await Promise.all([p.waitForNavigation(),p.click('a:has-text("Clash Firm")')]);
+expect((await p.locator('form[action$="/share/review"]').count())===2&&await has(p,'E2E Price list'),'share card on lead page');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/share/review"]:not([target]) button')]);expect(await has(p,'flash bad'),'review request error shown');
 // Quotation with PDF
 await p.goto(B+'/quotes/new');await p.selectOption('#lead_id',{label:'Clash Firm, Indore'});await p.selectOption('#p0',{label:'E2E Pan-D'});await p.fill('#q0','1000');
 expect((await p.inputValue('#r0'))!=='','rate filled from product');

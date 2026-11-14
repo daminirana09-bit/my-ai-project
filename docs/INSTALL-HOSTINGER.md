@@ -144,7 +144,16 @@ The small script in the code fills `utm_source`, `utm_medium`, `utm_campaign`, `
 and `referrer`, so a lead is tagged **Google Ads**, **Facebook Ads**, **Instagram Ads**,
 **Google (search)** or **Website** correctly.
 
-## 8. Lock it down (Rule 1)
+## 8. Company links, catalogue and reviews
+
+- **Share & reviews** (admin): enter website, phone, email, social pages and the **Google review link**
+  (Google Business Profile → "Ask for reviews"). The team then sends the company profile or a review
+  request from any lead in one click. For one message to all customers, get a WhatsApp template such as
+  `review_request` approved in Meta and use the "Review request to all won customers" button.
+- **Catalogue & files**: upload price lists and catalogues (up to 25 MB). Files stay outside the website
+  folder; share links end after the chosen days and can be stopped.
+
+## 9. Lock it down (Rule 1)
 
 - Put the office's fixed IP (and VPN IP, if any) in `CRM_ALLOWED_IPS` in `.env`, then
   `php artisan config:cache`. The WhatsApp webhook, lead integrations and website form keep working from anywhere.

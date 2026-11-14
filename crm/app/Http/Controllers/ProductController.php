@@ -7,16 +7,16 @@ use App\Models\MasterOption;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use OpenSpout\Common\Entity\Row;
-use OpenSpout\Reader\CSV\Reader as CsvReader;
-use OpenSpout\Reader\XLSX\Reader as XlsxReader;
-use OpenSpout\Writer\XLSX\Writer;
+use App\Models\CompanySetting;
+use App\Services\ProductImporter;
+use App\Services\Sheets;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Illuminate\Support\Facades\Storage;
 
 /** Product list with rates, packing and MOQ. Everyone can view; editing needs the permission. */
 class ProductController extends Controller
 {
-    private const HEADER = ['Name', 'Composition', 'Form', 'Packing', 'Category', 'Rate', 'Unit', 'MOQ', 'HSN', 'GST %', 'Active', 'Notes'];
-
     public function index(Request $request)
     {
         $products = Product::search($request->q)
@@ -59,79 +59,58 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('ok', __('Product saved.'));
     }
 
+    /** Product list as Excel, CSV or ODS (needs edit rights), or as a PDF price list (anyone, to share with clients). */
     public function export(Request $request)
     {
-        $this->authorizeEdit($request);
-        $path = tempnam(sys_get_temp_dir(), 'prd');
-        $w = new Writer;
-        $w->openToFile($path);
-        $w->addRow(Row::fromValues(self::HEADER));
-        Product::orderBy('name')->chunk(500, function ($chunk) use ($w) {
-            foreach ($chunk as $p) {
-                $w->addRow(Row::fromValues([$p->name, $p->composition, $p->form, $p->packing, $p->category, $p->rate !== null ? (float) $p->rate : null, $p->unit, $p->moq, $p->hsn, (float) $p->gst_percent, $p->active ? 'Yes' : 'No', $p->notes]));
-            }
-        });
-        $w->close();
-        AuditLog::record('product.export');
+        $format = (string) $request->query('format', 'xlsx');
+        if ($format === 'pdf') {
+            AuditLog::record('product.export', 'pdf');
 
-        return response()->download($path, 'products-'.now()->format('Y-m-d').'.xlsx')->deleteFileAfterSend();
+            return response($this->priceListPdf(), 200, ['Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="price-list-'.now()->format('Y-m-d').'.pdf"']);
+        }
+        $this->authorizeEdit($request);
+        $format = Sheets::format($format);
+        $rows = Product::orderBy('name')->get()->map(fn ($p) => [$p->name, $p->composition, $p->form, $p->packing, $p->category,
+            $p->rate !== null ? (float) $p->rate : null, $p->unit, $p->moq, $p->hsn, (float) $p->gst_percent, $p->active ? 'Yes' : 'No', $p->notes]);
+        $path = Sheets::write($format, ProductImporter::HEADER, $rows);
+        AuditLog::record('product.export', $format);
+
+        return response()->download($path, 'products-'.now()->format('Y-m-d').'.'.$format)->deleteFileAfterSend();
+    }
+
+    /** Active products with rates, on the company letterhead. */
+    public function priceListPdf(): string
+    {
+        $c = CompanySetting::current();
+        $logo = null;
+        if ($c->logo_path && Storage::disk('local')->exists($c->logo_path)) {
+            $file = Storage::disk('local')->path($c->logo_path);
+            $logo = 'data:'.mime_content_type($file).';base64,'.base64_encode(file_get_contents($file));
+        }
+        $opt = new Options;
+        $opt->set('isRemoteEnabled', false); // never fetch anything from the internet
+        $opt->set('defaultFont', 'DejaVu Sans');
+        $pdf = new Dompdf($opt);
+        $products = Product::where('active', true)->orderBy('category')->orderBy('name')->get();
+        $pdf->loadHtml(view('products.pdf', ['c' => $c, 'logo' => $logo, 'groups' => $products->groupBy(fn ($p) => $p->category ?: __('Other'))])->render(), 'UTF-8');
+        $pdf->setPaper('A4');
+        $pdf->render();
+
+        return $pdf->output();
     }
 
     /** Adds new products and updates existing ones with the same name and packing. */
-    public function import(Request $request)
+    public function import(Request $request, ProductImporter $importer)
     {
         $this->authorizeEdit($request);
-        $request->validate(['file' => ['required', 'file', 'max:5120', 'mimes:xlsx,csv,txt']]);
+        $request->validate(['file' => ['required', 'file', 'max:10240', 'extensions:'.implode(',', Sheets::IMPORT)]],
+            ['file.extensions' => __('Use an Excel (.xlsx), CSV or ODS file. An old .xls file: open it and save as .xlsx.')]);
         $file = $request->file('file');
-        $reader = strtolower($file->getClientOriginalExtension()) === 'xlsx' ? new XlsxReader : new CsvReader;
-        $reader->open($file->getRealPath());
-        $header = null;
-        $added = $updated = 0;
-        foreach ($reader->getSheetIterator() as $sheet) {
-            foreach ($sheet->getRowIterator() as $row) {
-                $c = $row->toArray();
-                if ($header === null) {
-                    $header = array_map(fn ($h) => strtolower(trim((string) $h)), $c);
-                    continue;
-                }
-                $get = function (array $names) use ($header, $c) {
-                    foreach ($names as $n) {
-                        $i = array_search($n, $header, true);
-                        if ($i !== false && isset($c[$i]) && trim((string) $c[$i]) !== '') {
-                            return trim((string) $c[$i]);
-                        }
-                    }
+        $r = $importer->import($file->getRealPath(), strtolower($file->getClientOriginalExtension()));
+        AuditLog::record('product.import', $file->getClientOriginalName(), $r);
 
-                    return null;
-                };
-                $name = $get(['name', 'product', 'product name', 'brand']);
-                if (! $name) {
-                    continue;
-                }
-                $num = fn ($v) => $v !== null && is_numeric(str_replace([',', '₹'], '', $v)) ? str_replace([',', '₹'], '', $v) : null;
-                $data = [
-                    'composition' => $get(['composition', 'salt', 'generic']),
-                    'form' => $get(['form', 'dosage form', 'type']),
-                    'category' => $get(['category', 'therapy', 'segment']),
-                    'rate' => $num($get(['rate', 'price', 'ptr'])),
-                    'unit' => $get(['unit']) ?? 'strip',
-                    'moq' => $num($get(['moq', 'minimum order'])),
-                    'hsn' => $get(['hsn', 'hsn code']),
-                    'gst_percent' => $num($get(['gst %', 'gst', 'gst percent'])) ?? 5,
-                    'active' => ! in_array(strtolower((string) $get(['active'])), ['no', '0', 'false'], true),
-                    'notes' => $get(['notes', 'remarks']),
-                ];
-                $packing = $get(['packing', 'pack', 'pack size']);
-                $p = Product::firstOrNew(['name' => mb_substr($name, 0, 255), 'packing' => $packing]);
-                $p->exists ? $updated++ : $added++;
-                $p->fill($data)->save();
-            }
-            break;
-        }
-        $reader->close();
-        AuditLog::record('product.import', $file->getClientOriginalName(), ['added' => $added, 'updated' => $updated]);
-
-        return redirect()->route('products.index')->with('ok', __('Products imported: :a added, :u updated.', ['a' => $added, 'u' => $updated]));
+        return redirect()->route('products.index')->with('ok', __('Products imported: :a added, :u updated.', ['a' => $r['added'], 'u' => $r['updated']]));
     }
 
     private function authorizeEdit(Request $request): void

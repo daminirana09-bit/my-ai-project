@@ -40,6 +40,12 @@ One installation per company. Each company sets its own name, logo, timings and 
   (Zapier, Pabbly, LinkedIn, IVR). Every lead is tagged with its platform; repeats are ignored;
   a known client gets a note instead of a second lead.
 - **Email inbox:** enquiry mails from any portal or client become leads (IMAP, read-only), tagged with the portal.
+- **Catalogue & files:** price lists, catalogues, COAs in any common format (PDF, Excel, CSV, ODS, Word,
+  PowerPoint, photos) for the whole team, with versions, team alerts, expiring share links and
+  "send on WhatsApp" from a lead; a spreadsheet there fills the product list.
+- **Every format:** products and leads import/export as Excel, CSV (comma/semicolon) and ODS; PDF price list.
+- **Share & reviews:** company website, contact and social pages for the team; one-click company profile
+  and Google review request to a client (CRM WhatsApp, or the rep's own WhatsApp); bulk review campaign.
 - **Light / dark theme:** each person picks light, dark or same as their device.
 - **Website enquiry form:** a secret link; tags Google Ads, Google search, Facebook/Instagram ads.
 - **Tags:** source and tags on every lead (reference, walk-in…), filter by source or tag, in export/import.
@@ -63,4 +69,4 @@ php artisan test
 **Install for a company:** build the zip with `tools/make-release.sh` (includes `vendor/`, no
 tests, no `.env`), then follow `../docs/INSTALL-HOSTINGER.md`.
 
-**Tests:** `php artisan test` (114 feature tests) and the browser run in `tests/e2e/README.md`.
+**Tests:** `php artisan test` (121 feature tests) and the browser run in `tests/e2e/README.md`.
