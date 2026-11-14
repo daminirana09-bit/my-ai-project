@@ -53,8 +53,8 @@ const typed = (frame: number, text: string, from: number, to: number) => text.sl
 
 export const Stage: React.FC<{ L: Line[]; wAt: (li: number, n: number) => number; handle: string }> = ({ L, wAt, handle }) => {
   const { frame, sp, fade } = useA();
-  const end = (i: number) => (i + 1 < L.length ? L[i + 1].s : L[i].e + 40);
   const from = (i: number) => Math.max(0, L[i].s - 4);
+  const end = (i: number) => (i + 1 < L.length ? from(i + 1) : L[i].e + 40); // next beat starts as this one ends
 
   // 0: incoming call
   const ring = Math.sin(frame / 1.6) * 6 * (frame < L[0].e ? 1 : 0);

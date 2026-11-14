@@ -1,1 +1,639 @@
-[]
+[
+  {
+    "word": "Website?",
+    "start": 0.2,
+    "end": 1.12,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "Mere",
+    "start": 1.4,
+    "end": 1.72,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "paas",
+    "start": 1.76,
+    "end": 1.96,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "toh",
+    "start": 2.04,
+    "end": 2.28,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "patient",
+    "start": 2.44,
+    "end": 2.84,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "word",
+    "start": 2.92,
+    "end": 3.08,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "of",
+    "start": 3.107,
+    "end": 3.213,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "mouth",
+    "start": 3.24,
+    "end": 3.48,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "se",
+    "start": 3.52,
+    "end": 3.6,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "aate",
+    "start": 3.64,
+    "end": 3.88,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "hain.",
+    "start": 3.92,
+    "end": 4.44,
+    "who": "N",
+    "line": 0
+  },
+  {
+    "word": "Doctor",
+    "start": 4.706,
+    "end": 5.026,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "ma'am,",
+    "start": 5.066,
+    "end": 5.546,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "aajkal",
+    "start": 5.746,
+    "end": 6.386,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "word",
+    "start": 6.546,
+    "end": 6.786,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "of",
+    "start": 6.818,
+    "end": 6.946,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "mouth",
+    "start": 7.026,
+    "end": 7.346,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "bhi",
+    "start": 7.386,
+    "end": 7.506,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "Google",
+    "start": 7.586,
+    "end": 7.826,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "pe",
+    "start": 7.906,
+    "end": 7.986,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "check",
+    "start": 8.026,
+    "end": 8.226,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "hota",
+    "start": 8.279,
+    "end": 8.466,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "hai.",
+    "start": 8.506,
+    "end": 9.026,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "Toh",
+    "start": 9.29,
+    "end": 9.41,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "main",
+    "start": 9.45,
+    "end": 9.69,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "Instagram",
+    "start": 9.73,
+    "end": 10.33,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "pe",
+    "start": 10.41,
+    "end": 10.65,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "before-after",
+    "start": 10.73,
+    "end": 11.45,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "photos",
+    "start": 11.53,
+    "end": 11.93,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "daal",
+    "start": 11.97,
+    "end": 12.17,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "deti",
+    "start": 12.21,
+    "end": 12.49,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "hoon!",
+    "start": 12.53,
+    "end": 12.97,
+    "who": "N",
+    "line": 2
+  },
+  {
+    "word": "Na",
+    "start": 13.221,
+    "end": 13.221,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "na!",
+    "start": 13.301,
+    "end": 13.621,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "National",
+    "start": 13.701,
+    "end": 14.661,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "Dental",
+    "start": 14.741,
+    "end": 15.021,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "Commission",
+    "start": 15.061,
+    "end": 15.701,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "ne",
+    "start": 15.741,
+    "end": 15.861,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "testimonial",
+    "start": 16.181,
+    "end": 16.981,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "aur",
+    "start": 17.061,
+    "end": 17.221,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "before-after",
+    "start": 17.301,
+    "end": 18.101,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "se",
+    "start": 18.181,
+    "end": 18.341,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "mana",
+    "start": 18.421,
+    "end": 18.661,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "kiya",
+    "start": 18.741,
+    "end": 18.981,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "hai.",
+    "start": 19.021,
+    "end": 19.621,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "Arre!",
+    "start": 19.869,
+    "end": 20.509,
+    "who": "N",
+    "line": 4
+  },
+  {
+    "word": "Phir",
+    "start": 20.589,
+    "end": 20.829,
+    "who": "N",
+    "line": 4
+  },
+  {
+    "word": "patient",
+    "start": 20.869,
+    "end": 21.149,
+    "who": "N",
+    "line": 4
+  },
+  {
+    "word": "mujhe",
+    "start": 21.229,
+    "end": 21.469,
+    "who": "N",
+    "line": 4
+  },
+  {
+    "word": "dhoondhenge",
+    "start": 21.549,
+    "end": 22.029,
+    "who": "N",
+    "line": 4
+  },
+  {
+    "word": "kaise?",
+    "start": 22.069,
+    "end": 22.749,
+    "who": "N",
+    "line": 4
+  },
+  {
+    "word": "Website",
+    "start": 23.016,
+    "end": 23.576,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "pe",
+    "start": 23.616,
+    "end": 23.736,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "timing,",
+    "start": 23.776,
+    "end": 24.616,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "treatments",
+    "start": 24.696,
+    "end": 25.096,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "ki",
+    "start": 25.176,
+    "end": 25.256,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "jaankari,",
+    "start": 25.336,
+    "end": 26.216,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "online",
+    "start": 26.296,
+    "end": 26.656,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "appointment",
+    "start": 26.696,
+    "end": 27.256,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "aur",
+    "start": 27.576,
+    "end": 27.816,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "Google",
+    "start": 27.896,
+    "end": 28.136,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "profile—",
+    "start": 28.216,
+    "end": 28.696,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "sab",
+    "start": 29.256,
+    "end": 29.496,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "rules",
+    "start": 29.576,
+    "end": 29.816,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "ke",
+    "start": 29.896,
+    "end": 29.949,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "andar.",
+    "start": 29.976,
+    "end": 30.776,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "Kharcha?",
+    "start": 31.022,
+    "end": 31.902,
+    "who": "N",
+    "line": 6
+  },
+  {
+    "word": "Sirf",
+    "start": 32.236,
+    "end": 32.699,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "₹5,000",
+    "start": 32.699,
+    "end": 33.392,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "se",
+    "start": 33.392,
+    "end": 33.623,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "shuru.",
+    "start": 33.623,
+    "end": 34.316,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "Toh",
+    "start": 34.574,
+    "end": 34.814,
+    "who": "N",
+    "line": 8
+  },
+  {
+    "word": "pehle",
+    "start": 34.894,
+    "end": 35.214,
+    "who": "N",
+    "line": 8
+  },
+  {
+    "word": "kyun",
+    "start": 35.254,
+    "end": 35.414,
+    "who": "N",
+    "line": 8
+  },
+  {
+    "word": "nahi",
+    "start": 35.454,
+    "end": 35.614,
+    "who": "N",
+    "line": 8
+  },
+  {
+    "word": "bataya?",
+    "start": 35.694,
+    "end": 36.414,
+    "who": "N",
+    "line": 8
+  },
+  {
+    "word": "Aapka",
+    "start": 36.676,
+    "end": 36.996,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "bhi",
+    "start": 37.036,
+    "end": 37.156,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "clinic",
+    "start": 37.196,
+    "end": 37.476,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "hai?",
+    "start": 37.556,
+    "end": 37.956,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "Comment",
+    "start": 38.196,
+    "end": 38.516,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "karo",
+    "start": 38.556,
+    "end": 38.836,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "CLINIC—",
+    "start": 39.076,
+    "end": 39.476,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "DM",
+    "start": 40.036,
+    "end": 40.276,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "mein",
+    "start": 40.356,
+    "end": 40.476,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "details",
+    "start": 40.516,
+    "end": 40.836,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "bhej",
+    "start": 40.916,
+    "end": 41.076,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "dunga.",
+    "start": 41.156,
+    "end": 41.876,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "C-L-I-N-I-C…",
+    "start": 42.122,
+    "end": 45.002,
+    "who": "N",
+    "line": 10
+  },
+  {
+    "word": "ho",
+    "start": 45.002,
+    "end": 45.482,
+    "who": "N",
+    "line": 10
+  },
+  {
+    "word": "gaya!",
+    "start": 45.482,
+    "end": 46.682,
+    "who": "N",
+    "line": 10
+  }
+]

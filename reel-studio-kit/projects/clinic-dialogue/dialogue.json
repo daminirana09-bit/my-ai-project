@@ -1,20 +1,70 @@
 {
-  "voices": { "M": "onwK4e9ZLuTAKqWW03F9", "R": "JBFqnCBsd6RMkjVDRZzb" },
-  "voiceNames": { "M": "Daniel (premade, free) for Dr. Mehra", "R": "George (premade, free) for Arjun" },
+  "voices": {
+    "N": "EXAVITQu4vr4xnSDxMaL",
+    "R": "JBFqnCBsd6RMkjVDRZzb"
+  },
+  "voiceNames": {
+    "N": "Sarah (premade, free, female) for Dr. Neha Mehra",
+    "R": "George (premade, free, male) for Arjun"
+  },
   "model": "eleven_v4",
   "lang": "hi",
   "gap": 0.3,
   "lines": [
-    { "who": "M", "text": "Website? Mere paas toh patient word of mouth se aate hain.", "tts": "वेबसाइट? मेरे पास तो पेशेंट वर्ड ऑफ़ माउथ से आते हैं।" },
-    { "who": "R", "text": "Doctor sahab, aajkal word of mouth bhi Google pe check hota hai.", "tts": "डॉक्टर साहब, आजकल वर्ड ऑफ़ माउथ भी Google पे चेक होता है।" },
-    { "who": "M", "text": "Toh main Instagram pe before-after photos daal deta hoon!", "tts": "तो मैं Instagram पे बिफ़ोर-आफ़्टर फ़ोटोज़ डाल देता हूँ!" },
-    { "who": "R", "text": "Na na! National Dental Commission ne testimonial aur before-after se mana kiya hai.", "tts": "ना ना! नेशनल डेंटल कमीशन ने टेस्टिमोनियल और बिफ़ोर-आफ़्टर से मना किया है।" },
-    { "who": "M", "text": "Arre! Phir patient mujhe dhoondhenge kaise?", "tts": "अरे! फिर पेशेंट मुझे ढूँढेंगे कैसे?" },
-    { "who": "R", "text": "Website pe timing, treatments ki jaankari, online appointment aur Google profile — sab rules ke andar.", "tts": "वेबसाइट पे टाइमिंग, ट्रीटमेंट्स की जानकारी, ऑनलाइन अपॉइंटमेंट और Google प्रोफ़ाइल — सब रूल्स के अंदर।" },
-    { "who": "M", "text": "Kharcha?", "tts": "ख़र्चा?" },
-    { "who": "R", "text": "Sirf ₹5,000 se shuru.", "tts": "सिर्फ़ पाँच हज़ार से शुरू।" },
-    { "who": "M", "text": "Toh pehle kyun nahi bataya?", "tts": "तो पहले क्यों नहीं बताया?" },
-    { "who": "R", "text": "Aapka bhi clinic hai? Comment karo CLINIC — DM mein details bhej dunga.", "tts": "आपका भी क्लिनिक है? कमेंट करो CLINIC — DM में डिटेल्स भेज दूँगा।" },
-    { "who": "M", "text": "C-L-I-N-I-C… ho gaya!", "tts": "सी, एल, आई, एन, आई, सी... हो गया!" }
+    {
+      "who": "N",
+      "text": "Website? Mere paas toh patient word of mouth se aate hain.",
+      "tts": "वेबसाइट? मेरे पास तो पेशेंट वर्ड ऑफ़ माउथ से आते हैं।"
+    },
+    {
+      "who": "R",
+      "text": "Doctor ma'am, aajkal word of mouth bhi Google pe check hota hai.",
+      "tts": "डॉक्टर मैम, आजकल वर्ड ऑफ़ माउथ भी Google पे चेक होता है।"
+    },
+    {
+      "who": "N",
+      "text": "Toh main Instagram pe before-after photos daal deti hoon!",
+      "tts": "तो मैं Instagram पे बिफ़ोर-आफ़्टर फ़ोटोज़ डाल देती हूँ!"
+    },
+    {
+      "who": "R",
+      "text": "Na na! National Dental Commission ne testimonial aur before-after se mana kiya hai.",
+      "tts": "ना ना! नेशनल डेंटल कमीशन ने टेस्टिमोनियल और बिफ़ोर-आफ़्टर से मना किया है।"
+    },
+    {
+      "who": "N",
+      "text": "Arre! Phir patient mujhe dhoondhenge kaise?",
+      "tts": "अरे! फिर पेशेंट मुझे ढूँढेंगे कैसे?"
+    },
+    {
+      "who": "R",
+      "text": "Website pe timing, treatments ki jaankari, online appointment aur Google profile — sab rules ke andar.",
+      "tts": "वेबसाइट पे टाइमिंग, ट्रीटमेंट्स की जानकारी, ऑनलाइन अपॉइंटमेंट और Google प्रोफ़ाइल — सब रूल्स के अंदर।"
+    },
+    {
+      "who": "N",
+      "text": "Kharcha?",
+      "tts": "ख़र्चा?"
+    },
+    {
+      "who": "R",
+      "text": "Sirf ₹5,000 se shuru.",
+      "tts": "सिर्फ़ पाँच हज़ार से शुरू।"
+    },
+    {
+      "who": "N",
+      "text": "Toh pehle kyun nahi bataya?",
+      "tts": "तो पहले क्यों नहीं बताया?"
+    },
+    {
+      "who": "R",
+      "text": "Aapka bhi clinic hai? Comment karo CLINIC — DM mein details bhej dunga.",
+      "tts": "आपका भी क्लिनिक है? कमेंट करो CLINIC — DM में डिटेल्स भेज दूँगा।"
+    },
+    {
+      "who": "N",
+      "text": "C-L-I-N-I-C… ho gaya!",
+      "tts": "सी, एल, आई, एन, आई, सी... हो गया!"
+    }
   ]
 }
