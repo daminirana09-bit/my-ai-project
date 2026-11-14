@@ -39,3 +39,18 @@ if (! function_exists('t12')) {
         return $time ? date('g:i A', strtotime($time)) : '—';
     }
 }
+
+if (! function_exists('asset_v')) {
+    /**
+     * Link to a file in public/ with a short fingerprint of its content (css/app.css?v=3f9a…),
+     * so after an update every browser and the hosting CDN load the new file at once.
+     */
+    function asset_v(string $path): string
+    {
+        static $seen = [];
+        $file = public_path($path);
+        $seen[$path] ??= is_file($file) ? substr(md5_file($file), 0, 10) : '0';
+
+        return asset($path).'?v='.$seen[$path];
+    }
+}

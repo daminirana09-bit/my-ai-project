@@ -289,6 +289,8 @@ class FlowsTest extends CrmTestCase
     public function test_each_person_chooses_light_dark_or_device_theme(): void
     {
         $this->actingAs($this->repA)->get('/')->assertOk()->assertDontSee('data-theme="', false);
+        // CSS/JS links carry a fingerprint, so a browser never keeps an old copy after an update
+        $this->get('/')->assertSee('css/app.css?v='.substr(md5_file(public_path('css/app.css')), 0, 10), false)->assertSee('js/app.js?v=', false);
         $this->post('/profile/theme', ['theme' => 'dark'])->assertRedirect()->assertCookie('crm_theme', 'dark');
         $this->assertSame('dark', $this->repA->fresh()->theme);
         $this->get('/')->assertSee('data-theme="dark"', false);

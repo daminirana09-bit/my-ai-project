@@ -8,7 +8,7 @@
 <meta name="author" content="Solvix Web">
 <title>@yield('title') · {{ $company?->company_name ?? __('Sales CRM') }}</title>
 <link rel="icon" href="{{ asset('brand/favicon-32.png') }}">
-<link rel="stylesheet" href="{{ asset('css/app.css') }}">
+<link rel="stylesheet" href="{{ asset_v('css/app.css') }}">
 </head>
 <body>
 <div class="auth @yield('authclass')">

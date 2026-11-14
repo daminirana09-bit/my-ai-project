@@ -20,8 +20,8 @@
 <meta name="author" content="Solvix Web">
 <title>@yield('title', __('Dashboard')) · {{ $company->company_name }}</title>
 <link rel="icon" href="{{ asset('brand/favicon-32.png') }}">
-<link rel="stylesheet" href="{{ asset('css/app.css') }}">
-<script src="{{ asset('js/app.js') }}" defer></script>
+<link rel="stylesheet" href="{{ asset_v('css/app.css') }}">
+<script src="{{ asset_v('js/app.js') }}" defer></script>
 </head>
 <body>
 <div class="shell">
