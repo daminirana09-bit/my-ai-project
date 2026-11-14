@@ -1,0 +1,597 @@
+[
+  {
+    "word": "Website",
+    "start": 0.2,
+    "end": 0.68,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "ki",
+    "start": 0.76,
+    "end": 0.84,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "kya",
+    "start": 0.92,
+    "end": 1.04,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "zaroorat?",
+    "start": 1.08,
+    "end": 2.04,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "Hum",
+    "start": 2.08,
+    "end": 2.2,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "toh",
+    "start": 2.28,
+    "end": 2.52,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "bees",
+    "start": 2.56,
+    "end": 2.84,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "saal",
+    "start": 2.92,
+    "end": 3.16,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "se",
+    "start": 3.24,
+    "end": 3.32,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "pharma",
+    "start": 3.4,
+    "end": 3.72,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "mein",
+    "start": 3.747,
+    "end": 3.84,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "hain.",
+    "start": 3.88,
+    "end": 4.44,
+    "who": "B",
+    "line": 0
+  },
+  {
+    "word": "Sir,",
+    "start": 4.706,
+    "end": 5.106,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "naya",
+    "start": 5.306,
+    "end": 5.666,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "distributor",
+    "start": 5.746,
+    "end": 6.386,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "pehle",
+    "start": 6.466,
+    "end": 6.786,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "Google",
+    "start": 6.866,
+    "end": 7.186,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "karta",
+    "start": 7.266,
+    "end": 7.506,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "hai—",
+    "start": 7.586,
+    "end": 7.666,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "company",
+    "start": 8.226,
+    "end": 8.706,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "asli",
+    "start": 8.746,
+    "end": 9.026,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "hai",
+    "start": 9.106,
+    "end": 9.346,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "ya",
+    "start": 9.506,
+    "end": 9.586,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "nahi.",
+    "start": 9.626,
+    "end": 10.306,
+    "who": "R",
+    "line": 1
+  },
+  {
+    "word": "Arre,",
+    "start": 10.57,
+    "end": 11.21,
+    "who": "B",
+    "line": 2
+  },
+  {
+    "word": "hum",
+    "start": 11.29,
+    "end": 11.53,
+    "who": "B",
+    "line": 2
+  },
+  {
+    "word": "toh",
+    "start": 11.61,
+    "end": 11.77,
+    "who": "B",
+    "line": 2
+  },
+  {
+    "word": "asli",
+    "start": 11.85,
+    "end": 12.17,
+    "who": "B",
+    "line": 2
+  },
+  {
+    "word": "hain!",
+    "start": 12.25,
+    "end": 12.89,
+    "who": "B",
+    "line": 2
+  },
+  {
+    "word": "Par",
+    "start": 13.142,
+    "end": 13.382,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "Google",
+    "start": 13.462,
+    "end": 13.782,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "pe",
+    "start": 13.862,
+    "end": 14.102,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "sirf",
+    "start": 14.262,
+    "end": 14.502,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "ek",
+    "start": 14.542,
+    "end": 14.662,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "purana",
+    "start": 14.702,
+    "end": 15.062,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "number",
+    "start": 15.102,
+    "end": 15.382,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "hai,",
+    "start": 15.422,
+    "end": 16.022,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "aur",
+    "start": 16.102,
+    "end": 16.262,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "email",
+    "start": 16.342,
+    "end": 16.662,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "bhi",
+    "start": 16.742,
+    "end": 16.982,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "Gmail",
+    "start": 17.142,
+    "end": 17.462,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "wala.",
+    "start": 17.542,
+    "end": 18.262,
+    "who": "R",
+    "line": 3
+  },
+  {
+    "word": "Toh",
+    "start": 18.51,
+    "end": 18.75,
+    "who": "B",
+    "line": 4
+  },
+  {
+    "word": "phir",
+    "start": 18.99,
+    "end": 19.15,
+    "who": "B",
+    "line": 4
+  },
+  {
+    "word": "kya",
+    "start": 19.23,
+    "end": 19.35,
+    "who": "B",
+    "line": 4
+  },
+  {
+    "word": "karein?",
+    "start": 19.39,
+    "end": 19.95,
+    "who": "B",
+    "line": 4
+  },
+  {
+    "word": "Website",
+    "start": 20.221,
+    "end": 20.871,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "pe",
+    "start": 20.871,
+    "end": 21.057,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "company",
+    "start": 21.057,
+    "end": 21.708,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "profile,",
+    "start": 21.708,
+    "end": 22.451,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "product",
+    "start": 22.451,
+    "end": 23.102,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "list,",
+    "start": 23.102,
+    "end": 23.566,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "contact",
+    "start": 23.566,
+    "end": 24.217,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "page—",
+    "start": 24.217,
+    "end": 24.681,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "aur",
+    "start": 24.681,
+    "end": 24.96,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "info@bansalhealthcare.com",
+    "start": 24.96,
+    "end": 27.283,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "jaisi",
+    "start": 27.283,
+    "end": 27.748,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "professional",
+    "start": 27.748,
+    "end": 28.863,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "email.",
+    "start": 28.863,
+    "end": 29.421,
+    "who": "R",
+    "line": 5
+  },
+  {
+    "word": "Kharcha?",
+    "start": 29.69,
+    "end": 30.57,
+    "who": "B",
+    "line": 6
+  },
+  {
+    "word": "Website",
+    "start": 30.904,
+    "end": 31.704,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "₹5,000",
+    "start": 31.704,
+    "end": 32.39,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "se",
+    "start": 32.39,
+    "end": 32.618,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "shuru.",
+    "start": 32.618,
+    "end": 33.304,
+    "who": "R",
+    "line": 7
+  },
+  {
+    "word": "Toh",
+    "start": 33.555,
+    "end": 33.795,
+    "who": "B",
+    "line": 8
+  },
+  {
+    "word": "pehle",
+    "start": 33.875,
+    "end": 34.155,
+    "who": "B",
+    "line": 8
+  },
+  {
+    "word": "kyun",
+    "start": 34.195,
+    "end": 34.328,
+    "who": "B",
+    "line": 8
+  },
+  {
+    "word": "nahi",
+    "start": 34.355,
+    "end": 34.515,
+    "who": "B",
+    "line": 8
+  },
+  {
+    "word": "bataya?",
+    "start": 34.595,
+    "end": 35.315,
+    "who": "B",
+    "line": 8
+  },
+  {
+    "word": "Aapki",
+    "start": 35.579,
+    "end": 35.899,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "bhi",
+    "start": 35.979,
+    "end": 36.139,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "pharma",
+    "start": 36.179,
+    "end": 36.459,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "company",
+    "start": 36.539,
+    "end": 36.859,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "hai?",
+    "start": 36.899,
+    "end": 37.579,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "Comment",
+    "start": 37.619,
+    "end": 37.899,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "karo",
+    "start": 37.939,
+    "end": 38.139,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "PHARMA—",
+    "start": 38.539,
+    "end": 38.939,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "DM",
+    "start": 39.499,
+    "end": 39.819,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "mein",
+    "start": 39.859,
+    "end": 39.979,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "details",
+    "start": 40.059,
+    "end": 40.379,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "bhej",
+    "start": 40.459,
+    "end": 40.619,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "dunga.",
+    "start": 40.659,
+    "end": 41.339,
+    "who": "R",
+    "line": 9
+  },
+  {
+    "word": "P-H-A-R-M-A…",
+    "start": 41.6,
+    "end": 44.177,
+    "who": "B",
+    "line": 10
+  },
+  {
+    "word": "ho",
+    "start": 44.177,
+    "end": 44.606,
+    "who": "B",
+    "line": 10
+  },
+  {
+    "word": "gaya!",
+    "start": 44.606,
+    "end": 45.68,
+    "who": "B",
+    "line": 10
+  }
+]

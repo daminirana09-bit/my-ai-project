@@ -1,0 +1,20 @@
+{
+  "voices": { "B": "onwK4e9ZLuTAKqWW03F9", "R": "JBFqnCBsd6RMkjVDRZzb" },
+  "voiceNames": { "B": "Daniel (premade, free, male) for Mr. Bansal", "R": "George (premade, free, male) for Arjun" },
+  "model": "eleven_v4",
+  "lang": "hi",
+  "gap": 0.3,
+  "lines": [
+    { "who": "B", "text": "Website ki kya zaroorat? Hum toh bees saal se pharma mein hain.", "tts": "वेबसाइट की क्या ज़रूरत? हम तो बीस साल से फ़ार्मा में हैं।" },
+    { "who": "R", "text": "Sir, naya distributor pehle Google karta hai — company asli hai ya nahi.", "tts": "सर, नया डिस्ट्रीब्यूटर पहले Google करता है — कंपनी असली है या नहीं।" },
+    { "who": "B", "text": "Arre, hum toh asli hain!", "tts": "अरे, हम तो असली हैं!" },
+    { "who": "R", "text": "Par Google pe sirf ek purana number hai, aur email bhi Gmail wala.", "tts": "पर Google पे सिर्फ़ एक पुराना नंबर है, और ईमेल भी Gmail वाला।" },
+    { "who": "B", "text": "Toh phir kya karein?", "tts": "तो फिर क्या करें?" },
+    { "who": "R", "text": "Website pe company profile, product list, contact page — aur info@bansalhealthcare.com jaisi professional email.", "tts": "वेबसाइट पे कंपनी प्रोफ़ाइल, प्रोडक्ट लिस्ट, कॉन्टैक्ट पेज — और इन्फ़ो ऐट बंसल हेल्थकेयर डॉट कॉम जैसी प्रोफ़ेशनल ईमेल।" },
+    { "who": "B", "text": "Kharcha?", "tts": "ख़र्चा?" },
+    { "who": "R", "text": "Website ₹5,000 se shuru.", "tts": "वेबसाइट पाँच हज़ार से शुरू।" },
+    { "who": "B", "text": "Toh pehle kyun nahi bataya?", "tts": "तो पहले क्यों नहीं बताया?" },
+    { "who": "R", "text": "Aapki bhi pharma company hai? Comment karo PHARMA — DM mein details bhej dunga.", "tts": "आपकी भी फ़ार्मा कंपनी है? कमेंट करो PHARMA — DM में डिटेल्स भेज दूँगा।" },
+    { "who": "B", "text": "P-H-A-R-M-A… ho gaya!", "tts": "पी, एच, ए, आर, एम, ए... हो गया!" }
+  ]
+}

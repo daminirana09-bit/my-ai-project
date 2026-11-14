@@ -91,12 +91,12 @@ const Mouth: React.FC<{ open: number; mood: Mood; y: number }> = ({ open, mood, 
   );
 };
 
-export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha"; mouth: number[]; cues: PoseCue[]; lookRight?: boolean; speaking?: boolean; scale?: number }> = ({ who, mouth, cues, lookRight = true, speaking = false, scale = 1 }) => {
+export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha" | "bansal"; mouth: number[]; cues: PoseCue[]; lookRight?: boolean; speaking?: boolean; scale?: number }> = ({ who, mouth, cues, lookRight = true, speaking = false, scale = 1 }) => {
   const frame = useCurrentFrame();
   const { angles, mood, pose } = usePose(cues, frame);
   const m = mouth[frame] ?? 0;
   // blink every ~3.3 s (offset per character), 5 frames long
-  const period = who === "aunty" ? 100 : who === "doctor" ? 107 : who === "neha" ? 97 : 113;
+  const period = who === "aunty" ? 100 : who === "doctor" || who === "bansal" ? 107 : who === "neha" ? 97 : 113;
   const ph = (frame + (who === "aunty" ? 37 : who === "doctor" ? 61 : 0)) % period;
   const blink = ph < 5 ? Math.sin((ph / 5) * Math.PI) : 0;
   const breathe = Math.sin(frame / 22) * 3;
@@ -105,16 +105,25 @@ export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha"; mouth:
   const gaze = lookRight ? 4 : -4;
 
   const A = who === "aunty";
-  const D = who === "doctor";
+  const B = who === "bansal";
+  const D = who === "doctor" || B; // Bansal shares the doctor's head (bald, grey sides, moustache)
   const N = who === "neha";
   const skin = A ? "#C68863" : D ? "#B97A56" : N ? "#C98E6A" : "#A86E4C";
-  const sleeve = A ? "#22314F" : D || N ? "#F7F7F2" : "#F26B3A";
+  const sleeve = A ? "#22314F" : B ? "#4A4E57" : D || N ? "#F7F7F2" : "#F26B3A";
   const hair = A ? "#2B2B30" : D ? "#CFCFD6" : N ? "#3A2A22" : "#18181C";
   return (
     <svg width={420 * scale} height={640 * scale} viewBox="0 0 420 640" style={{ overflow: "visible" }}>
       <g transform={`translate(0 ${breathe})`}>
         {/* torso */}
-        {D || N ? (
+        {B ? (
+          <g>
+            <path d="M86 332 Q 210 278 334 332 L 360 660 L 60 660 Z" fill="#F4F4F0" stroke={OUT} strokeWidth={SW} />
+            <path d="M198 300 L 222 300 L 230 330 L 214 470 L 206 470 L 190 330 Z" fill="#8E2C3A" stroke={OUT} strokeWidth={4} />
+            <path d="M86 332 Q 150 300 184 298 L 200 480 L 150 660 L 60 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
+            <path d="M334 332 Q 270 300 236 298 L 220 480 L 270 660 L 360 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
+            <path d="M262 420 L 300 420" stroke="#F4F4F0" strokeWidth={6} />
+          </g>
+        ) : D || N ? (
           <g>
             <path d="M86 332 Q 210 278 334 332 L 360 660 L 60 660 Z" fill={N ? "#E98AA8" : "#9CC9F0"} stroke={OUT} strokeWidth={SW} />
             <path d="M86 332 Q 150 300 184 298 L 204 470 L 150 660 L 60 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
@@ -196,6 +205,13 @@ export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha"; mouth:
           {N ? (
             <g stroke={OUT} strokeWidth={4} strokeLinecap="round">
               <path d="M150 168 L 142 160 M 270 168 L 278 160" />
+            </g>
+          ) : null}
+          {B ? (
+            <g fill="none" stroke={OUT} strokeWidth={5}>
+              <rect x={146} y={160} width={52} height={38} rx={8} />
+              <rect x={222} y={160} width={52} height={38} rx={8} />
+              <path d="M198 176 L 222 176 M 146 172 L 128 168 M 274 172 L 292 168" />
             </g>
           ) : null}
           {D || N ? null : <g fill="none" stroke={A ? "#B8860B" : OUT} strokeWidth={5}>

@@ -9,6 +9,7 @@ import * as r_dentist_digital from "./dentist-digital/Reel";
 import * as r_desk from "./desk-text/Reel";
 import * as r_pharma_dialogue from "./pharma-dialogue/Reel";
 import * as r_clinic_dialogue from "./clinic-dialogue/Reel";
+import * as r_pharma_trust from "./pharma-trust/Reel";
 // <new-reel-imports>
 
 export type ReelEntry = {
@@ -37,6 +38,7 @@ export const REELS: ReelEntry[] = [
   ...r_desk.CLIENT_REELS.map((r) => ({ ...r, durationInFrames: r_desk.durationInFrames })),
   { id: "pharma-dialogue", Component: r_pharma_dialogue.Reel, durationInFrames: r_pharma_dialogue.durationInFrames },
   { id: "clinic-dialogue", Component: r_clinic_dialogue.Reel, durationInFrames: r_clinic_dialogue.durationInFrames },
+  { id: "pharma-trust", Component: r_pharma_trust.Reel, durationInFrames: r_pharma_trust.durationInFrames },
   // <new-reel-entries>
 ];
 
