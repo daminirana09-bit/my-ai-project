@@ -21,7 +21,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password', 'role', 'manager_id', 'phone', 'active',
         'office_start', 'office_end', 'lunch_start', 'lunch_end', 'locale',
+        'away_type', 'away_until', 'backup_user_id', 'salutation',
     ];
+
+    public const AWAY_TYPES = ['half_day' => 'Half day', 'leave' => 'On leave', 'meeting' => 'Meeting / field visit'];
 
     protected $hidden = ['password', 'remember_token', 'two_factor_secret'];
 
@@ -30,6 +33,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'last_login_at' => 'datetime',
+            'away_until' => 'datetime',
             'password' => 'hashed',
             'phone' => 'encrypted',
             'two_factor_secret' => 'encrypted',
@@ -47,6 +51,28 @@ class User extends Authenticatable
     public function allows(string $permission): bool
     {
         return (bool) CompanySetting::current()?->roleAllows($this->role, $permission);
+    }
+
+    /** Away right now (half day, leave or meeting), so WhatsApp cover replies for them. */
+    public function isAway(): bool
+    {
+        return $this->away_type !== null && $this->away_until !== null && $this->away_until->isFuture();
+    }
+
+    public function backup(): BelongsTo { return $this->belongsTo(User::class, 'backup_user_id'); }
+
+    /** How clients hear this person's name: "Amit ji", "Amit Sir", "Amit Madam". */
+    public function calledAs(): string
+    {
+        $first = explode(' ', trim($this->name))[0];
+
+        $title = match ($this->salutation) {
+            'sir' => 'Sir',
+            'madam' => 'Madam',
+            default => 'ji',
+        };
+
+        return $first.' '.$title;
     }
 
     public function manager(): BelongsTo { return $this->belongsTo(User::class, 'manager_id'); }

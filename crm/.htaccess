@@ -1,0 +1,10 @@
+# Used only when the whole CRM folder sits inside public_html (when the sub-domain cannot point
+# at /public). Everything is sent into /public, so .env, storage, vendor etc. are never served.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+Options -Indexes

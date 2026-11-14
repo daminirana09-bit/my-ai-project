@@ -28,7 +28,10 @@ class TranslationsTest extends TestCase
         $labels = array_merge(array_values(Lead::STATUSES), array_values(Lead::TEMPERATURES), array_values(LeadActivity::TYPES), array_values(LeadActivity::CALL_OUTCOMES),
             array_values(Task::STATUSES), array_values(Task::PRIORITIES), array_values(User::ROLES), array_values(MasterOption::TYPES),
             array_map(fn ($p) => $p[0], CompanySetting::PERMISSIONS), array_values(\App\Models\AttendanceDay::STATUSES), array_values(\App\Models\Sale::STATUSES),
-            array_values(\App\Models\LeadClash::REASONS), ['strip', 'bottle', 'box', 'piece', 'kg', 'litre']);
+            array_values(\App\Models\LeadClash::REASONS), ['strip', 'bottle', 'box', 'piece', 'kg', 'litre'],
+            array_values(\App\Models\Campaign::VARIABLES), array_values(\App\Models\ReplyTemplate::INTENTS), array_values(User::AWAY_TYPES),
+            array_values(\App\Models\Quote::STATUSES), ['Sent', 'Delivered', 'Read', 'Failed', 'Received', 'Queued', 'Pending', 'Skipped', 'All', 'Unread', 'Waiting', 'Other', 'Waiting for call', 'Urgent',
+                'WhatsApp', 'Auto-reply when the salesperson is away', 'On half day, leave or meeting, clients get a reply in their language and wait for a call.', 'Auto-reply outside office hours', 'Also reply after office time and on weekly off.', 'Alert on urgent messages', 'URGENT or complaint messages alert the backup person and managers.', 'Give new leads out automatically', 'Leads from the company WhatsApp number or the website form go to the rep with the fewest new leads today.', 'Task for leads not updated in 30 days', 'Every morning the owner gets a follow-up task.', 'Tell managers about late follow-ups', 'Every morning, managers see who has follow-ups more than 2 days late.']);
         foreach ($labels as $l) {
             $keys[$l] = true;
         }

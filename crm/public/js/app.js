@@ -13,3 +13,13 @@ document.addEventListener('keydown', function (e) {
 document.addEventListener('change', function (e) {
   if (e.target.matches('[data-autosubmit]')) e.target.form.submit();
 });
+// Quote lines: picking a product fills its rate and GST (only if those boxes are empty).
+document.addEventListener('change', function (e) {
+  var s = e.target;
+  if (!s.matches('select[data-line]')) return;
+  var o = s.options[s.selectedIndex], i = s.getAttribute('data-line');
+  var r = document.getElementById('r' + i), g = document.getElementById('g' + i), q = document.getElementById('q' + i);
+  if (o && o.dataset.rate && r && !r.value) r.value = o.dataset.rate;
+  if (o && o.dataset.gst && g && !g.value) g.value = o.dataset.gst;
+  if (q && !q.value) q.focus();
+});

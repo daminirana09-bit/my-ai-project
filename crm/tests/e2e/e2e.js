@@ -14,7 +14,7 @@ const logout=async(p)=>{await Promise.all([p.waitForNavigation(),p.click('form[a
 const overflow=async(p)=>p.evaluate(()=>document.documentElement.scrollWidth-innerWidth);
 
 // 1. Setup wizard
-let {c,p}=await newPage();
+let {c,p}=await newPage();globalThis.P=p;
 await p.goto(B+'/');expect(p.url().endsWith('/setup'),'first visit goes to setup');
 await p.fill('#company_name','E2E Pharma Pvt Ltd');await p.fill('#gstin','03ABCDE1234F1Z5');
 await p.fill('#admin_name','Owner Admin');await p.fill('#admin_email','owner@e2e.in');await p.fill('#password',PW);await p.fill('#password_confirmation',PW);
@@ -98,7 +98,57 @@ for(const u of ['/','/leads','/customers','/tasks','/products','/analytics','/se
 await logout(p);
 await login(p,'sohan@e2e.in');await p.goto(B+'/leads');expect(await has(p,'/leads/export'),'rep export button appears after admin allows it');await logout(p);
 await p.goto(B+'/login');await p.fill('#email','rita@e2e.in');await p.fill('#password',PW);await p.click('form button.p');await p.waitForLoadState();expect(await has(p,'flash bad'),'deactivated Rita cannot log in');
+// 9. WhatsApp, website form, away cover, inbox, quotation, marketing
+const crypto=require('crypto');
+await login(p,'owner@e2e.in');
+await p.goto(B+'/whatsapp');await p.fill('#access_token','e2e-fake-token');await p.fill('#app_secret','e2e-app-secret');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/whatsapp"] button.p')]);expect(await has(p,'flash ok'),'WhatsApp settings saved');
+expect(!(await has(p,'e2e-fake-token'))&&!(await has(p,'e2e-app-secret')),'saved secrets never shown again');
+const vtok=await p.$$eval('dl.dl dt',dts=>{const i=dts.findIndex(d=>/Verify|सत्यापन/.test(d.textContent));return i<0?'':dts[i].nextElementSibling.textContent.trim()});
+const addForm='form[action$="/whatsapp/numbers"]';
+await p.fill(addForm+' input[name="label"]','Sohan WhatsApp');await p.fill(addForm+' input[name="display_phone"]','+91 90000 00001');await p.fill(addForm+' input[name="phone_number_id"]','109876543210987');
+await p.selectOption(addForm+' select[name="user_id"]',{label:'Sohan Rep'});await Promise.all([p.waitForNavigation(),p.click(addForm+' button')]);expect(await has(p,'Sohan WhatsApp'),'WhatsApp number added');
+const formUrl=(await p.$eval('p.secret',e=>e.textContent.trim()));
+let r=await p.request.get(B+'/webhook/whatsapp?hub.mode=subscribe&hub.verify_token='+encodeURIComponent(vtok)+'&hub.challenge=4242');expect(vtok.length>10&&r.status()===200&&(await r.text())==='4242','Meta webhook verification works');
+r=await p.request.get(B+'/webhook/whatsapp?hub.mode=subscribe&hub.verify_token=wrong&hub.challenge=4242');expect(r.status()===403,'wrong verify token refused '+r.status());
+r=await p.request.post(formUrl,{form:{name:'Web Visitor',phone:'+91 97000 11122',firm:'Web Enquiry Firm',city:'Pune',message:'Need PCD franchise list',website:''}});expect(r.status()===200,'website form accepted '+r.status());
+r=await p.request.post(B+'/webhook/lead/wrongtoken',{form:{name:'X',phone:'9999999999'}});expect(r.status()===404,'website form with wrong token refused '+r.status());
+await p.goto(B+'/leads?q=Web+Enquiry');expect(await has(p,'Web Enquiry Firm'),'website enquiry became a lead');
+for(const u of ['/inbox','/quotes','/quotes/new','/campaigns','/campaigns/new','/ready-replies','/whatsapp','/automations','/system']){const rr=await p.goto(B+u);expect(rr.status()===200,'admin page '+u+' '+rr.status());expect(await has(p,'Solvix Web'),'credit on '+u)}
+await p.goto(B+'/automations');await Promise.all([p.waitForNavigation(),p.click('form[action$="/automations"] button.p')]);expect(await has(p,'flash ok'),'automations saved');
+await p.goto(B+'/ready-replies');await Promise.all([p.waitForNavigation(),p.click('form[action$="/ready-replies"] button.p')]);expect(await has(p,'flash ok'),'ready replies saved');
+await p.goto(B+'/campaigns/new');await p.fill('#name','E2E Diwali');await p.fill('#template_name','diwali_offer');await Promise.all([p.waitForNavigation(),p.click('button[name="preview"]')]);
+expect(p.url().includes('preview=1'),'campaign count preview works');step();
+await logout(p);
+// Sohan goes on leave; a client writes in Hindi on his number
+await login(p,'sohan@e2e.in');await p.goto(B+'/profile');
+const tm=new Date(Date.now()+86400000);await p.selectOption('#away_type','leave');await p.fill('#back_date',tm.toISOString().slice(0,10));
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/availability"] button')]);expect(await has(p,'pill warn'),'Sohan marked away');
+const sign=b=>'sha256='+crypto.createHmac('sha256','e2e-app-secret').update(b).digest('hex');
+const inbound=(text,id)=>JSON.stringify({entry:[{changes:[{value:{metadata:{phone_number_id:'109876543210987'},contacts:[{wa_id:'919811100099',profile:{name:'Clash Client'}}],messages:[{id,from:'919811100099',timestamp:String(Math.floor(Date.now()/1000)),type:'text',text:{body:text}}]}}]}]});
+let body=inbound('नमस्ते, कृपया रेट लिस्ट भेजिए','wamid.E2E'+RUN+'a');
+r=await p.request.post(B+'/webhook/whatsapp',{headers:{'Content-Type':'application/json','X-Hub-Signature-256':sign(body)},data:body});expect(r.status()===200,'signed webhook accepted '+r.status());
+r=await p.request.post(B+'/webhook/whatsapp',{headers:{'Content-Type':'application/json','X-Hub-Signature-256':sign(body)},data:body});expect(r.status()===200,'duplicate webhook accepted (ignored)');
+r=await p.request.post(B+'/webhook/whatsapp',{headers:{'Content-Type':'application/json','X-Hub-Signature-256':'sha256=00'},data:inbound('fake','wamid.FAKE'+RUN)});expect(r.status()===403,'unsigned webhook refused '+r.status());
+await p.goto(B+'/profile');await Promise.all([p.waitForNavigation(),p.click('form[action$="/availability"] button')]);expect(await has(p,'flash'),'I am back shows welcome');
+await p.goto(B+'/inbox');expect(await has(p,'Clash Client')||await has(p,'Clash Firm'),'chat appears in Sohan inbox');
+await Promise.all([p.waitForNavigation(),p.click('a.conv')]);
+expect(await has(p,'कृपया रेट लिस्ट'),'client message shown');expect((await p.$$('form.sug')).length>0,'ready replies suggested');
+expect(/[ऀ-ॿ]/.test(await p.$eval('form.sug .o',e=>e.textContent).catch(()=>'')),'suggestion is in Hindi (client language)');
+const bubbles=await p.$$eval('.bubble',e=>e.map(x=>x.className));expect(bubbles.length===2&&bubbles.some(c=>c.includes('auto')),'one inbound + one auto-reply (duplicate ignored), got '+bubbles.join('|'));
+await p.fill('#body','Ji, rate list bhej raha hoon');await Promise.all([p.waitForNavigation(),p.click('form.compose button')]);expect(await has(p,'Ji, rate list bhej raha hoon'),'reply recorded (fake token: failed, shown)');
+// Quotation with PDF
+await p.goto(B+'/quotes/new');await p.selectOption('#lead_id',{label:'Clash Firm, Indore'});await p.selectOption('#p0',{label:'E2E Pan-D'});await p.fill('#q0','1000');
+expect((await p.inputValue('#r0'))!=='','rate filled from product');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/quotes"] button.p')]);expect(/\/quotes\/\d+$/.test(p.url()),'quotation created '+p.url());expect(await has(p,'QT-'),'quotation number shown');
+const pdfHref=await p.$eval('a[href$="/pdf"]',a=>a.href);r=await p.request.get(pdfHref);const pdf=await r.body();
+expect(r.status()===200&&(r.headers()['content-type']||'').includes('pdf')&&pdf.slice(0,4).toString()==='%PDF'&&pdf.length>5000,'quotation PDF downloads');
+const sendRes=await Promise.all([p.waitForNavigation(),p.click('form[action$="/send"] button')]);expect(sendRes[0].status()<500&&await has(p,'flash'),'send quote on WhatsApp handled');
+expect((await p.goto(B+'/campaigns')).status()===403,'rep blocked from campaigns by default');
+expect((await p.goto(B+'/whatsapp')).status()===403,'rep blocked from WhatsApp settings');
+{const m=await newPage({width:390,height:844});await login(m.p,'sohan@e2e.in');for(const u of ['/inbox','/quotes','/quotes/new','/profile']){await m.p.goto(B+u);const o=await overflow(m.p);expect(o<=0,'mobile overflow '+u+' '+o)}await m.c.close();}
+await p.goto(B+'/');await logout(p);step();
 const r404=await p.goto(B+'/nope-page');expect(r404.status()===404&&await has(p,'Solvix Web'),'own 404 page with credit');
 await b.close();
 console.log(`\nRUN ${RUN}: ${issues.length?'ISSUES':'OK'}`);issues.forEach(i=>console.log('  '+i));process.exit(issues.length?1:0);
-})().catch(e=>{console.log('\nCRASH',e.message);issues.forEach(i=>console.log('  '+i));process.exit(2)});
+})().catch(e=>{console.log('\nCRASH at',globalThis.P&&globalThis.P.url(),e.message);issues.forEach(i=>console.log('  '+i));process.exit(2)});

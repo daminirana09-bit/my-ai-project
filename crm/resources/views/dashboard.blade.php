@@ -90,7 +90,7 @@
       <div class="ch"><h2>{{ __('Reminders') }}</h2><span class="pill {{ $reminders->where('overdue', true)->count() ? 'bad' : 'accent' }}">{{ $reminders->count() }}</span></div>
       <div class="list">
         @forelse($reminders as $r)
-          <a class="item" href="{{ $r->url }}"><span class="bar {{ $r->overdue ? 'bad' : 'warn' }}"></span><div><b>{{ $r->title }}</b><small>{{ $r->kind === 'task' ? __('Task') : __('Follow-up') }} · {{ $r->date->isToday() ? __('today') : $r->date->format('d M') }}</small></div><span></span></a>
+          <a class="item" href="{{ $r->url }}"><span class="bar {{ $r->overdue ? 'bad' : 'warn' }}"></span><div><b>{{ $r->title }}</b><small>{{ ['task' => __('Task'), 'follow_up' => __('Follow-up'), 'callback' => __('Waiting for your call'), 'urgent_chat' => __('Urgent WhatsApp')][$r->kind] }} · {{ $r->date->isToday() ? __('today') : $r->date->format('d M') }}</small></div><span></span></a>
         @empty
           <p class="empty">{{ __('Nothing due today.') }}</p>
         @endforelse

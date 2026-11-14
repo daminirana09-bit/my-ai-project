@@ -80,7 +80,7 @@ class LeadController extends Controller
         $this->authorizeLead($request, $lead);
 
         return view('leads.show', [
-            'lead' => $lead->load(['owner', 'activities.user', 'tasks.assignee', 'sales', 'clashes' => fn ($q) => $q->where('status', 'open')->with('otherUser')]),
+            'lead' => $lead->load(['owner', 'activities.user', 'tasks.assignee', 'sales', 'quotes', 'conversations', 'clashes' => fn ($q) => $q->where('status', 'open')->with('otherUser')]),
             'owners' => $this->assignable($request->user()),
         ]);
     }

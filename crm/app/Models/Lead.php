@@ -28,7 +28,7 @@ class Lead extends Model
     protected $fillable = [
         'firm_name', 'contact_name', 'phone', 'email', 'city', 'state', 'gstin', 'source', 'client_type',
         'requirement', 'status', 'expected_value', 'owner_id', 'created_by', 'created_via',
-        'last_contact_at', 'next_follow_up_on', 'lost_reason', 'notes', 'temperature',
+        'last_contact_at', 'next_follow_up_on', 'lost_reason', 'notes', 'temperature', 'whatsapp_opt_out', 'language',
     ];
 
     protected function casts(): array
@@ -39,6 +39,7 @@ class Lead extends Model
             'expected_value' => 'decimal:2',
             'last_contact_at' => 'datetime',
             'next_follow_up_on' => 'date',
+            'whatsapp_opt_out' => 'boolean',
         ];
     }
 
@@ -91,6 +92,8 @@ class Lead extends Model
         return $q->open()->where(fn ($w) => $w->where('last_contact_at', '<', $cut)->orWhere(fn ($x) => $x->whereNull('last_contact_at')->where('created_at', '<', $cut)));
     }
 
+    public function quotes(): HasMany { return $this->hasMany(Quote::class)->latest('id'); }
+    public function conversations(): HasMany { return $this->hasMany(WaConversation::class); }
     public function tasks(): HasMany { return $this->hasMany(Task::class)->latest(); }
     public function sales(): HasMany { return $this->hasMany(Sale::class)->latest('sale_date'); }
 

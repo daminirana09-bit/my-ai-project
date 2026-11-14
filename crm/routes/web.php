@@ -1,6 +1,14 @@
 <?php
 
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\AutomationController;
+use App\Http\Controllers\AvailabilityController;
+use App\Http\Controllers\CampaignController;
+use App\Http\Controllers\InboxController;
+use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\ReplyTemplateController;
+use App\Http\Controllers\SystemController;
+use App\Http\Controllers\WhatsAppSettingsController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\AuthController;
@@ -68,6 +76,21 @@ Route::middleware('auth')->group(function () {
     Route::patch('/tasks/{task}/status', [TaskController::class, 'status'])->name('tasks.status');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
+    Route::get('/inbox', [InboxController::class, 'index'])->name('inbox');
+    Route::get('/inbox/{conversation}', [InboxController::class, 'index'])->name('inbox.show');
+    Route::post('/inbox/{conversation}/send', [InboxController::class, 'send'])->middleware('throttle:30,1')->name('inbox.send');
+    Route::post('/inbox/{conversation}/done', [InboxController::class, 'done'])->name('inbox.done');
+    Route::post('/availability', [AvailabilityController::class, 'update'])->name('availability');
+    Route::post('/availability/{user}', [AvailabilityController::class, 'update'])->name('availability.user');
+
+    Route::get('/quotes', [QuoteController::class, 'index'])->name('quotes.index');
+    Route::get('/quotes/new', [QuoteController::class, 'create'])->name('quotes.create');
+    Route::post('/quotes', [QuoteController::class, 'store'])->name('quotes.store');
+    Route::get('/quotes/{quote}', [QuoteController::class, 'show'])->name('quotes.show');
+    Route::get('/quotes/{quote}/pdf', [QuoteController::class, 'pdf'])->middleware('throttle:30,1')->name('quotes.pdf');
+    Route::patch('/quotes/{quote}/status', [QuoteController::class, 'status'])->name('quotes.status');
+    Route::post('/quotes/{quote}/send', [QuoteController::class, 'send'])->middleware('throttle:10,1')->name('quotes.send');
+
     Route::get('/targets', [TargetController::class, 'index'])->name('targets.index');
     Route::post('/sales', [TargetController::class, 'storeSale'])->name('sales.store');
 
@@ -86,6 +109,12 @@ Route::middleware('auth')->group(function () {
     // Admin and managers.
     Route::middleware('role:manage')->group(function () {
         Route::get('/clashes', [ClashController::class, 'index'])->name('clashes.index');
+        Route::get('/campaigns', [CampaignController::class, 'index'])->name('campaigns.index');
+        Route::get('/campaigns/new', [CampaignController::class, 'create'])->name('campaigns.create');
+        Route::post('/campaigns', [CampaignController::class, 'store'])->middleware('throttle:5,1')->name('campaigns.store');
+        Route::get('/campaigns/{campaign}', [CampaignController::class, 'show'])->name('campaigns.show');
+        Route::get('/ready-replies', [ReplyTemplateController::class, 'index'])->name('replies.index');
+        Route::post('/ready-replies', [ReplyTemplateController::class, 'save'])->name('replies.save');
         Route::post('/clashes/{clash}/resolve', [ClashController::class, 'resolve'])->name('clashes.resolve');
         Route::post('/targets', [TargetController::class, 'saveTargets'])->name('targets.save');
         Route::patch('/sales/{sale}', [TargetController::class, 'updateSale'])->name('sales.update');
@@ -110,6 +139,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/masters', [MasterController::class, 'index'])->name('masters.index');
         Route::post('/masters', [MasterController::class, 'store'])->name('masters.store');
         Route::put('/masters/{option}', [MasterController::class, 'update'])->name('masters.update');
+        Route::get('/whatsapp', [WhatsAppSettingsController::class, 'edit'])->name('whatsapp.settings');
+        Route::post('/whatsapp', [WhatsAppSettingsController::class, 'update'])->name('whatsapp.update');
+        Route::post('/whatsapp/numbers', [WhatsAppSettingsController::class, 'storeNumber'])->name('whatsapp.numbers.store');
+        Route::put('/whatsapp/numbers/{number}', [WhatsAppSettingsController::class, 'updateNumber'])->name('whatsapp.numbers.update');
+        Route::post('/whatsapp/lead-form-token', [WhatsAppSettingsController::class, 'rotateToken'])->name('whatsapp.token');
+        Route::get('/automations', [AutomationController::class, 'edit'])->name('automations');
+        Route::post('/automations', [AutomationController::class, 'update'])->name('automations.update');
+        Route::get('/system', SystemController::class)->name('system');
         Route::get('/roles', [RoleController::class, 'edit'])->name('roles');
         Route::post('/roles', [RoleController::class, 'update'])->name('roles.update');
     });

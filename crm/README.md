@@ -24,6 +24,18 @@ One installation per company. Each company sets its own name, logo, timings and 
   full day, half day, absent, single swipe, late; monthly register; admin corrections.
 - **Admin:** users, roles & permissions, masters (sources, client types, lost reasons,
   product categories), company settings, activity log.
+- **WhatsApp inbox (Meta Cloud API):** each salesperson their own number; chats come in
+  through a signed webhook; the client's language and request are detected and ready replies
+  are offered in that language (14 Indian languages, editable under Ready replies).
+- **Away cover:** a rep marks half day, leave or meeting; clients who message get an automatic
+  reply in their language, urgent messages alert the backup person and managers, and on return
+  the rep sees who is waiting for a call first. STOP opts a client out of marketing.
+- **Quotations:** GST quotation from the product list, PDF, sent on WhatsApp in one click.
+- **Marketing:** approved WhatsApp templates to a filtered group of clients, sent in the background.
+- **Automations:** auto-reply, after-hours reply, auto-assign new leads, daily tasks for
+  stale leads, late follow-up alerts, urgent alerts (each can be switched off).
+- **Website enquiry form:** a secret link; enquiries become leads automatically.
+- **System check** page for hosting (PHP, extensions, HTTPS, cron, queue, WhatsApp, 2-step login).
 - **Global search** in the top bar. **Languages:** English, Hinglish, Hindi per user.
 - **Who sees what:** admin everything; manager own team; sales rep only own data.
 - **Rule 1 (data never leaks):** see `../docs/RULE-1-DATA-PROTECTION.md`.
@@ -40,4 +52,7 @@ php artisan serve
 php artisan test
 ```
 
-**Install for a company:** see `../docs/INSTALL-HOSTINGER.md`.
+**Install for a company:** build the zip with `tools/make-release.sh` (includes `vendor/`, no
+tests, no `.env`), then follow `../docs/INSTALL-HOSTINGER.md`.
+
+**Tests:** `php artisan test` (84 feature tests) and the browser run in `tests/e2e/README.md`.

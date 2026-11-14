@@ -276,4 +276,14 @@ class FlowsTest extends CrmTestCase
         $this->actingAs($this->admin)->post('/clashes/999/resolve', ['assigned_to' => 1])->assertNotFound();
         $this->actingAs($this->admin)->get('/attendance/people/999')->assertNotFound();
     }
+
+    public function test_back_after_a_download_returns_to_the_page_not_the_file(): void
+    {
+        $this->actingAs($this->admin)->get('/leads')->assertOk();
+        $this->get('/leads/export?format=csv')->assertOk();
+        $this->get('/branding/logo', ['Sec-Fetch-Dest' => 'image']);
+        // A form with a mistake goes back: it must land on /leads, not on the export file
+        $res = $this->post('/tasks', ['title' => '']);
+        $res->assertRedirect(url('/leads'));
+    }
 }

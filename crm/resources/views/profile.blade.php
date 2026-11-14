@@ -3,6 +3,7 @@
 @section('content')
 @php $me = auth()->user(); @endphp
 <div class="head"><h1>{{ __('My profile') }}</h1></div>
+@include('partials.availability')
 <div class="grid g3">
   <form method="post" action="{{ route('profile.language') }}" class="card form">
     @csrf

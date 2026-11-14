@@ -4,7 +4,7 @@
 @php $me = auth()->user(); @endphp
 <div class="head">
   <div><h1>{{ $lead->firm_name }}</h1><p>{{ $lead->contact_name }} · {{ $lead->city }}{{ $lead->state ? ', '.$lead->state : '' }} · <span class="pill {{ $lead->status }}">{{ __(\App\Models\Lead::STATUSES[$lead->status]) }}</span>@if($lead->temperature) <span class="pill {{ $lead->temperature }}">{{ __(\App\Models\Lead::TEMPERATURES[$lead->temperature]) }}</span>@endif</p></div>
-  <div class="row"><a class="btn" href="{{ route('leads.edit', $lead) }}"><x-icon name="edit"/>{{ __('Edit') }}</a></div>
+  <div class="row"><a class="btn" href="{{ route('quotes.create', ['lead' => $lead->id]) }}"><x-icon name="plus"/>{{ __('New quote') }}</a><a class="btn" href="{{ route('leads.edit', $lead) }}"><x-icon name="edit"/>{{ __('Edit') }}</a></div>
 </div>
 
 @if($lead->clashes->isNotEmpty() && $me->canManage())
@@ -44,6 +44,16 @@
         <button class="btn"><x-icon name="plus"/>{{ __('Add task') }}</button>
       </form>
     </section>
+
+    @if($lead->quotes->isNotEmpty() || $lead->conversations->isNotEmpty())
+    <section class="card">
+      <h2>{{ __('Quotations and WhatsApp') }}</h2>
+      <div class="list">
+        @foreach($lead->quotes as $q)<a class="item" href="{{ route('quotes.show', $q) }}"><span class="bar"></span><div><b class="mono">{{ $q->number }}</b><small>{{ $q->quote_date->format('d M Y') }} · {{ inr($q->grand_total, false) }}</small></div><span class="pill">{{ __(\App\Models\Quote::STATUSES[$q->status]) }}</span></a>@endforeach
+        @foreach($lead->conversations as $c)@if($c->isVisibleTo(auth()->user()))<a class="item" href="{{ route('inbox.show', $c) }}"><span class="bar info"></span><div><b>{{ __('WhatsApp chat') }}</b><small>{{ $c->last_message_at?->diffForHumans() }}</small></div><span></span></a>@endif @endforeach
+      </div>
+    </section>
+    @endif
 
     <div class="card"><h2>{{ __('History') }}</h2>
       <div class="timeline">

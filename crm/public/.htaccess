@@ -23,3 +23,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# No folder listings; no dot-files.
+Options -Indexes
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

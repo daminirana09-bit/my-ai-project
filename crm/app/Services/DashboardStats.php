@@ -118,6 +118,11 @@ class DashboardStats
             ->orderBy('next_follow_up_on')->limit(8)->get()
             ->map(fn (Lead $l) => (object) ['kind' => 'follow_up', 'title' => $l->firm_name, 'date' => $l->next_follow_up_on, 'url' => route('leads.show', $l), 'overdue' => $l->next_follow_up_on->lt(today())]);
 
-        return $tasks->concat($follow)->sortBy('date')->values();
+        $chats = \App\Models\WaConversation::whereHas('number', fn ($q) => $q->where('user_id', $viewer->id))
+            ->where(fn ($q) => $q->where('waiting_callback', true)->orWhere('urgent', true))->with('lead:id,firm_name')->limit(8)->get()
+            ->map(fn ($c) => (object) ['kind' => $c->urgent ? 'urgent_chat' : 'callback', 'title' => $c->lead?->firm_name ?? $c->contact_name ?? 'WhatsApp',
+                'date' => $c->last_inbound_at ?? now(), 'url' => route('inbox.show', $c), 'overdue' => (bool) $c->urgent]);
+
+        return $chats->concat($tasks->concat($follow)->sortBy('date'))->values();
     }
 }
