@@ -91,13 +91,13 @@ const Mouth: React.FC<{ open: number; mood: Mood; y: number }> = ({ open, mood, 
   );
 };
 
-export const Toon: React.FC<{ who: "aunty" | "arjun"; mouth: number[]; cues: PoseCue[]; lookRight?: boolean; speaking?: boolean; scale?: number }> = ({ who, mouth, cues, lookRight = true, speaking = false, scale = 1 }) => {
+export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor"; mouth: number[]; cues: PoseCue[]; lookRight?: boolean; speaking?: boolean; scale?: number }> = ({ who, mouth, cues, lookRight = true, speaking = false, scale = 1 }) => {
   const frame = useCurrentFrame();
   const { angles, mood, pose } = usePose(cues, frame);
   const m = mouth[frame] ?? 0;
   // blink every ~3.3 s (offset per character), 5 frames long
-  const period = who === "aunty" ? 100 : 113;
-  const ph = (frame + (who === "aunty" ? 37 : 0)) % period;
+  const period = who === "aunty" ? 100 : who === "doctor" ? 107 : 113;
+  const ph = (frame + (who === "aunty" ? 37 : who === "doctor" ? 61 : 0)) % period;
   const blink = ph < 5 ? Math.sin((ph / 5) * Math.PI) : 0;
   const breathe = Math.sin(frame / 22) * 3;
   const bob = speaking ? Math.sin(frame / 3.1) * 3 * Math.min(1, m * 2) : 0;
@@ -105,14 +105,24 @@ export const Toon: React.FC<{ who: "aunty" | "arjun"; mouth: number[]; cues: Pos
   const gaze = lookRight ? 4 : -4;
 
   const A = who === "aunty";
-  const skin = A ? "#C68863" : "#A86E4C";
-  const sleeve = A ? "#22314F" : "#F26B3A";
-  const hair = A ? "#2B2B30" : "#18181C";
+  const D = who === "doctor";
+  const skin = A ? "#C68863" : D ? "#B97A56" : "#A86E4C";
+  const sleeve = A ? "#22314F" : D ? "#F7F7F2" : "#F26B3A";
+  const hair = A ? "#2B2B30" : D ? "#CFCFD6" : "#18181C";
   return (
     <svg width={420 * scale} height={640 * scale} viewBox="0 0 420 640" style={{ overflow: "visible" }}>
       <g transform={`translate(0 ${breathe})`}>
         {/* torso */}
-        {A ? (
+        {D ? (
+          <g>
+            <path d="M86 332 Q 210 278 334 332 L 360 660 L 60 660 Z" fill="#9CC9F0" stroke={OUT} strokeWidth={SW} />
+            <path d="M86 332 Q 150 300 184 298 L 204 470 L 150 660 L 60 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
+            <path d="M334 332 Q 270 300 236 298 L 216 470 L 270 660 L 360 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
+            <rect x={262} y={430} width={52} height={60} rx={6} fill="#EDEDE6" stroke={OUT} strokeWidth={4} />
+            <rect x={276} y={404} width={8} height={40} rx={3} fill="#2F6BFF" stroke={OUT} strokeWidth={3} />
+            <path d="M160 316 Q 210 352 260 316 L 252 296 Q 210 322 168 296 Z" fill="#7FC8E8" stroke={OUT} strokeWidth={4} />
+          </g>
+        ) : A ? (
           <g>
             <path d="M88 330 Q 210 270 332 330 L 360 660 L 60 660 Z" fill="#1F8A84" stroke={OUT} strokeWidth={SW} />
             <path d="M88 330 Q 150 300 186 300 L 210 460 L 120 660 L 60 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
@@ -153,6 +163,12 @@ export const Toon: React.FC<{ who: "aunty" | "arjun"; mouth: number[]; cues: Pos
               <path d="M228 80 Q 262 92 276 128" stroke="#9A9AA6" strokeWidth={7} fill="none" strokeLinecap="round" />
               <circle cx={210} cy={140} r={6} fill="#D7263D" />
             </>
+          ) : D ? (
+            <g fill={hair} stroke={OUT} strokeWidth={4}>
+              <path d="M130 196 Q 118 140 150 108 Q 160 128 156 150 Q 150 172 152 200 Z" />
+              <path d="M290 196 Q 302 140 270 108 Q 260 128 264 150 Q 270 172 268 200 Z" />
+              <path d="M186 82 Q 210 70 236 82" fill="none" strokeWidth={5} />
+            </g>
           ) : (
             <g fill={hair} stroke={OUT} strokeWidth={4}>
               {[
@@ -162,20 +178,21 @@ export const Toon: React.FC<{ who: "aunty" | "arjun"; mouth: number[]; cues: Pos
               ))}
             </g>
           )}
-          {!A ? <path d="M138 214 Q 210 300 282 214 Q 270 262 210 268 Q 150 262 138 214 Z" fill="#000" opacity={0.12} /> : null}
+          {who === "arjun" ? <path d="M138 214 Q 210 300 282 214 Q 270 262 210 268 Q 150 262 138 214 Z" fill="#000" opacity={0.12} /> : null}
           <Brows y={146} mood={mood} color={hair} />
           <Eye cx={172} cy={178} blink={blink} gaze={gaze} mood={mood} />
           <Eye cx={248} cy={178} blink={blink} gaze={gaze} mood={mood} />
           {/* glasses */}
-          <g fill="none" stroke={A ? "#B8860B" : OUT} strokeWidth={5}>
+          {D ? null : <g fill="none" stroke={A ? "#B8860B" : OUT} strokeWidth={5}>
             <circle cx={172} cy={178} r={28} />
             <circle cx={248} cy={178} r={28} />
             <path d="M200 178 Q 210 170 220 178" />
             <path d="M144 176 L 128 172 M 276 176 L 292 172" />
-          </g>
+          </g>}
           {A ? <path d="M132 176 Q 120 250 150 300 M 288 176 Q 300 250 270 300" fill="none" stroke="#B8860B" strokeWidth={2.5} strokeDasharray="3 4" /> : null}
           <path d="M210 190 Q 202 214 212 218" fill="none" stroke={OUT} strokeWidth={4} strokeLinecap="round" />
           <Mouth open={m} mood={mood} y={238} />
+          {D ? <path d="M168 230 Q 186 210 210 222 Q 234 210 252 230 Q 232 240 210 232 Q 188 240 168 230 Z" fill={hair} stroke={OUT} strokeWidth={4} /> : null}
           {mood === "shock" && random(`s${Math.floor(frame / 4)}`) >= 0 ? (
             <g stroke="#D7263D" strokeWidth={6} strokeLinecap="round">
               <path d="M84 70 L 104 92 M 72 110 L 98 116 M 336 70 L 316 92 M 348 110 L 322 116" />
