@@ -8,3 +8,4 @@ __pycache__
 *.zip
 .git
 /public/broll/*.mp4
+/public/reels/*/lines/

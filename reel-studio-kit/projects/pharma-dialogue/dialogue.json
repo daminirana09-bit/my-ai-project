@@ -1,0 +1,20 @@
+{
+  "voices": { "A": "EXAVITQu4vr4xnSDxMaL", "R": "JBFqnCBsd6RMkjVDRZzb" },
+  "voiceNames": { "A": "Sarah (premade, free) for Gupta Aunty", "R": "George (premade, free) for Arjun" },
+  "model": "eleven_v4",
+  "lang": "hi",
+  "gap": 0.3,
+  "lines": [
+    { "who": "A", "text": "Website? Hum pharma company hain, distributor toh phone pe hi order dete hain!", "tts": "वेबसाइट? हम फ़ार्मा कंपनी हैं, डिस्ट्रीब्यूटर तो फ़ोन पे ही ऑर्डर देते हैं!" },
+    { "who": "R", "text": "Aunty, naye distributor aapko pehle Google pe check karte hain.", "tts": "आंटी, नए डिस्ट्रीब्यूटर आपको पहले Google पे चेक करते हैं।" },
+    { "who": "A", "text": "Toh? Humara catalogue PDF hai na.", "tts": "तो? हमारा कैटलॉग PDF है ना।" },
+    { "who": "R", "text": "PDF WhatsApp mein kho jaata hai. Website pe poora product catalogue, composition ke saath.", "tts": "PDF WhatsApp में खो जाता है। वेबसाइट पे पूरा प्रोडक्ट कैटलॉग, कम्पोज़िशन के साथ।" },
+    { "who": "A", "text": "Aur franchise wale log?", "tts": "और फ़्रैंचाइज़ वाले लोग?" },
+    { "who": "R", "text": "Franchise enquiry form — lead seedha aapke WhatsApp pe.", "tts": "फ़्रैंचाइज़ इन्क्वायरी फ़ॉर्म — लीड सीधा आपके WhatsApp पे।" },
+    { "who": "A", "text": "Kharcha kitna?", "tts": "ख़र्चा कितना?" },
+    { "who": "R", "text": "Website sirf ₹5,000 se shuru.", "tts": "वेबसाइट सिर्फ़ पाँच हज़ार से शुरू।" },
+    { "who": "A", "text": "Arre! Toh pehle kyun nahi bataya?", "tts": "अरे! तो पहले क्यों नहीं बताया?" },
+    { "who": "R", "text": "Aapki bhi pharma company hai? Comment karo PHARMA — DM mein details bhej dunga.", "tts": "आपकी भी फ़ार्मा कंपनी है? कमेंट करो PHARMA — DM में डिटेल्स भेज दूँगा।" },
+    { "who": "A", "text": "P-H-A-R-M-A… ho gaya!", "tts": "पी, एच, ए, आर, एम, ए... हो गया!" }
+  ]
+}
