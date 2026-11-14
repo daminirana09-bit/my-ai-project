@@ -6,6 +6,10 @@
   @csrf
   <div><h1>{{ __('Set up your company') }}</h1><p class="muted">{{ __('Enter your company details and create the first admin. All data stays on this server.') }}</p></div>
   @include('partials.flash')
+  @if($codeMissing)
+    <p class="note bad">{{ __('Setup is locked. Open the .env file on the server, write a secret word of 8 or more characters after CRM_SETUP_CODE=, save, then reload this page.') }}</p>
+  @endif
+  <div class="field"><label for="setup_code">{{ __('Setup code (from the .env file)') }}</label><input type="password" id="setup_code" name="setup_code" required autocomplete="off"></div>
   <h2>{{ __('Company') }}</h2>
   <div class="f2">
     <div class="field"><label for="company_name">{{ __('Company name') }}</label><input id="company_name" name="company_name" value="{{ old('company_name') }}" required></div>

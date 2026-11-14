@@ -15,11 +15,18 @@ class SetupController extends Controller
 {
     public function show()
     {
-        return view('setup');
+        return view('setup', ['codeMissing' => strlen((string) config('crm.setup_code')) < 8]);
     }
 
     public function store(Request $request)
     {
+        $code = (string) config('crm.setup_code');
+        if (strlen($code) < 8) {
+            return back()->withErrors(['setup_code' => __('First write CRM_SETUP_CODE (8 or more characters) in the .env file on the server.')]);
+        }
+        if (! hash_equals($code, (string) $request->input('setup_code'))) {
+            return back()->withErrors(['setup_code' => __('The setup code is not correct.')])->withInput($request->except(['password', 'password_confirmation', 'setup_code']));
+        }
         $data = $request->validate([
             'company_name' => ['required', 'string', 'max:150'],
             'gstin' => ['nullable', 'string', 'max:20'],

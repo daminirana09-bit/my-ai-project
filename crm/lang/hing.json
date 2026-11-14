@@ -741,5 +741,9 @@
  "Auto-reply when the salesperson is not at work": "Salesperson kaam par na ho to auto-reply",
  "During office hours: not punched in an hour after start time, or punched out and gone (lunch is not counted).": "Office time mein: start time ke ek ghante baad tak punch-in nahi kiya, ya punch-out karke chala gaya (lunch nahi gina jaata).",
  "After office time (for example after 6 PM), before it starts and on weekly off. Each person's own timing is used.": "Office time ke baad (jaise 6 baje ke baad), shuru hone se pehle aur weekly off par. Har vyakti ki apni timing maani jaati hai.",
- ":n clients are waiting for your call. They are at the top of your Inbox.": ":n clients aapki call ka wait kar rahe hain. Wo aapke Inbox mein sabse upar hain."
+ ":n clients are waiting for your call. They are at the top of your Inbox.": ":n clients aapki call ka wait kar rahe hain. Wo aapke Inbox mein sabse upar hain.",
+ "First write CRM_SETUP_CODE (8 or more characters) in the .env file on the server.": "Pehle server par .env file mein CRM_SETUP_CODE (8 ya zyada characters) likhein.",
+ "The setup code is not correct.": "Setup code sahi nahi hai.",
+ "Setup is locked. Open the .env file on the server, write a secret word of 8 or more characters after CRM_SETUP_CODE=, save, then reload this page.": "Setup band hai. Server par .env file kholein, CRM_SETUP_CODE= ke aage 8 ya zyada characters ka secret word likhein, save karein, phir yeh page reload karein.",
+ "Setup code (from the .env file)": "Setup code (.env file wala)"
 }

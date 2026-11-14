@@ -12,29 +12,49 @@ Each pharma company gets its **own** installation, on its own hosting, with its 
 - One MySQL database (hPanel → Databases → Management).
 - **HTTPS** on the sub-domain (hPanel → Security → SSL; the free SSL is fine).
 
-## 2. Upload
+## 2. Sub-domain and upload
 
-Use the ready package `pharma-sales-crm-<version>.zip` (made with `crm/tools/make-release.sh`;
-it already contains `vendor/`, so Composer is not needed on the server).
+1. hPanel → **Domains → Subdomains**: create one with a name that is hard to guess, e.g.
+   `team-x7k.company.com` rather than `crm.company.com`. Keep the folder Hostinger suggests.
+2. hPanel → **Security → SSL**: make sure the sub-domain has the free SSL (HTTPS). Wait until it shows *Active*.
+3. hPanel → **Databases → Management**: create a database and a user with a strong password. Note the
+   three values (database name, user, password); Hostinger adds a prefix like `u123456789_`.
+4. **File Manager** → open the sub-domain's folder → delete the default `default.php` / `index.html`
+   → upload `pharma-sales-crm-<version>.zip` → right-click → **Extract** into the same folder.
+   (The zip already contains `vendor/`; Composer is not needed.)
+5. The `.htaccess` in that folder sends every request into `public/`, so `.env`, `storage` and
+   `vendor` can never be opened from a browser. (If your plan lets you set the sub-domain's document
+   root to the `public` folder, that is even better.)
 
-1. Create the sub-domain, e.g. `crm.company.com` (hPanel → Domains → Subdomains).
-2. Upload the zip to the sub-domain's folder and extract it there.
-3. **Best:** set the sub-domain's document root to the `public` folder inside it.
-   **If that is not possible:** leave it as is. The `.htaccess` in the main folder sends every
-   request into `public/`, so `.env`, `storage` and `vendor` can never be opened from a browser.
+### "Not public": what is and is not possible
+
+A sub-domain is on the internet, and it has to be: WhatsApp, IndiaMART, Facebook and the website
+form must reach it, and salespeople in the field open it on mobile data. What the CRM does instead:
+
+- Every page needs a login; no client data is shown to anyone without one (Rule 1).
+- Search engines are told not to list it (`robots.txt` and a `noindex` header on every reply).
+- Setup is locked with a code only you know (`CRM_SETUP_CODE`, step 3), so nobody who finds the
+  address before you can make themselves admin.
+- Wrong passwords lock that email for a while; 2-step login for admins and managers; secrets encrypted.
+- Optional: `CRM_ALLOWED_IPS` lets only the office IP open the CRM. Use it only if everyone works
+  from the office: it also blocks salespeople on mobile data. Webhooks keep working.
 
 ## 3. Settings file
 
-1. Copy `.env.example` to `.env` (File Manager → Copy, or `cp .env.example .env`).
-2. Fill in `APP_URL=https://crm.company.com` and `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`.
-3. Over SSH run:
+1. File Manager → copy `.env.example` to `.env` → **Edit** `.env`:
+   - `APP_URL=https://team-x7k.company.com`
+   - `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` from step 2.3 (`DB_HOST=localhost` on Hostinger)
+   - `CRM_SETUP_CODE=` any secret word of 8+ characters (asked once on the setup page)
+2. Over SSH (hPanel → Advanced → SSH Access), in the sub-domain's folder, run:
    ```sh
-   php artisan key:generate
+   php artisan key:generate --force
    php artisan migrate --force
    php artisan config:cache && php artisan route:cache && php artisan view:cache
    chmod 600 .env
    ```
-   Without SSH: hPanel → Advanced → Cron Jobs can run each command once as a one-time job.
+   Without SSH: hPanel → Advanced → Cron Jobs can run each command once as a one-time job
+   (`cd /full/path/to/folder && php artisan key:generate --force`, and so on).
+   After any later change to `.env`, run `php artisan config:cache` again.
 
 **Keep a copy of `.env` somewhere safe.** `APP_KEY` inside it decrypts phone numbers, emails,
 messages and the WhatsApp keys. Without it, even a backup cannot be read.
@@ -50,10 +70,11 @@ and the morning automations (follow-up tasks, overdue alerts).
 
 ## 5. First login
 
-Open `https://crm.company.com`. The setup page asks for the company name, GSTIN, office timing and
-the first admin. Then, as admin:
+Open `https://team-x7k.company.com`. The setup page asks for the setup code from `.env`, the
+company name, GSTIN, office timing and the first admin. Then, as admin:
 
 1. **System check** (sidebar → Admin) must show no red rows.
+   Also open `https://team-x7k.company.com/.env` in a browser: it must show an error page, not the file.
 2. **My profile → 2-step login**: turn it on for every admin and manager.
 3. **Users**: add the team (role, manager, language, personal timing).
 4. **Masters, Products, Office hours, Roles & permissions, Automations**: set to your needs.

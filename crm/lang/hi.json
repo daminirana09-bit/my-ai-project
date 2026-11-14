@@ -741,5 +741,9 @@
  "Auto-reply when the salesperson is not at work": "सेल्सपर्सन काम पर न हो तो स्वचालित जवाब",
  "During office hours: not punched in an hour after start time, or punched out and gone (lunch is not counted).": "कार्यालय समय में: शुरू होने के एक घंटे बाद तक पंच-इन नहीं किया, या पंच-आउट करके चला गया (लंच नहीं गिना जाता)।",
  "After office time (for example after 6 PM), before it starts and on weekly off. Each person's own timing is used.": "कार्यालय समय के बाद (जैसे शाम 6 बजे के बाद), शुरू होने से पहले और साप्ताहिक छुट्टी पर। हर व्यक्ति का अपना समय माना जाता है।",
- ":n clients are waiting for your call. They are at the top of your Inbox.": ":n ग्राहक आपकी कॉल की प्रतीक्षा कर रहे हैं। वे आपके इनबॉक्स में सबसे ऊपर हैं।"
+ ":n clients are waiting for your call. They are at the top of your Inbox.": ":n ग्राहक आपकी कॉल की प्रतीक्षा कर रहे हैं। वे आपके इनबॉक्स में सबसे ऊपर हैं।",
+ "First write CRM_SETUP_CODE (8 or more characters) in the .env file on the server.": "पहले सर्वर पर .env फ़ाइल में CRM_SETUP_CODE (8 या ज़्यादा अक्षर) लिखें।",
+ "The setup code is not correct.": "सेटअप कोड सही नहीं है।",
+ "Setup is locked. Open the .env file on the server, write a secret word of 8 or more characters after CRM_SETUP_CODE=, save, then reload this page.": "सेटअप बंद है। सर्वर पर .env फ़ाइल खोलें, CRM_SETUP_CODE= के आगे 8 या ज़्यादा अक्षरों का गुप्त शब्द लिखें, सहेजें, फिर यह पेज दोबारा खोलें।",
+ "Setup code (from the .env file)": "सेटअप कोड (.env फ़ाइल वाला)"
 }

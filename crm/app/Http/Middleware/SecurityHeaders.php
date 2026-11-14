@@ -12,6 +12,7 @@ class SecurityHeaders
     {
         $response = $next($request);
         $response->headers->set('Content-Security-Policy', "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'self'");
+        $response->headers->set('X-Robots-Tag', 'noindex, nofollow, noarchive');
         $response->headers->set('X-Frame-Options', 'DENY');
         $response->headers->set('X-Content-Type-Options', 'nosniff');
         $response->headers->set('Referrer-Policy', 'no-referrer');

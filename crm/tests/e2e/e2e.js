@@ -16,7 +16,9 @@ const overflow=async(p)=>p.evaluate(()=>document.documentElement.scrollWidth-inn
 // 1. Setup wizard
 let {c,p}=await newPage();globalThis.P=p;
 await p.goto(B+'/');expect(p.url().endsWith('/setup'),'first visit goes to setup');
-await p.fill('#company_name','E2E Pharma Pvt Ltd');await p.fill('#gstin','03ABCDE1234F1Z5');
+await p.fill('#setup_code','wrong-code-1');await p.fill('#company_name','E2E Pharma Pvt Ltd');await p.fill('#admin_name','X');await p.fill('#admin_email','x@e2e.in');await p.fill('#password',PW);await p.fill('#password_confirmation',PW);
+await Promise.all([p.waitForNavigation(),p.click('form button.p')]);expect(p.url().endsWith('/setup')&&await has(p,'flash bad'),'wrong setup code refused');
+await p.fill('#setup_code',process.env.SETUP_CODE||'e2e-setup-code');await p.fill('#company_name','E2E Pharma Pvt Ltd');await p.fill('#gstin','03ABCDE1234F1Z5');
 await p.fill('#admin_name','Owner Admin');await p.fill('#admin_email','owner@e2e.in');await p.fill('#password',PW);await p.fill('#password_confirmation',PW);
 await Promise.all([p.waitForNavigation(),p.click('form button.p')]);step();
 expect(await has(p,'E2E Pharma Pvt Ltd'),'company name shown after setup');
