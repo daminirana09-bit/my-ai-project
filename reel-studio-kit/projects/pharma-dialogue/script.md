@@ -1,31 +1,38 @@
-# pharma-dialogue — "SOLVIX STORIES · EP 01: Medical store ki website"
+# pharma-dialogue — "SOLVIX STORIES · EP 01: Pharma company ki website"
 
 Format: animated two-character dialogue (own characters, own script, own look). Inspired by the
 format of a dialogue explainer reel; nothing copied (no audio, characters, series name or lines).
 
 Characters
-- Gupta Aunty — runs "Gupta Medical Store". Saree + white pharmacist coat, glasses on a chain, bun.
+- Gupta Aunty — Director, "Gupta Pharma" (small pharma company / PCD franchise). Salwar suit + blazer,
+  glasses on a chain, bun, file of papers.
 - Arjun — Solvix Web. Solvix t-shirt, round glasses, curly hair, phone in hand.
-Set: medical-store counter, green cross sign, striped awning, medicine shelves behind.
+Set: small office cabin, "GUPTA PHARMA" sign, shelf with medicine cartons, window.
 Captions: speech bubble above whoever is talking (word highlight). Tag: "SOLVIX STORIES · EP 01".
 
 ## Dialogue (A = Aunty, R = Arjun)
-A: Website? Pachaas hazaar? Na baba, medical store hai, mall nahi!
-R: Aunty, pachaas nahi — sirf paanch hazaar.
-A: Paanch hazaar? Isme kya milega?
-R: Store ki timing, location, WhatsApp button, aur health tips ke posts.
-A: Aur raat ko koi "medical store near me" dhoondhe toh?
-R: Google profile bhi set kar dunga, taaki aap map pe dikho.
+A: Website? Hum pharma company hain, distributor toh phone pe hi order dete hain!
+R: Aunty, naye distributor aapko pehle Google pe check karte hain.
+A: Toh? Humara catalogue PDF hai na.
+R: PDF WhatsApp mein kho jaata hai. Website pe poora product catalogue, composition ke saath.
+A: Aur franchise wale log?
+R: Franchise enquiry form — lead seedha aapke WhatsApp pe.
+A: Kharcha kitna?
+R: Website sirf paanch hazaar se shuru.
 A: Arre! Toh pehle kyun nahi bataya?
-R: Aapka bhi medical store hai? Comment karo WEBSITE — DM mein details bhej dunga.
-A: W-E-B-S-I-T-E… ho gaya!
+R: Aapki bhi pharma company hai? Comment karo PHARMA — DM mein details bhej dunga.
+A: P-H-A-R-M-A… ho gaya!
 
 ## On screen
-- "₹50,000?" slashed -> "₹5,000" bounces in.
-- Arjun's phone opens a mini site: timing, map pin, WhatsApp button, health-tip card (ticks on each word).
-- Night scene beat: moon + search bar "medical store near me" -> map pin with "Gupta Medical".
-- End: Aunty's phone, comment "WEBSITE" typed and posted.
+- Phone call "Distributor calling…" -> Google search "gupta pharma" -> "no website" card.
+- PDF icon slides into a WhatsApp chat and gets buried under messages.
+- Arjun's phone: mini site with product grid (name + composition), "Franchise enquiry" form.
+- Form submit -> WhatsApp notification "New franchise lead".
+- "₹5,000 se shuru" price tag bounce.
+- End: Aunty's phone, comment "PHARMA" typed and posted.
 
 ## Notes
-- No claims about ranking first on Google; no selling prescription medicines online (the site is
-  information + contact only). Not legal advice.
+- "se shuru": a big catalogue costs more; confirm the starting price before posting.
+- Site is B2B information (catalogue, enquiry). No therapeutic claims or ads for prescription drugs
+  to the public (Drugs and Magic Remedies Act, UCPMP 2024). Not legal advice.
+- No certification claims (e.g. WHO-GMP) for the fictional company.
