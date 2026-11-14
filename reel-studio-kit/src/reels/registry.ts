@@ -7,6 +7,7 @@ import * as demo from "./demo/Reel";
 import * as r_website_zaroori from "./website-zaroori/Reel";
 import * as r_dentist_digital from "./dentist-digital/Reel";
 import * as r_desk from "./desk-text/Reel";
+import * as r_pharma_dialogue from "./pharma-dialogue/Reel";
 // <new-reel-imports>
 
 export type ReelEntry = {
@@ -33,6 +34,7 @@ export const REELS: ReelEntry[] = [
   { id: "dentist-digital", Component: r_dentist_digital.Reel, durationInFrames: r_dentist_digital.durationInFrames },
   { id: "desk-hiring", Component: r_desk.Hiring, durationInFrames: r_desk.durationInFrames },
   ...r_desk.CLIENT_REELS.map((r) => ({ ...r, durationInFrames: r_desk.durationInFrames })),
+  { id: "pharma-dialogue", Component: r_pharma_dialogue.Reel, durationInFrames: r_pharma_dialogue.durationInFrames },
   // <new-reel-entries>
 ];
 
