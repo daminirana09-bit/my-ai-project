@@ -44,6 +44,11 @@ class SystemCheck
         }
         $last = Cache::get('crm:cron_last_run');
         $add($last && now()->diffInMinutes($last, true) < 5 ? 'ok' : 'bad', 'Cron runs every minute', $last ? 'last run '.\Illuminate\Support\Carbon::parse($last)->diffForHumans() : 'never: add the cron job');
+        $tasks = collect(['queue', 'leads-pull', 'automations', 'attendance-close'])->mapWithKeys(fn ($t) => [$t => Cache::get('crm:task:'.$t)])->filter();
+        $failed = $tasks->filter(fn ($t) => ! ($t['ok'] ?? false));
+        $queue = $tasks->get('queue');
+        $add($failed->isEmpty() && $queue && now()->diffInMinutes($queue['at'], true) < 5 ? 'ok' : ($failed->isNotEmpty() ? 'bad' : 'warn'), 'Background tasks run (queue, lead fetch, automations)',
+            $failed->isNotEmpty() ? 'failing: '.$failed->map(fn ($t, $k) => $k.' ('.($t['error'] ?? '?').')')->implode(', ') : ($queue ? 'queue ran '.\Illuminate\Support\Carbon::parse($queue['at'])->diffForHumans() : 'not yet'));
         $pending = DB::table('jobs')->count();
         $add($pending < 50 ? 'ok' : 'warn', 'Background queue', $pending.' waiting');
         $c = CompanySetting::current();

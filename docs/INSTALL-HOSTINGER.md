@@ -61,12 +61,16 @@ messages and the WhatsApp keys. Without it, even a backup cannot be read.
 
 ## 4. Cron (one line, every minute)
 
-hPanel → Advanced → Cron Jobs → every minute:
+hPanel → Advanced → Cron Jobs → type **Custom** → Minute, Hour, Day, Month, Weekday all
+"Every… (*)" → command (full paths; `USER` and the folder as File Manager shows them):
 ```
-cd /home/USER/domains/crm.company.com/public_html && php artisan schedule:run >> /dev/null 2>&1
+/opt/alt/php83/usr/bin/php /home/USER/domains/company.com/public_html/crm/artisan schedule:run >> /home/USER/domains/company.com/public_html/crm/storage/logs/cron.log 2>&1
 ```
-This one line runs: WhatsApp campaigns in the background, the nightly attendance close,
-and the morning automations (follow-up tasks, overdue alerts).
+This one line runs: WhatsApp campaigns in the background, fetching leads (IndiaMART, email…),
+the nightly attendance close and the morning automations (follow-up tasks, overdue alerts).
+Everything runs inside that one PHP process, so it works on hosting where `proc_open` is
+turned off (Hostinger). **System check** shows "Cron runs every minute" and "Background tasks run"
+in green within two minutes; errors are in `storage/logs/`.
 
 ## 5. First login
 

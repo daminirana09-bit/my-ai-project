@@ -305,5 +305,19 @@ class FlowsTest extends CrmTestCase
         $this->withCookie('crm_theme', 'dark')->get('/login')->assertSee('data-theme="dark"', false);
         $this->withCookie('crm_theme', '"><script>')->get('/login')->assertDontSee('<script>"', false)->assertDontSee('data-theme="', false);
     }
+    public function test_scheduled_tasks_never_need_a_separate_process(): void
+    {
+        // Shared hosting turns off proc_open: every scheduled task must run inside the cron's own PHP process.
+        $events = app(\Illuminate\Console\Scheduling\Schedule::class)->events();
+        $this->assertNotEmpty($events);
+        foreach ($events as $e) {
+            $this->assertInstanceOf(\Illuminate\Console\Scheduling\CallbackEvent::class, $e, 'needs a separate process: '.$e->command);
+        }
+        $names = collect($events)->map->description->all();
+        foreach (['cron-heartbeat', 'queue', 'leads-pull', 'automations', 'attendance-close', 'attendance-close-yesterday'] as $n) {
+            $this->assertContains($n, $names);
+        }
+        $this->assertSame('queue', end($names), 'the queue runs last because it may work for up to 50 seconds');
+    }
 }
 

@@ -37,9 +37,22 @@ Artisan::command('leads:pull', function (\App\Services\Leads\Puller $puller) {
 })->purpose('Fetch new leads from IndiaMART, TradeIndia and portal API links');
 
 // One cron line on the hosting runs all of this every minute: php artisan schedule:run
+// Shared hosting (Hostinger and others) turns off proc_open, so every task runs inside the same PHP
+// process with Artisan::call, never as a separate process. Each task notes when it last ran and
+// whether it worked, for System check.
+$task = fn (string $name, string $command, array $args = []) => function () use ($name, $command, $args) {
+    try {
+        $code = Artisan::call($command, $args);
+        Cache::put('crm:task:'.$name, ['at' => now()->toIso8601String(), 'ok' => $code === 0, 'error' => $code === 0 ? null : 'exit code '.$code], now()->addDays(3));
+    } catch (Throwable $e) {
+        Cache::put('crm:task:'.$name, ['at' => now()->toIso8601String(), 'ok' => false, 'error' => mb_substr($e->getMessage(), 0, 200)], now()->addDays(3));
+        report($e);
+    }
+};
 Schedule::call(fn () => Cache::put('crm:cron_last_run', now()->toIso8601String(), now()->addDay()))->everyMinute()->name('cron-heartbeat');
-Schedule::command('queue:work --stop-when-empty --max-time=50 --tries=3')->everyMinute()->withoutOverlapping(5);
-Schedule::command('attendance:close')->dailyAt('23:50');
-Schedule::command('attendance:close yesterday')->dailyAt('00:10');
-Schedule::command('crm:automations')->dailyAt('09:05');
-Schedule::command('leads:pull')->everyTenMinutes()->withoutOverlapping(15);
+Schedule::call($task('attendance-close', 'attendance:close'))->dailyAt('23:50')->name('attendance-close');
+Schedule::call($task('attendance-close-yesterday', 'attendance:close', ['date' => 'yesterday']))->dailyAt('00:10')->name('attendance-close-yesterday');
+Schedule::call($task('automations', 'crm:automations'))->dailyAt('09:05')->name('automations');
+Schedule::call($task('leads-pull', 'leads:pull'))->everyTenMinutes()->name('leads-pull')->withoutOverlapping(15);
+// Last, because it may work for up to 50 seconds (WhatsApp campaigns and other background work).
+Schedule::call($task('queue', 'queue:work', ['--stop-when-empty' => true, '--max-time' => 50, '--tries' => 3]))->everyMinute()->name('queue')->withoutOverlapping(5);
