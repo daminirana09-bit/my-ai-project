@@ -1,16 +1,23 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClashController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\MasterController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SetupController;
 use App\Http\Controllers\TargetController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +50,23 @@ Route::middleware('auth')->group(function () {
     Route::put('/leads/{lead}', [LeadController::class, 'update'])->name('leads.update');
     Route::post('/leads/{lead}/activity', [LeadController::class, 'activity'])->name('leads.activity');
     Route::post('/leads/{lead}/assign', [LeadController::class, 'assign'])->middleware('role:manage')->name('leads.assign');
+
+    Route::get('/search', SearchController::class)->name('search');
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/analytics', AnalyticsController::class)->name('analytics');
+
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/new', [ProductController::class, 'create'])->name('products.create');
+    Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+    Route::get('/products/export', [ProductController::class, 'export'])->middleware('throttle:10,1')->name('products.export');
+    Route::post('/products/import', [ProductController::class, 'import'])->middleware('throttle:10,1')->name('products.import');
+    Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
+    Route::patch('/tasks/{task}/status', [TaskController::class, 'status'])->name('tasks.status');
+    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
 
     Route::get('/targets', [TargetController::class, 'index'])->name('targets.index');
     Route::post('/sales', [TargetController::class, 'storeSale'])->name('sales.store');
@@ -81,5 +105,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');
         Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
         Route::get('/audit', AuditController::class)->name('audit');
+        Route::get('/office-hours', [SettingsController::class, 'officeHours'])->name('office-hours');
+        Route::post('/office-hours', [SettingsController::class, 'updateOfficeHours'])->name('office-hours.update');
+        Route::get('/masters', [MasterController::class, 'index'])->name('masters.index');
+        Route::post('/masters', [MasterController::class, 'store'])->name('masters.store');
+        Route::put('/masters/{option}', [MasterController::class, 'update'])->name('masters.update');
+        Route::get('/roles', [RoleController::class, 'edit'])->name('roles');
+        Route::post('/roles', [RoleController::class, 'update'])->name('roles.update');
     });
 });

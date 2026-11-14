@@ -43,6 +43,12 @@ class User extends Authenticatable
     /** Admin and managers see team data and get clash alerts. */
     public function canManage(): bool { return in_array($this->role, ['admin', 'manager'], true); }
 
+    /** Role permission set by the admin on Roles & Permissions. */
+    public function allows(string $permission): bool
+    {
+        return (bool) CompanySetting::current()?->roleAllows($this->role, $permission);
+    }
+
     public function manager(): BelongsTo { return $this->belongsTo(User::class, 'manager_id'); }
     public function team(): HasMany { return $this->hasMany(User::class, 'manager_id'); }
     public function leads(): HasMany { return $this->hasMany(Lead::class, 'owner_id'); }

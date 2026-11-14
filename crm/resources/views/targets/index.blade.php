@@ -1,9 +1,9 @@
 @extends('layouts.app')
-@section('title', __('Targets & sales'))
+@section('title', __('Targets & orders'))
 @section('content')
 @php $me = auth()->user(); $label = \Carbon\Carbon::createFromFormat('Y-m', $month)->translatedFormat('F Y'); @endphp
 <div class="head">
-  <div><h1>{{ __('Targets & sales') }}</h1><p>{{ __('Target, sales done and pending for :month.', ['month' => $label]) }}</p></div>
+  <div><h1>{{ __('Targets & orders') }}</h1><p>{{ __('Target, sales done and pending for :month.', ['month' => $label]) }}</p></div>
   <form method="get" class="row"><label class="sr" for="month">{{ __('Month') }}</label><input type="month" id="month" name="month" value="{{ $month }}" data-autosubmit></form>
 </div>
 

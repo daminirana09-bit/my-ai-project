@@ -3,8 +3,8 @@
 @section('content')
 @php $me = auth()->user(); @endphp
 <div class="head">
-  <div><h1>{{ $lead->firm_name }}</h1><p>{{ $lead->contact_name }} · {{ $lead->city }}{{ $lead->state ? ', '.$lead->state : '' }} · <span class="pill {{ $lead->status }}">{{ __(\App\Models\Lead::STATUSES[$lead->status]) }}</span></p></div>
-  <div class="row"><a class="btn" href="{{ route('leads.edit', $lead) }}">{{ __('Edit') }}</a></div>
+  <div><h1>{{ $lead->firm_name }}</h1><p>{{ $lead->contact_name }} · {{ $lead->city }}{{ $lead->state ? ', '.$lead->state : '' }} · <span class="pill {{ $lead->status }}">{{ __(\App\Models\Lead::STATUSES[$lead->status]) }}</span>@if($lead->temperature) <span class="pill {{ $lead->temperature }}">{{ __(\App\Models\Lead::TEMPERATURES[$lead->temperature]) }}</span>@endif</p></div>
+  <div class="row"><a class="btn" href="{{ route('leads.edit', $lead) }}"><x-icon name="edit"/>{{ __('Edit') }}</a></div>
 </div>
 
 @if($lead->clashes->isNotEmpty() && $me->canManage())
@@ -28,6 +28,23 @@
       <div><button class="btn p">{{ __('Save') }}</button></div>
     </form>
 
+    <section class="card">
+      <div class="ch"><h2>{{ __('Tasks') }}</h2></div>
+      <div class="list">
+        @forelse($lead->tasks as $t)
+          <a class="item" href="{{ route('tasks.index', ['view' => 'team', 'focus' => $t->id]) }}"><span class="bar {{ $t->isOverdue() ? 'bad' : 'warn' }}"></span><div><b>{{ $t->title }}</b><small>{{ $t->assignee?->name }} · {{ $t->due_on?->format('d M') ?? '—' }}</small></div><span class="pill {{ $t->status }}">{{ __(\App\Models\Task::STATUSES[$t->status]) }}</span></a>
+        @empty
+          <p class="empty">{{ __('No tasks for this client.') }}</p>
+        @endforelse
+      </div>
+      <form method="post" action="{{ route('tasks.store') }}" class="row">@csrf
+        <input type="hidden" name="lead_id" value="{{ $lead->id }}"><input type="hidden" name="priority" value="normal">
+        <div class="field"><label for="qt">{{ __('Quick task') }}</label><input id="qt" name="title" required maxlength="200" placeholder="{{ __('e.g. Send sample and rate list') }}"></div>
+        <div class="field"><label for="qd">{{ __('Due date') }}</label><input type="date" id="qd" name="due_on" value="{{ today()->addDay()->format('Y-m-d') }}"></div>
+        <button class="btn"><x-icon name="plus"/>{{ __('Add task') }}</button>
+      </form>
+    </section>
+
     <div class="card"><h2>{{ __('History') }}</h2>
       <div class="timeline">
         @forelse($lead->activities as $a)
@@ -46,6 +63,7 @@
         <tr><td class="muted">{{ __('Phone / WhatsApp') }}</td><td class="mono">{{ $lead->phone ?: '—' }}</td></tr>
         <tr><td class="muted">{{ __('Email') }}</td><td>{{ $lead->email ?: '—' }}</td></tr>
         <tr><td class="muted">GSTIN</td><td class="mono">{{ $lead->gstin ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Orders') }}</td><td>{{ $lead->sales->where('status', 'confirmed')->count() }} · {{ inr($lead->sales->where('status', 'confirmed')->sum('amount')) }}</td></tr>
         <tr><td class="muted">{{ __('Source') }}</td><td>{{ $lead->source ?: '—' }}</td></tr>
         <tr><td class="muted">{{ __('Client type') }}</td><td>{{ $lead->client_type ?: '—' }}</td></tr>
         <tr><td class="muted">{{ __('Requirement') }}</td><td>{{ $lead->requirement ?: '—' }}</td></tr>

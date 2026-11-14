@@ -62,6 +62,7 @@ class TargetController extends Controller
     public function storeSale(Request $request)
     {
         $me = $request->user();
+        abort_unless($me->allows('record_sales'), 403);
         $data = $request->validate([
             'user_id' => ['nullable', 'integer'],
             'lead_id' => ['nullable', 'integer'],

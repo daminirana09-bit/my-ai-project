@@ -41,9 +41,14 @@ await p.selectOption('#type','call');await p.selectOption('#outcome','connected'
 await Promise.all([p.waitForNavigation(),p.click('form[action$="/activity"] button.p')]);expect(await has(p,'Called, interested in PCD'),'activity logged');
 await p.goto(B+'/targets');await p.selectOption('#lead_id',{label:'Clash Firm'});await p.fill('#amount','120000');
 await Promise.all([p.waitForNavigation(),p.click('form[action$="/sales"] button.p')]);expect(await has(p,'₹1,20,000'),'sale recorded');step();
+await p.goto(B+'/tasks');await p.fill('#title','Send COA to Clash Firm');await p.selectOption('#priority','high');await Promise.all([p.waitForNavigation(),p.click('form[action$="/tasks"] button.p')]);
+expect(await has(p,'Send COA to Clash Firm'),'task created');
+await p.goto(B+'/');expect(await has(p,'Send COA to Clash Firm'),'task shows in dashboard reminders');
+await p.goto(B+'/tasks');await Promise.all([p.waitForNavigation(),p.selectOption('select[data-autosubmit][name="status"]','done')]);expect(await p.$eval('select[data-autosubmit][name="status"]',e=>e.value)==='done','task completed');
+await p.fill('#gq','98111 00099');await Promise.all([p.waitForNavigation(),p.press('#gq','Enter')]);expect(await has(p,'Clash Firm'),'top search finds lead by phone');
 // mobile check for Rita
 {const m=await newPage({width:390,height:844});await login(m.p,'rita@e2e.in');for(const u of ['/','/leads','/targets','/attendance/me']){await m.p.goto(B+u);const o=await overflow(m.p);expect(o<=0,'mobile overflow '+u+' '+o)}
- await m.p.click('[data-menu]');expect(await m.p.$eval('.side',e=>e.classList.contains('open')),'mobile menu opens');await m.p.mouse.click(370,600);expect(!(await m.p.$eval('.side',e=>e.classList.contains('open'))),'mobile menu closes on outside tap');await m.c.close();}
+ await m.p.click('[data-menu]');expect(await m.p.$eval('.sidebar',e=>e.classList.contains('open')),'mobile menu opens');await m.p.mouse.click(370,600);expect(!(await m.p.$eval('.sidebar',e=>e.classList.contains('open'))),'mobile menu closes on outside tap');await m.c.close();}
 await logout(p);
 
 // 5. Sohan: same client → clash; import file
@@ -63,12 +68,18 @@ await p.goto(B+'/clashes');const opens=await p.$$('form[action*="/resolve"]');ex
 await p.selectOption('form[action*="/resolve"] select',{label:'Sohan Rep'});await Promise.all([p.waitForNavigation(),p.click('form[action*="/resolve"] button')]);expect(await has(p,'Sohan Rep'),'clash resolved to Sohan');
 await p.goto(B+'/targets');await Promise.all([p.waitForNavigation(),p.selectOption('select[data-autosubmit][name="status"]','confirmed')]);
 await p.goto(B+'/attendance/today');expect(await has(p,'Abhi kaam par')||await has(p,'Working now'),'Rita shown working now');
+await p.goto(B+'/products/new');await p.fill('#name','E2E Pan-D');await p.fill('#composition','Pantoprazole 40 mg + Domperidone 30 mg');await p.fill('#rate','22.4');await p.fill('#moq','10000');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/products"] button.p')]);expect(await has(p,'E2E Pan-D'),'manager adds product');
+expect((await p.goto(B+'/analytics')).status()===200,'analytics opens for manager');
+expect((await p.goto(B+'/customers')).status()===200,'customers opens');
 await p.goto(B+'/leads');
 const [dl]=await Promise.all([p.waitForEvent('download'),p.click('a[href*="export"][href*="xlsx"]')]);const dpath=await dl.path();expect(fs.statSync(dpath).size>3000,'export file has content');step();
 await logout(p);
 
 // 7. Sohan now owns Clash Firm; Rita does not
-await login(p,'sohan@e2e.in');await p.goto(B+'/leads');expect(await has(p,'Clash Firm'),'Sohan now sees Clash Firm');await logout(p);
+await login(p,'sohan@e2e.in');await p.goto(B+'/leads');expect(await has(p,'Clash Firm'),'Sohan now sees Clash Firm');
+expect(!(await has(p,'/leads/export')),'rep has no export button by default');
+await p.goto(B+'/products');expect(await has(p,'E2E Pan-D')&&!(await has(p,'/products/1/edit')),'rep sees products read-only');await logout(p);
 await login(p,'rita@e2e.in');await p.goto(B+'/leads');expect(!(await has(p,'Clash Firm')),'Rita no longer sees Clash Firm');
 await p.goto(B+'/targets');expect(await has(p,'₹1.20 L'),'Rita sale confirmed counts in target');
 await Promise.all([p.waitForNavigation(),p.click('form[action$="/attendance/punch"] button')]);expect(await has(p,'पंच इन'),'punch out works');
@@ -79,9 +90,13 @@ await login(p,'owner@e2e.in');await p.goto(B+'/users');
 const ritaEdit=await p.$$eval('tr',rows=>{const r=rows.find(x=>x.textContent.includes('Rita Rep'));return r?r.querySelector('a').href:null});
 await p.goto(ritaEdit);await p.uncheck('input[name="active"]');await p.selectOption('#move_leads_to',{label:'Sohan Rep'});await Promise.all([p.waitForNavigation(),p.click('form button.p')]);
 await p.goto(B+'/audit');expect(await has(p,'lead.export')&&await has(p,'clash.resolve')&&await has(p,'lead.import'),'audit log has export/import/clash');
-await p.goto(B+'/settings');await p.fill('#office_start','10:00');await Promise.all([p.waitForNavigation(),p.click('form[action$="/settings"] button.p')]);expect(await has(p,'flash ok'),'settings saved');
-for(const u of ['/','/leads','/clashes','/targets','/attendance/today','/attendance/register','/users','/settings','/audit','/notifications','/profile']){const r=await p.goto(B+u);expect(r.status()===200,'admin page '+u+' '+r.status());expect(await has(p,'Solvix Web'),'credit on '+u)}
+await p.goto(B+'/office-hours');await p.fill('#office_start','10:00');await Promise.all([p.waitForNavigation(),p.click('form[action$="/office-hours"] button.p')]);expect(await has(p,'flash ok'),'office hours saved');
+await p.goto(B+'/settings');await p.fill('#company_name','E2E Pharma Pvt Ltd');await Promise.all([p.waitForNavigation(),p.click('form[action$="/settings"] button.p')]);expect(await has(p,'flash ok'),'settings saved');
+await p.goto(B+'/roles');await p.check('input[name="perm[rep][export_leads]"]');await Promise.all([p.waitForNavigation(),p.click('form[action$="/roles"] button.p')]);expect(await has(p,'flash ok'),'permissions saved');
+await p.goto(B+'/masters');await p.fill('#newsource','E2E Expo');await Promise.all([p.waitForNavigation(),p.click('form[action$="/masters"]:has(#newsource) button')]);expect(await has(p,'E2E Expo'),'master value added');
+for(const u of ['/','/leads','/customers','/tasks','/products','/analytics','/search?q=e2e','/clashes','/targets','/attendance/today','/attendance/register','/office-hours','/users','/roles','/masters','/settings','/audit','/notifications','/profile']){const r=await p.goto(B+u);expect(r.status()===200,'admin page '+u+' '+r.status());expect(await has(p,'Solvix Web'),'credit on '+u)}
 await logout(p);
+await login(p,'sohan@e2e.in');await p.goto(B+'/leads');expect(await has(p,'/leads/export'),'rep export button appears after admin allows it');await logout(p);
 await p.goto(B+'/login');await p.fill('#email','rita@e2e.in');await p.fill('#password',PW);await p.click('form button.p');await p.waitForLoadState();expect(await has(p,'flash bad'),'deactivated Rita cannot log in');
 const r404=await p.goto(B+'/nope-page');expect(r404.status()===404&&await has(p,'Solvix Web'),'own 404 page with credit');
 await b.close();

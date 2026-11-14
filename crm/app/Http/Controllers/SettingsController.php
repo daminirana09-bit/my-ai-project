@@ -25,23 +25,8 @@ class SettingsController extends Controller
             'drug_licence_no' => ['nullable', 'string', 'max:100'],
             'phone' => ['nullable', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:150'],
-            'office_start' => ['required', 'date_format:H:i'],
-            'office_end' => ['required', 'date_format:H:i', 'after:office_start'],
-            'lunch_start' => ['required', 'date_format:H:i'],
-            'lunch_end' => ['required', 'date_format:H:i', 'after:lunch_start'],
-            'late_grace_minutes' => ['required', 'integer', 'min:0', 'max:180'],
-            'full_day_hours' => ['required', 'numeric', 'min:1', 'max:16'],
-            'half_day_hours' => ['required', 'numeric', 'min:0.5', 'max:12', 'lt:full_day_hours'],
-            'weekly_off' => ['nullable', 'array'],
-            'weekly_off.*' => ['integer', 'between:0,6'],
             'logo' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:1024'],
         ]);
-
-        $data['full_day_minutes'] = (int) round($data['full_day_hours'] * 60);
-        $data['half_day_minutes'] = (int) round($data['half_day_hours'] * 60);
-        $data['weekly_off'] = implode(',', $data['weekly_off'] ?? []);
-        $data['reps_can_export_own_leads'] = $request->boolean('reps_can_export_own_leads');
-        unset($data['full_day_hours'], $data['half_day_hours']);
 
         if ($request->hasFile('logo')) {
             // Kept outside the public folder and served through the app.
@@ -56,6 +41,35 @@ class SettingsController extends Controller
         AuditLog::record('settings.update');
 
         return back()->with('ok', __('Settings saved.'));
+    }
+
+    public function officeHours()
+    {
+        return view('office-hours', ['c' => CompanySetting::current(), 'people' => \App\Models\User::active()->orderBy('name')->get()]);
+    }
+
+    public function updateOfficeHours(Request $request)
+    {
+        $data = $request->validate([
+            'office_start' => ['required', 'date_format:H:i'],
+            'office_end' => ['required', 'date_format:H:i', 'after:office_start'],
+            'lunch_start' => ['required', 'date_format:H:i'],
+            'lunch_end' => ['required', 'date_format:H:i', 'after:lunch_start'],
+            'late_grace_minutes' => ['required', 'integer', 'min:0', 'max:180'],
+            'full_day_hours' => ['required', 'numeric', 'min:1', 'max:16'],
+            'half_day_hours' => ['required', 'numeric', 'min:0.5', 'max:12', 'lt:full_day_hours'],
+            'weekly_off' => ['nullable', 'array'],
+            'weekly_off.*' => ['integer', 'between:0,6'],
+        ]);
+        $data['full_day_minutes'] = (int) round($data['full_day_hours'] * 60);
+        $data['half_day_minutes'] = (int) round($data['half_day_hours'] * 60);
+        $data['weekly_off'] = implode(',', $data['weekly_off'] ?? []);
+        unset($data['full_day_hours'], $data['half_day_hours']);
+        CompanySetting::current()->update($data);
+        CompanySetting::forget();
+        AuditLog::record('office_hours.update');
+
+        return back()->with('ok', __('Office hours saved.'));
     }
 
     public function logo()

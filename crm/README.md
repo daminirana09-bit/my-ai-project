@@ -6,17 +6,26 @@ One installation per company. Each company sets its own name, logo, timings and 
 
 **What it does today**
 
-- **Leads:** status for every lead, filters, search, call/WhatsApp/visit log, follow-ups,
-  one-click **Excel/CSV import and export** (Google Sheets via downloaded .xlsx/.csv).
-- **Who sees what:** admin sees everything; a manager sees their own team; a sales rep sees
-  only their own leads and numbers.
-- **Lead clash:** if two salespeople add, import or work the same client (same phone or
-  GSTIN), the lead is not duplicated and admin + managers get an alert to decide who keeps it.
-- **Targets & sales:** monthly target per salesperson, sales done, still to achieve, pending
+- **Dashboard:** leads, customers, orders, sales, leads not updated in 30 days, dead leads;
+  monthly target strip; team report (total, mature, hot, warm, cold, follow-up, dead);
+  follow-ups (pending, overdue, today, next 7 days, updated today); reminders; lead mix;
+  task counts (self and team); latest leads; attendance today; open clashes.
+- **Leads:** status + hot/warm/cold, search (name, city, GSTIN, full phone, full email),
+  filters, call/WhatsApp/visit log, follow-ups, tasks per client, one-click **Excel/CSV
+  import and export** (Google Sheets via downloaded .xlsx/.csv).
+- **Customers:** won leads with orders, business and reorder alert (no order in 30 days).
+- **Products:** composition, form, packing, category, rate, MOQ, HSN, GST; Excel import/export.
+- **Tasks:** for self or team, priority, due date, status (pending / in progress / complete).
+- **Targets & orders:** monthly target per salesperson, sales done, still to achieve, pending
   orders, calls today and this week.
-- **Attendance:** punch in / punch out in the CRM; company and personal office/lunch timing;
+- **Analytics:** leads and sales per month, source-wise and salesperson-wise conversion.
+- **Lead clash:** same client (phone or GSTIN) with two salespeople → admin + managers decide.
+- **Attendance:** punch in/out; company and personal office/lunch timing (Office hours);
   full day, half day, absent, single swipe, late; monthly register; admin corrections.
-- **Languages:** each user picks English, Hinglish or Hindi.
+- **Admin:** users, roles & permissions, masters (sources, client types, lost reasons,
+  product categories), company settings, activity log.
+- **Global search** in the top bar. **Languages:** English, Hinglish, Hindi per user.
+- **Who sees what:** admin everything; manager own team; sales rep only own data.
 - **Rule 1 (data never leaks):** see `../docs/RULE-1-DATA-PROTECTION.md`.
 
 **Run locally**

@@ -24,13 +24,17 @@ class LeadController extends Controller
         return Lead::visibleTo($me)
             ->when($request->filled('status') && isset(Lead::STATUSES[$request->status]), fn ($q) => $q->where('status', $request->status))
             ->when($request->filled('source'), fn ($q) => $q->where('source', $request->source))
+            ->when($request->filled('temperature') && isset(Lead::TEMPERATURES[$request->temperature]), fn ($q) => $q->where('temperature', $request->temperature))
+            ->when($request->boolean('stale'), fn ($q) => $q->stale())
             ->when($me->canManage() && $request->filled('owner'), fn ($q) => $q->where('owner_id', (int) $request->owner))
             ->when($request->filled('q'), function ($q) use ($request) {
                 $term = '%'.str_replace(['%', '_'], ['\%', '\_'], $request->q).'%';
                 $hash = Lead::hashPhone($request->q);
+                $isEmail = str_contains($request->q, '@');
                 $q->where(fn ($w) => $w->where('firm_name', 'like', $term)->orWhere('contact_name', 'like', $term)
                     ->orWhere('city', 'like', $term)->orWhere('gstin', 'like', $term)
-                    ->when($hash && strlen((string) Lead::normalizePhone($request->q)) >= 10, fn ($x) => $x->orWhere('phone_hash', $hash)));
+                    ->when(! $isEmail && $hash && strlen((string) Lead::normalizePhone($request->q)) >= 10, fn ($x) => $x->orWhere('phone_hash', $hash))
+                    ->when($isEmail, fn ($x) => $x->orWhere('email_hash', Lead::hashEmail($request->q))));
             })
             ->when($request->boolean('due'), fn ($q) => $q->whereNotIn('status', ['won', 'lost'])->whereDate('next_follow_up_on', '<=', today()));
     }
@@ -39,10 +43,12 @@ class LeadController extends Controller
     {
         $me = $request->user();
         $counts = Lead::visibleTo($me)->selectRaw('status, COUNT(*) as n')->groupBy('status')->pluck('n', 'status');
+        $temps = Lead::visibleTo($me)->open()->whereNotNull('temperature')->selectRaw('temperature, COUNT(*) as n')->groupBy('temperature')->pluck('n', 'temperature');
 
         return view('leads.index', [
             'leads' => $this->filtered($request)->with('owner:id,name')->latest('updated_at')->paginate(25)->withQueryString(),
             'counts' => $counts,
+            'temps' => $temps,
             'owners' => $me->canManage() ? User::active()->visibleTo($me)->orderBy('name')->get(['id', 'name']) : collect(),
             'canExport' => $this->canExport($me),
         ]);
@@ -74,7 +80,7 @@ class LeadController extends Controller
         $this->authorizeLead($request, $lead);
 
         return view('leads.show', [
-            'lead' => $lead->load(['owner', 'activities.user', 'clashes' => fn ($q) => $q->where('status', 'open')->with('otherUser')]),
+            'lead' => $lead->load(['owner', 'activities.user', 'tasks.assignee', 'sales', 'clashes' => fn ($q) => $q->where('status', 'open')->with('otherUser')]),
             'owners' => $this->assignable($request->user()),
         ]);
     }
@@ -152,7 +158,7 @@ class LeadController extends Controller
     public function export(Request $request, LeadExporter $exporter)
     {
         $me = $request->user();
-        abort_unless($this->canExport($me), 403, __('Export is turned off for sales reps. Ask your admin.'));
+        abort_unless($this->canExport($me), 403, __('Export is turned off for your role. Ask your admin.'));
         $format = $request->query('format') === 'csv' ? 'csv' : 'xlsx';
         $query = $this->filtered($request);
         $count = (clone $query)->count();
@@ -165,12 +171,14 @@ class LeadController extends Controller
 
     public function importForm(Request $request)
     {
+        abort_unless($request->user()->allows('import_leads'), 403);
         return view('leads.import', ['owners' => $this->assignable($request->user())]);
     }
 
     public function import(Request $request, LeadImporter $importer)
     {
         $me = $request->user();
+        abort_unless($me->allows('import_leads'), 403);
         $request->validate([
             'file' => ['required', 'file', 'max:5120', 'mimes:xlsx,csv,txt'],
             'owner_id' => ['nullable', 'integer'],
@@ -229,8 +237,10 @@ class LeadController extends Controller
             'city' => ['nullable', 'string', 'max:80'],
             'state' => ['nullable', 'string', 'max:80'],
             'gstin' => ['nullable', 'string', 'max:20'],
-            'source' => ['nullable', Rule::in(Lead::SOURCES)],
-            'client_type' => ['nullable', Rule::in(Lead::CLIENT_TYPES)],
+            // Lists come from Masters; any earlier value stays valid.
+            'source' => ['nullable', 'string', 'max:60'],
+            'client_type' => ['nullable', 'string', 'max:60'],
+            'temperature' => ['nullable', Rule::in(array_keys(Lead::TEMPERATURES))],
             'requirement' => ['nullable', 'string', 'max:255'],
             'status' => ['required', Rule::in(array_keys(Lead::STATUSES))],
             'expected_value' => ['nullable', 'numeric', 'min:0'],
@@ -261,7 +271,7 @@ class LeadController extends Controller
 
     private function canExport(User $me): bool
     {
-        return $me->canManage() || (bool) CompanySetting::current()?->reps_can_export_own_leads;
+        return $me->allows('export_leads');
     }
 
     private function log(Lead $lead, User $by, string $type, ?string $outcome, ?string $note): void

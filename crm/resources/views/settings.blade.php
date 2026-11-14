@@ -1,8 +1,7 @@
 @extends('layouts.app')
 @section('title', __('Company settings'))
 @section('content')
-@php $days = [1 => __('Monday'), 2 => __('Tuesday'), 3 => __('Wednesday'), 4 => __('Thursday'), 5 => __('Friday'), 6 => __('Saturday'), 0 => __('Sunday')]; $off = $c->weeklyOffDays(); @endphp
-<div class="head"><div><h1>{{ __('Company settings') }}</h1><p>{{ __('Your company\'s own details, logo, office and lunch timing. These apply to everyone unless a person has their own timing.') }}</p></div></div>
+<div class="head"><div><h1>{{ __('Company settings') }}</h1><p>{{ __('Your company\'s own name, details and logo. They appear in the menu, on the login page and on documents.') }}</p></div></div>
 <form method="post" action="{{ route('settings.update') }}" enctype="multipart/form-data" class="form">
   @csrf
   <div class="card form">
@@ -17,26 +16,7 @@
     </div>
     <div class="field"><label for="address">{{ __('Address') }}</label><textarea id="address" name="address">{{ old('address', $c->address) }}</textarea></div>
   </div>
-  <div class="card form">
-    <h2>{{ __('Office and lunch timing') }}</h2>
-    <div class="f3">
-      <div class="field"><label for="office_start">{{ __('Office starts') }}</label><input type="time" id="office_start" name="office_start" value="{{ old('office_start', substr($c->office_start, 0, 5)) }}" required></div>
-      <div class="field"><label for="office_end">{{ __('Office ends') }}</label><input type="time" id="office_end" name="office_end" value="{{ old('office_end', substr($c->office_end, 0, 5)) }}" required></div>
-      <div class="field"><label for="late_grace_minutes">{{ __('Late after (minutes past start)') }}</label><input type="number" min="0" max="180" id="late_grace_minutes" name="late_grace_minutes" value="{{ old('late_grace_minutes', $c->late_grace_minutes) }}" required></div>
-      <div class="field"><label for="lunch_start">{{ __('Lunch starts') }}</label><input type="time" id="lunch_start" name="lunch_start" value="{{ old('lunch_start', substr($c->lunch_start, 0, 5)) }}" required></div>
-      <div class="field"><label for="lunch_end">{{ __('Lunch ends') }}</label><input type="time" id="lunch_end" name="lunch_end" value="{{ old('lunch_end', substr($c->lunch_end, 0, 5)) }}" required></div>
-      <div></div>
-      <div class="field"><label for="full_day_hours">{{ __('Full day = at least (hours worked)') }}</label><input type="number" min="1" max="16" step="0.25" id="full_day_hours" name="full_day_hours" value="{{ old('full_day_hours', $c->full_day_minutes / 60) }}" required></div>
-      <div class="field"><label for="half_day_hours">{{ __('Half day = at least (hours worked)') }}</label><input type="number" min="0.5" max="12" step="0.25" id="half_day_hours" name="half_day_hours" value="{{ old('half_day_hours', $c->half_day_minutes / 60) }}" required></div>
-    </div>
-    <p class="small muted">{{ __('Less than the half-day hours counts as absent. Only one punch in a day counts as single swipe. Lunch time is not counted as work.') }}</p>
-    <fieldset class="row"><legend class="small muted">{{ __('Weekly off') }}</legend>@foreach($days as $n => $d)<label class="check"><input type="checkbox" name="weekly_off[]" value="{{ $n }}" @checked(in_array($n, $off, true))> {{ $d }}</label>@endforeach</fieldset>
-  </div>
-  <div class="card form">
-    <h2>{{ __('Data protection') }}</h2>
-    <label class="check"><input type="checkbox" name="reps_can_export_own_leads" value="1" @checked($c->reps_can_export_own_leads)> {{ __('Allow sales reps to export their own leads') }}</label>
-    <p class="small muted">{{ __('Off is safer. Admin and managers can always export. Every export is recorded in the activity log.') }}</p>
-  </div>
+  <p class="note">{{ __('Office and lunch timing are under Office hours. Who may export or import is under Roles & permissions.') }}</p>
   <div><button class="btn p">{{ __('Save settings') }}</button></div>
 </form>
 @endsection

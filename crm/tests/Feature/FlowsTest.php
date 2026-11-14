@@ -116,24 +116,31 @@ class FlowsTest extends CrmTestCase
         $this->assertTrue($this->admin->fresh()->active);
     }
 
-    public function test_settings_save_timings_weekly_off_and_logo(): void
+    public function test_settings_save_details_and_logo(): void
     {
         $logo = UploadedFile::fake()->image('logo.png', 80, 80);
-        $this->actingAs($this->admin)->post('/settings', [
-            'company_name' => 'Renamed Pharma', 'office_start' => '10:00', 'office_end' => '19:00', 'lunch_start' => '14:00', 'lunch_end' => '14:45',
-            'late_grace_minutes' => 10, 'full_day_hours' => 7.5, 'half_day_hours' => 3.5, 'logo' => $logo,
+        $this->actingAs($this->admin)->post('/settings', ['company_name' => 'Renamed Pharma', 'gstin' => '03ABCDE1234F1Z5', 'logo' => $logo])->assertSessionHasNoErrors();
+        CompanySetting::forget();
+        $this->assertSame('Renamed Pharma', CompanySetting::current()->company_name);
+        $this->actingAs($this->repA)->get('/branding/logo')->assertOk();
+        $this->actingAs($this->repA)->get('/')->assertSee('Renamed Pharma');
+        $this->actingAs($this->manager)->post('/settings', ['company_name' => 'Hijack'])->assertForbidden();
+    }
+
+    public function test_office_hours_timings_and_weekly_off(): void
+    {
+        $this->actingAs($this->admin)->post('/office-hours', [
+            'office_start' => '10:00', 'office_end' => '19:00', 'lunch_start' => '14:00', 'lunch_end' => '14:45',
+            'late_grace_minutes' => 10, 'full_day_hours' => 7.5, 'half_day_hours' => 3.5,
         ])->assertSessionHasNoErrors();
         CompanySetting::forget();
         $c = CompanySetting::current();
-        $this->assertSame('Renamed Pharma', $c->company_name);
         $this->assertSame(450, $c->full_day_minutes);
         $this->assertSame('', $c->weekly_off); // no weekly off ticked
-        $this->assertFalse($c->reps_can_export_own_leads);
-        $this->actingAs($this->repA)->get('/branding/logo')->assertOk();
-        $this->actingAs($this->repA)->get('/')->assertSee('Renamed Pharma');
-
-        $this->actingAs($this->admin)->post('/settings', ['company_name' => 'X', 'office_start' => '10:00', 'office_end' => '09:00', 'lunch_start' => '14:00', 'lunch_end' => '14:45', 'late_grace_minutes' => 0, 'full_day_hours' => 4, 'half_day_hours' => 6])
+        $this->assertSame('10:00', substr($c->office_start, 0, 5));
+        $this->actingAs($this->admin)->post('/office-hours', ['office_start' => '10:00', 'office_end' => '09:00', 'lunch_start' => '14:00', 'lunch_end' => '14:45', 'late_grace_minutes' => 0, 'full_day_hours' => 4, 'half_day_hours' => 6])
             ->assertSessionHasErrors(['office_end', 'half_day_hours']);
+        $this->actingAs($this->manager)->get('/office-hours')->assertForbidden();
     }
 
     public function test_reps_can_export_only_their_own_when_allowed(): void

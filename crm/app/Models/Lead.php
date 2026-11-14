@@ -19,13 +19,16 @@ class Lead extends Model
         'lost' => 'Lost',
     ];
 
-    public const SOURCES = ['IndiaMART', 'TradeIndia', 'Website', 'WhatsApp', 'Call', 'Email', 'Referral', 'Exhibition', 'Other'];
-    public const CLIENT_TYPES = ['Third-party', 'PCD Franchise', 'Distributor', 'Hospital', 'Export', 'Other'];
+    /** How warm the client is. "Mature" = won, "Dead" = lost (see STATUSES). */
+    public const TEMPERATURES = ['hot' => 'Hot', 'warm' => 'Warm', 'cold' => 'Cold'];
+
+    /** Days without any update after which an open lead counts as "not updated". */
+    public const STALE_DAYS = 30;
 
     protected $fillable = [
         'firm_name', 'contact_name', 'phone', 'email', 'city', 'state', 'gstin', 'source', 'client_type',
         'requirement', 'status', 'expected_value', 'owner_id', 'created_by', 'created_via',
-        'last_contact_at', 'next_follow_up_on', 'lost_reason', 'notes',
+        'last_contact_at', 'next_follow_up_on', 'lost_reason', 'notes', 'temperature',
     ];
 
     protected function casts(): array
@@ -45,6 +48,7 @@ class Lead extends Model
         // without storing the number in readable form.
         static::saving(function (Lead $lead) {
             $lead->phone_hash = self::hashPhone($lead->phone);
+            $lead->email_hash = self::hashEmail($lead->email);
             if ($lead->gstin) {
                 $lead->gstin = strtoupper(trim($lead->gstin));
             }
@@ -66,6 +70,29 @@ class Lead extends Model
         $n = self::normalizePhone($phone);
         return $n ? hash_hmac('sha256', $n, (string) config('app.key')) : null;
     }
+
+    public static function hashEmail(?string $email): ?string
+    {
+        $e = strtolower(trim((string) $email));
+
+        return $e !== '' ? hash_hmac('sha256', 'e:'.$e, (string) config('app.key')) : null;
+    }
+
+    public function scopeOpen(Builder $q): Builder
+    {
+        return $q->whereNotIn('status', ['won', 'lost']);
+    }
+
+    /** Open leads nobody has touched for STALE_DAYS days. */
+    public function scopeStale(Builder $q): Builder
+    {
+        $cut = now()->subDays(self::STALE_DAYS);
+
+        return $q->open()->where(fn ($w) => $w->where('last_contact_at', '<', $cut)->orWhere(fn ($x) => $x->whereNull('last_contact_at')->where('created_at', '<', $cut)));
+    }
+
+    public function tasks(): HasMany { return $this->hasMany(Task::class)->latest(); }
+    public function sales(): HasMany { return $this->hasMany(Sale::class)->latest('sale_date'); }
 
     public function owner(): BelongsTo { return $this->belongsTo(User::class, 'owner_id'); }
     public function creator(): BelongsTo { return $this->belongsTo(User::class, 'created_by'); }

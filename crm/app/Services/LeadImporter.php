@@ -28,6 +28,7 @@ class LeadImporter
         'client_type' => ['type', 'client type', 'category', 'party type'],
         'requirement' => ['requirement', 'product', 'products', 'need', 'enquiry', 'inquiry', 'query'],
         'status' => ['status', 'lead status', 'stage'],
+        'temperature' => ['temperature', 'hot/cold', 'hot cold', 'priority', 'lead type'],
         'expected_value' => ['value', 'amount', 'deal value', 'expected value', 'order value'],
         'next_follow_up_on' => ['follow up', 'follow-up', 'next follow up', 'follow up date', 'next follow-up'],
         'notes' => ['notes', 'note', 'remark', 'remarks', 'comment', 'comments'],
@@ -114,6 +115,7 @@ class LeadImporter
                 'client_type' => $data['client_type'] ?? null,
                 'requirement' => $data['requirement'] ?? null,
                 'status' => $this->status($data['status'] ?? null),
+                'temperature' => $this->temperature($data['temperature'] ?? null),
                 'expected_value' => is_numeric(str_replace([',', '₹'], '', (string) ($data['expected_value'] ?? ''))) ? str_replace([',', '₹'], '', (string) $data['expected_value']) : null,
                 'next_follow_up_on' => $this->date($data['next_follow_up_on'] ?? null),
                 'notes' => $data['notes'] ?? null,
@@ -189,6 +191,13 @@ class LeadImporter
         }
 
         return 'new';
+    }
+
+    private function temperature(?string $value): ?string
+    {
+        $v = strtolower(trim((string) $value));
+
+        return isset(Lead::TEMPERATURES[$v]) ? $v : null;
     }
 
     private function date($value): ?string
