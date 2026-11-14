@@ -737,5 +737,9 @@
  "Name to show as source": "स्रोत में दिखने वाला नाम",
  "Not switched on, or the API key is missing.": "चालू नहीं है, या API key नहीं डाली।",
  "Fetched less than 5 minutes ago. The portal allows one fetch every 5 minutes.": "5 मिनट से पहले ही लाए थे। पोर्टल हर 5 मिनट में एक बार ही देता है।",
- "No source": "कोई स्रोत नहीं"
+ "No source": "कोई स्रोत नहीं",
+ "Auto-reply when the salesperson is not at work": "सेल्सपर्सन काम पर न हो तो स्वचालित जवाब",
+ "During office hours: not punched in an hour after start time, or punched out and gone (lunch is not counted).": "कार्यालय समय में: शुरू होने के एक घंटे बाद तक पंच-इन नहीं किया, या पंच-आउट करके चला गया (लंच नहीं गिना जाता)।",
+ "After office time (for example after 6 PM), before it starts and on weekly off. Each person's own timing is used.": "कार्यालय समय के बाद (जैसे शाम 6 बजे के बाद), शुरू होने से पहले और साप्ताहिक छुट्टी पर। हर व्यक्ति का अपना समय माना जाता है।",
+ ":n clients are waiting for your call. They are at the top of your Inbox.": ":n ग्राहक आपकी कॉल की प्रतीक्षा कर रहे हैं। वे आपके इनबॉक्स में सबसे ऊपर हैं।"
 }

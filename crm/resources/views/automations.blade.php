@@ -8,7 +8,8 @@
   <section class="card form">
     <h2>{{ __('WhatsApp') }}</h2>
     @foreach(['away_auto_reply' => ['Auto-reply when the salesperson is away', 'On half day, leave or meeting, clients get a reply in their language and wait for a call.'],
-              'after_hours_auto_reply' => ['Auto-reply outside office hours', 'Also reply after office time and on weekly off.'],
+              'absent_auto_reply' => ['Auto-reply when the salesperson is not at work', 'During office hours: not punched in an hour after start time, or punched out and gone (lunch is not counted).'],
+              'after_hours_auto_reply' => ['Auto-reply outside office hours', 'After office time (for example after 6 PM), before it starts and on weekly off. Each person\'s own timing is used.'],
               'urgent_alert' => ['Alert on urgent messages', 'URGENT or complaint messages alert the backup person and managers.']] as $k => [$t, $d])
       <label class="check top"><input type="checkbox" name="{{ $k }}" value="1" @checked($c->automation($k))><span><b>{{ __($t) }}</b><span class="sub muted small">{{ __($d) }}</span></span></label>
     @endforeach

@@ -3,6 +3,7 @@
 namespace App\Services\WhatsApp;
 
 use App\Models\AttendanceDay;
+use App\Models\AttendancePunch;
 use App\Models\CampaignRecipient;
 use App\Models\CompanySetting;
 use App\Models\Lead;
@@ -198,6 +199,9 @@ class Inbound
                 return [true, today()->addDay()->format('d M')];
             }
         }
+        if ($rep && $co->automation('absent_auto_reply') && ($back = $this->absentBack($rep, $co))) {
+            return [true, $back];
+        }
         if ($co->automation('after_hours_auto_reply')) {
             $shift = $rep ? $rep->shift($co) : ['office_start' => $co->office_start, 'office_end' => $co->office_end];
             $now = now();
@@ -205,16 +209,60 @@ class Inbound
             $end = $now->copy()->setTimeFromTimeString($shift['office_end']);
             $off = in_array($now->dayOfWeek, $co->weeklyOffDays(), true);
             if ($off || $now->lt($start) || $now->gt($end)) {
-                $next = $now->lt($start) && ! $off ? $start : $start->addDay();
-                while (in_array($next->dayOfWeek, $co->weeklyOffDays(), true)) {
-                    $next = $next->addDay();
-                }
-
-                return [true, $next->format('d M, g:i A')];
+                return [true, $this->nextStart($shift, $co, $now->lt($start) && ! $off)->format('d M, g:i A')];
             }
         }
 
         return [false, null];
+    }
+
+    /**
+     * During office hours, a salesperson who uses attendance but has not punched in an hour after
+     * their start time, or has punched out and left (not just for lunch), is treated as away.
+     * Returns when they are expected back, or null when they are at work.
+     */
+    private function absentBack(User $rep, CompanySetting $co): ?string
+    {
+        $now = now();
+        $shift = $rep->shift($co);
+        $start = $now->copy()->setTimeFromTimeString($shift['office_start']);
+        $end = $now->copy()->setTimeFromTimeString($shift['office_end']);
+        if (in_array($now->dayOfWeek, $co->weeklyOffDays(), true) || $now->lt($start) || $now->gt($end)) {
+            return null; // outside office hours: the after-hours reply decides
+        }
+        // Only for people who actually punch in; a company that does not use attendance is never "absent".
+        if (! AttendancePunch::where('user_id', $rep->id)->where('punched_at', '>=', $now->copy()->subDays(14))->exists()) {
+            return null;
+        }
+        $last = AttendancePunch::where('user_id', $rep->id)->where('punched_at', '>=', $now->copy()->startOfDay())->orderByDesc('punched_at')->orderByDesc('id')->first();
+        if (! $last) {
+            return $now->gte($start->copy()->addMinutes(60)) ? $this->nextStart($shift, $co, false)->format('d M, g:i A') : null;
+        }
+        if ($last->type === 'out') {
+            $lunchStart = $now->copy()->setTimeFromTimeString($shift['lunch_start'] ?: '00:00');
+            $lunchEnd = $now->copy()->setTimeFromTimeString($shift['lunch_end'] ?: '00:00');
+            if ($shift['lunch_start'] && $now->between($lunchStart, $lunchEnd)) {
+                return null; // out for lunch only
+            }
+
+            return $this->nextStart($shift, $co, false)->format('d M, g:i A');
+        }
+
+        return null;
+    }
+
+    /** Start of the next working day (or of today, if $today and it has not started yet). */
+    private function nextStart(array $shift, CompanySetting $co, bool $today): \Carbon\Carbon
+    {
+        $next = now()->setTimeFromTimeString($shift['office_start']);
+        if (! $today) {
+            $next = $next->addDay();
+        }
+        for ($i = 0; $i < 7 && in_array($next->dayOfWeek, $co->weeklyOffDays(), true); $i++) {
+            $next = $next->addDay();
+        }
+
+        return $next;
     }
 
     private function status(array $s): void

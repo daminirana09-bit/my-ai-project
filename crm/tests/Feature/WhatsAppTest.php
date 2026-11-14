@@ -26,6 +26,8 @@ class WhatsAppTest extends CrmTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        // A Thursday, 11 AM: inside office hours (09:30–18:30), so results never depend on when the tests run.
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-12 11:00:00'));
         CompanySetting::current()->update(['whatsapp_config' => ['access_token' => 'tok', 'app_secret' => 'sec', 'verify_token' => 'vt', 'api_version' => 'v23.0'], 'lead_capture_token' => str_repeat('a', 40)]);
         CompanySetting::forget();
         $this->amitNo = WhatsappNumber::create(['label' => 'Amit', 'display_phone' => '+91 90000 00001', 'phone_number_id' => '1001', 'user_id' => $this->repA->id, 'active' => true]);
@@ -151,6 +153,69 @@ class WhatsAppTest extends CrmTestCase
         CompanySetting::forget();
         $this->repA->update(['away_type' => 'leave', 'away_until' => now()->addDay()]);
         $this->hook('1001', '919876500006', 'Rate list please');
+        Http::assertNothingSent();
+    }
+
+    public function test_after_office_hours_clients_get_auto_reply_with_next_opening_time(): void
+    {
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-12 19:15:00')); // after 6:30 PM
+        $this->hook('1001', '919876500021', 'Rate list please');
+        Http::assertSent(fn ($r) => str_contains($r['text']['body'] ?? '', '13 Nov, 9:30 AM'));
+        $this->assertTrue(WaConversation::first()->waiting_callback);
+
+        // Saturday evening → Monday morning (Sunday is the weekly off)
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-14 20:00:00'));
+        $this->hook('1001', '919876500022', 'Rate list please');
+        Http::assertSent(fn ($r) => str_contains($r['text']['body'] ?? '', '16 Nov, 9:30 AM'));
+
+        // A person with their own timing (till 8 PM) is still at work at 7:15 PM
+        $this->repA->update(['office_end' => '20:00']);
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-12 19:15:00'));
+        $this->hook('1001', '919876500023', 'Rate list please');
+        $this->assertFalse(WaConversation::where('contact_name', 'Murugan')->latest('id')->first()->waiting_callback);
+
+        CompanySetting::current()->update(['automations' => ['after_hours_auto_reply' => false]]);
+        CompanySetting::forget();
+        $this->repA->update(['office_end' => null]);
+        $this->hook('1001', '919876500024', 'Rate list please');
+        $this->assertSame(2, WaMessage::where('type', 'auto')->count());
+    }
+
+    public function test_absent_without_marking_or_gone_after_punch_out_gets_auto_reply(): void
+    {
+        // Company uses attendance: Amit punched in yesterday
+        \App\Models\AttendancePunch::create(['user_id' => $this->repA->id, 'type' => 'in', 'punched_at' => now()->subDay()->setTime(9, 25)]);
+
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-12 10:15:00')); // only 45 min after start: may be late, not absent
+        $this->hook('1001', '919876500031', 'Hello');
+        $this->assertSame(0, WaMessage::where('type', 'auto')->count());
+
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-12 11:00:00')); // no punch an hour after start
+        $this->hook('1001', '919876500032', 'Hello');
+        $this->assertSame(1, WaMessage::where('type', 'auto')->count());
+        Http::assertSent(fn ($r) => str_contains($r['text']['body'] ?? '', '13 Nov, 9:30 AM'));
+
+        // He punches in: cover stops and he sees who is waiting
+        $res = $this->actingAs($this->repA)->post('/attendance/punch', ['type' => 'in']);
+        $this->assertStringContainsString('1 clients are waiting for your call', session('ok'));
+        $this->hook('1001', '919876500033', 'Hello');
+        $this->assertSame(1, WaMessage::where('type', 'auto')->count());
+
+        // Out for lunch (13:30–14:00) is not "gone"
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-12 13:35:00'));
+        $this->actingAs($this->repA)->post('/attendance/punch', ['type' => 'out']);
+        $this->hook('1001', '919876500034', 'Hello');
+        $this->assertSame(1, WaMessage::where('type', 'auto')->count());
+
+        // Still out at 3 PM: gone for the day
+        $this->travelTo(\Illuminate\Support\Carbon::parse('2026-11-12 15:00:00'));
+        $this->hook('1001', '919876500035', 'Hello');
+        $this->assertSame(2, WaMessage::where('type', 'auto')->count());
+    }
+
+    public function test_company_that_does_not_use_attendance_is_never_treated_as_absent(): void
+    {
+        $this->hook('1001', '919876500041', 'Hello'); // 11 AM, nobody ever punched in
         Http::assertNothingSent();
     }
 

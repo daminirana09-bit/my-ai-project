@@ -27,8 +27,9 @@ One installation per company. Each company sets its own name, logo, timings and 
 - **WhatsApp inbox (Meta Cloud API):** each salesperson their own number; chats come in
   through a signed webhook; the client's language and request are detected and ready replies
   are offered in that language (14 Indian languages, editable under Ready replies).
-- **Away cover:** a rep marks half day, leave or meeting; clients who message get an automatic
-  reply in their language, urgent messages alert the backup person and managers, and on return
+- **Away cover:** a rep marks half day, leave or meeting, or simply is not at work (no punch-in an
+  hour after start, or punched out and gone), or it is after office hours / weekly off; clients who
+  message get an automatic reply in their language with the time the rep is back, urgent messages alert the backup person and managers, and on return
   the rep sees who is waiting for a call first. STOP opts a client out of marketing.
 - **Quotations:** GST quotation from the product list, PDF, sent on WhatsApp in one click.
 - **Marketing:** approved WhatsApp templates to a filtered group of clients, sent in the background.
@@ -60,4 +61,4 @@ php artisan test
 **Install for a company:** build the zip with `tools/make-release.sh` (includes `vendor/`, no
 tests, no `.env`), then follow `../docs/INSTALL-HOSTINGER.md`.
 
-**Tests:** `php artisan test` (101 feature tests) and the browser run in `tests/e2e/README.md`.
+**Tests:** `php artisan test` (104 feature tests) and the browser run in `tests/e2e/README.md`.

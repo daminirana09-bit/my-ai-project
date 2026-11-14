@@ -21,7 +21,16 @@ class AttendanceController extends Controller
         $type = $request->validate(['type' => ['required', Rule::in(['in', 'out'])]])['type'];
         $p = $this->service->punch($request->user(), $type, $request->ip());
 
-        return back()->with('ok', __($type === 'in' ? 'Punched in at :time.' : 'Punched out at :time.', ['time' => $p->punched_at->format('h:i A')]));
+        $msg = __($type === 'in' ? 'Punched in at :time.' : 'Punched out at :time.', ['time' => $p->punched_at->format('h:i A')]);
+        if ($type === 'in') {
+            // Clients who got the automatic reply while this person was away are waiting for a call.
+            $waiting = \App\Models\WaConversation::whereHas('number', fn ($q) => $q->where('user_id', $request->user()->id))->where('waiting_callback', true)->count();
+            if ($waiting) {
+                $msg .= ' '.__(':n clients are waiting for your call. They are at the top of your Inbox.', ['n' => $waiting]);
+            }
+        }
+
+        return back()->with('ok', $msg);
     }
 
     private function month(Request $request): CarbonImmutable

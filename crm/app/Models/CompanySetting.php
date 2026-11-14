@@ -16,7 +16,8 @@ class CompanySetting extends Model
     /** Automation switches and their defaults. */
     public const AUTOMATIONS = [
         'away_auto_reply' => true,        // reply on WhatsApp when the salesperson is away
-        'after_hours_auto_reply' => false, // also reply outside office hours and on weekly off
+        'after_hours_auto_reply' => true,  // also reply outside office hours and on weekly off
+        'absent_auto_reply' => true,       // reply when the salesperson has not punched in, or has punched out and left
         'auto_assign_new_leads' => true,   // leads from WhatsApp company numbers / website form go round-robin
         'stale_lead_tasks' => true,        // daily task for leads not updated in STALE_DAYS
         'overdue_follow_up_alert' => true, // tell the manager when a follow-up is 2+ days late
