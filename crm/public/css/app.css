@@ -161,7 +161,7 @@ td input{border:1px solid var(--line);border-radius:6px;padding:6px 8px;backgrou
 .field textarea{min-height:96px;resize:vertical;padding:10px 12px;height:auto}
 .field input[type=file]{padding:7px 10px}
 .check{display:flex;gap:8px;align-items:center}
-.filters{display:grid;gap:12px;grid-template-columns:minmax(220px,2fr) repeat(auto-fit,minmax(150px,1fr)) auto;align-items:end}
+.filters{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}.filters>.field{flex:1 1 170px;min-width:0}.filters>.field:first-of-type{flex:2 1 240px}.filters>.btn,.filters>.chip{flex:0 0 auto}
 .flash{padding:11px 14px;border-radius:var(--r-sm);font-weight:550}
 .flash.ok{background:var(--good-soft);color:var(--good)}
 .flash.warn{background:var(--warn-soft);color:var(--warn)}
@@ -223,7 +223,7 @@ td input{border:1px solid var(--line);border-radius:6px;padding:6px 8px;backgrou
   .userchip span{display:none}.userchip{padding:4px}
   .content{padding:14px 12px}
   .f2,.f3,.f4,.g2,.g4{grid-template-columns:minmax(0,1fr)}
-  .filters{grid-template-columns:minmax(0,1fr)}
+  .filters>.field,.filters>.field:first-of-type{flex-basis:100%}
   .auth{grid-template-columns:minmax(0,1fr)}.auth-side{display:none}
   .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -278,3 +278,24 @@ td select{height:32px;border-radius:6px;border:1px solid var(--line);padding:0 8
 .lines td input,.lines td select{width:100%;min-width:90px;height:34px;border:1px solid var(--line);border-radius:6px;padding:0 8px;background:var(--surface)}
 .lines td:first-child select{min-width:200px}.lines td:nth-child(2) input{min-width:160px}
 .pre{white-space:pre-line}
+/* Lead sources and tags */
+.src{display:inline-flex;align-items:center;gap:5px;font-size:.74rem;font-weight:650;padding:2px 9px;border-radius:999px;white-space:nowrap;background:var(--surface-2);color:var(--fg);border:1px solid var(--line);text-decoration:none;margin:0 3px 3px 0}
+.src::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted)}
+a.src:hover{border-color:var(--brand)}
+.src-indiamart::before{background:#e1251b}.src-tradeindia::before{background:#1f5aa6}.src-exportersindia::before{background:#f08a24}
+.src-justdial::before{background:#ff6f00}.src-facebook-ads::before{background:#1877f2}.src-instagram-ads::before{background:#d62976}
+.src-google-ads::before{background:#fbbc04}.src-google-search::before{background:#34a853}.src-google-maps-business::before{background:#4285f4}
+.src-website::before{background:var(--cyan)}.src-whatsapp::before{background:#25d366}.src-reference::before{background:var(--violet)}
+.src-exhibition::before,.src-walk-in::before{background:var(--warn)}.src-import::before,.src-other-apps::before{background:var(--muted)}
+.src-existing-customer::before{background:var(--good)}.src-cold-call::before{background:var(--info)}
+.tag{display:inline-block;font-size:.68rem;padding:1px 7px;border-radius:5px;background:var(--surface-2);color:var(--muted);margin:0 3px 3px 0;text-decoration:none;white-space:nowrap}
+a.tag:hover{color:var(--fg)}
+.tags{display:flex;flex-wrap:wrap;margin-top:3px}
+.card h2 .src{font-size:.95rem;padding:3px 11px}
+.integ .stats{color:var(--muted)}.integ .stats b{color:var(--fg)}
+.integ .row{flex-wrap:wrap}
+.secret.sm{font-size:.8rem;letter-spacing:0}
+.note.bad{background:var(--bad-soft);color:var(--bad)}
+details.who summary,details summary{cursor:pointer}
+details.who .checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px 12px;margin:10px 0 6px}
+pre.code{white-space:pre-wrap;word-break:break-all;font-family:var(--mono);font-size:.74rem;background:var(--surface-2);padding:10px 12px;border-radius:6px;margin-top:8px;max-height:320px;overflow:auto}

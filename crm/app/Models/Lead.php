@@ -29,6 +29,7 @@ class Lead extends Model
         'firm_name', 'contact_name', 'phone', 'email', 'city', 'state', 'gstin', 'source', 'client_type',
         'requirement', 'status', 'expected_value', 'owner_id', 'created_by', 'created_via',
         'last_contact_at', 'next_follow_up_on', 'lost_reason', 'notes', 'temperature', 'whatsapp_opt_out', 'language',
+        'tags', 'campaign', 'referred_by', 'external_ref',
     ];
 
     protected function casts(): array
@@ -40,6 +41,7 @@ class Lead extends Model
             'last_contact_at' => 'datetime',
             'next_follow_up_on' => 'date',
             'whatsapp_opt_out' => 'boolean',
+            'tags' => 'array',
         ];
     }
 
@@ -112,6 +114,22 @@ class Lead extends Model
     public function isVisibleTo(User $user): bool
     {
         return $user->isAdmin() || $user->canSeeUser($this->owner_id);
+    }
+
+    /** Tags shown on the lead: the source first, then the rest, no repeats. */
+    public function tagList(): array
+    {
+        return collect([$this->source])->merge($this->tags ?? [])->filter()->unique(fn ($t) => mb_strtolower($t))->values()->all();
+    }
+
+    /** CSS colour class for a source / platform tag. */
+    public static function tagClass(?string $tag): string
+    {
+        $k = \Illuminate\Support\Str::slug((string) $tag);
+        $known = ['indiamart', 'tradeindia', 'exportersindia', 'justdial', 'facebook-ads', 'instagram-ads', 'google-ads', 'google-search',
+            'google-maps-business', 'website', 'whatsapp', 'reference', 'exhibition', 'walk-in', 'cold-call', 'import', 'other-apps', 'existing-customer'];
+
+        return in_array($k, $known, true) ? 'src src-'.$k : 'src';
     }
 
     public function maskedPhone(): string

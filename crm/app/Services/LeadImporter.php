@@ -32,6 +32,9 @@ class LeadImporter
         'expected_value' => ['value', 'amount', 'deal value', 'expected value', 'order value'],
         'next_follow_up_on' => ['follow up', 'follow-up', 'next follow up', 'follow up date', 'next follow-up'],
         'notes' => ['notes', 'note', 'remark', 'remarks', 'comment', 'comments'],
+        'tags' => ['tags', 'tag', 'labels', 'label'],
+        'referred_by' => ['referred by', 'reference', 'referred', 'reference by', 'ref by'],
+        'campaign' => ['campaign', 'campaign name', 'ad', 'ad name', 'form name'],
         'owner' => ['salesperson', 'sales person', 'assigned to', 'rep', 'sales rep', 'executive'],
     ];
 
@@ -119,6 +122,9 @@ class LeadImporter
                 'expected_value' => is_numeric(str_replace([',', '₹'], '', (string) ($data['expected_value'] ?? ''))) ? str_replace([',', '₹'], '', (string) $data['expected_value']) : null,
                 'next_follow_up_on' => $this->date($data['next_follow_up_on'] ?? null),
                 'notes' => $data['notes'] ?? null,
+                'tags' => collect(explode(',', (string) ($data['tags'] ?? '')))->map(fn ($t) => mb_substr(trim((string) $t), 0, 40))->filter()->unique()->take(12)->values()->all() ?: null,
+                'referred_by' => isset($data['referred_by']) && $data['referred_by'] !== '' ? mb_substr((string) $data['referred_by'], 0, 150) : null,
+                'campaign' => isset($data['campaign']) && $data['campaign'] !== '' ? mb_substr((string) $data['campaign'], 0, 150) : null,
                 'owner_id' => $owner->id,
                 'created_by' => $by->id,
                 'created_via' => 'import',

@@ -10,7 +10,7 @@ use OpenSpout\Writer\XLSX\Writer as XlsxWriter;
 
 class LeadExporter
 {
-    public const HEADER = ['Firm name', 'Contact name', 'Phone', 'Email', 'City', 'State', 'GSTIN', 'Source', 'Client type', 'Requirement', 'Status', 'Temperature', 'Expected value', 'Salesperson', 'Next follow-up', 'Last contact', 'Created', 'Notes'];
+    public const HEADER = ['Firm name', 'Contact name', 'Phone', 'Email', 'City', 'State', 'GSTIN', 'Source', 'Client type', 'Requirement', 'Status', 'Temperature', 'Expected value', 'Salesperson', 'Next follow-up', 'Last contact', 'Created', 'Notes', 'Tags', 'Campaign', 'Referred by'];
 
     /** Writes the leads to a temporary file and returns its path. */
     public function write(Builder $leads, string $format): string
@@ -27,7 +27,7 @@ class LeadExporter
                     $l->source, $l->client_type, $l->requirement, Lead::STATUSES[$l->status] ?? $l->status, Lead::TEMPERATURES[$l->temperature] ?? '',
                     $l->expected_value !== null ? (float) $l->expected_value : null, $l->owner?->name,
                     $l->next_follow_up_on?->format('Y-m-d'), $l->last_contact_at?->format('Y-m-d H:i'),
-                    $l->created_at?->format('Y-m-d'), $l->notes,
+                    $l->created_at?->format('Y-m-d'), $l->notes, implode(', ', $l->tags ?? []), $l->campaign, $l->referred_by,
                 ]));
             }
         });

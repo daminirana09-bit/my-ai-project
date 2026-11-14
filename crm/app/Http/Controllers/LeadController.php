@@ -24,6 +24,7 @@ class LeadController extends Controller
         return Lead::visibleTo($me)
             ->when($request->filled('status') && isset(Lead::STATUSES[$request->status]), fn ($q) => $q->where('status', $request->status))
             ->when($request->filled('source'), fn ($q) => $q->where('source', $request->source))
+            ->when($request->filled('tag') && is_string($request->tag), fn ($q) => $q->whereJsonContains('tags', mb_substr((string) $request->tag, 0, 40)))
             ->when($request->filled('temperature') && isset(Lead::TEMPERATURES[$request->temperature]), fn ($q) => $q->where('temperature', $request->temperature))
             ->when($request->boolean('stale'), fn ($q) => $q->stale())
             ->when($me->canManage() && $request->filled('owner'), fn ($q) => $q->where('owner_id', (int) $request->owner))
@@ -229,7 +230,7 @@ class LeadController extends Controller
 
     private function validated(Request $request): array
     {
-        return $request->validate([
+        $data = $request->validate([
             'firm_name' => ['required', 'string', 'max:150'],
             'contact_name' => ['nullable', 'string', 'max:100'],
             'phone' => ['nullable', 'string', 'max:20', 'regex:/^[0-9+\-\s()]{7,20}$/'],
@@ -247,7 +248,13 @@ class LeadController extends Controller
             'next_follow_up_on' => ['nullable', 'date'],
             'lost_reason' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:5000'],
+            'referred_by' => ['nullable', 'string', 'max:150'],
+            'tags' => ['nullable', 'string', 'max:400'],
         ]);
+        $data['tags'] = collect(explode(',', (string) ($data['tags'] ?? '')))->map(fn ($t) => mb_substr(trim(strip_tags($t)), 0, 40))
+            ->filter()->unique(fn ($t) => mb_strtolower($t))->take(12)->values()->all() ?: null;
+
+        return $data;
     }
 
     private function ownerFrom(Request $request, User $me): User

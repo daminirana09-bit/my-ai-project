@@ -7,7 +7,7 @@ confirms the sale, exports → admin deactivates a rep and moves their leads →
 credit footer, error pages, mobile layout and that nothing breaks. Then WhatsApp: admin saves
 Meta keys and a rep's number, the webhook verification and signature check are tried, a website
 enquiry becomes a lead, the rep goes on leave, a Hindi message arrives (auto-reply, duplicate
-ignored), the rep comes back, sees Hindi ready replies, replies, makes a quotation and its PDF.
+ignored), the rep comes back, sees Hindi ready replies, replies, makes a quotation and its PDF. Finally the admin switches on JustDial, Google Ads and "other apps", sends a lead to each, and checks the source tags and the tag and source filters.
 Messages to Meta use a fake token, so they are recorded as failed; that path is tested too.
 
 ```sh

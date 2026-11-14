@@ -49,6 +49,9 @@ class SystemCheck
         $c = CompanySetting::current();
         $add($c?->wa('access_token') && $c?->wa('app_secret') ? 'ok' : 'warn', 'WhatsApp connected', $c?->wa('access_token') ? '' : 'WhatsApp settings');
         $add(WhatsappNumber::where('active', true)->exists() ? 'ok' : 'warn', 'WhatsApp numbers added', WhatsappNumber::where('active', true)->count().' active');
+        $on = \App\Models\LeadIntegration::where('enabled', true)->get();
+        $broken = $on->filter(fn ($i) => $i->last_error_at && (! $i->last_success_at || $i->last_error_at->gt($i->last_success_at)));
+        $add($broken->isEmpty() ? 'ok' : 'warn', 'Lead integrations working', $on->isEmpty() ? 'none switched on' : ($broken->isEmpty() ? $on->count().' on' : 'check: '.$broken->map->name()->implode(', ')));
         $no2fa = User::active()->whereIn('role', ['admin', 'manager'])->whereNull('two_factor_secret')->count();
         $add($no2fa === 0 ? 'ok' : 'warn', 'Admins and managers use 2-step login', $no2fa ? $no2fa.' without it' : '');
         $add(filled(config('crm.allowed_ips')) ? 'ok' : 'warn', 'CRM limited to office IPs (CRM_ALLOWED_IPS)', filled(config('crm.allowed_ips')) ? '' : 'Optional, recommended');

@@ -108,13 +108,33 @@ const vtok=await p.$$eval('dl.dl dt',dts=>{const i=dts.findIndex(d=>/Verify|рд╕р
 const addForm='form[action$="/whatsapp/numbers"]';
 await p.fill(addForm+' input[name="label"]','Sohan WhatsApp');await p.fill(addForm+' input[name="display_phone"]','+91 90000 00001');await p.fill(addForm+' input[name="phone_number_id"]','109876543210987');
 await p.selectOption(addForm+' select[name="user_id"]',{label:'Sohan Rep'});await Promise.all([p.waitForNavigation(),p.click(addForm+' button')]);expect(await has(p,'Sohan WhatsApp'),'WhatsApp number added');
-const formUrl=(await p.$eval('p.secret',e=>e.textContent.trim()));
+await p.goto(B+'/integrations');const formUrl=(await p.$eval('#i-website p.secret',e=>e.textContent.trim()));await p.goto(B+'/whatsapp');
 let r=await p.request.get(B+'/webhook/whatsapp?hub.mode=subscribe&hub.verify_token='+encodeURIComponent(vtok)+'&hub.challenge=4242');expect(vtok.length>10&&r.status()===200&&(await r.text())==='4242','Meta webhook verification works');
 r=await p.request.get(B+'/webhook/whatsapp?hub.mode=subscribe&hub.verify_token=wrong&hub.challenge=4242');expect(r.status()===403,'wrong verify token refused '+r.status());
 r=await p.request.post(formUrl,{form:{name:'Web Visitor',phone:'+91 97000 11122',firm:'Web Enquiry Firm',city:'Pune',message:'Need PCD franchise list',website:''}});expect(r.status()===200,'website form accepted '+r.status());
 r=await p.request.post(B+'/webhook/lead/wrongtoken',{form:{name:'X',phone:'9999999999'}});expect(r.status()===404,'website form with wrong token refused '+r.status());
 await p.goto(B+'/leads?q=Web+Enquiry');expect(await has(p,'Web Enquiry Firm'),'website enquiry became a lead');
-for(const u of ['/inbox','/quotes','/quotes/new','/campaigns','/campaigns/new','/ready-replies','/whatsapp','/automations','/system']){const rr=await p.goto(B+u);expect(rr.status()===200,'admin page '+u+' '+rr.status());expect(await has(p,'Solvix Web'),'credit on '+u)}
+// Lead integrations: JustDial push, Google Ads lead form, other app with its own source; tags on leads
+await p.goto(B+'/integrations');
+for(const pf of ['justdial','google_ads','custom']){await p.check(`#i-${pf} input[name="enabled"]`);await Promise.all([p.waitForNavigation(),p.click(`#i-${pf} form[action$="/integrations/${pf}"] button.p`)]);expect(await has(p,'flash ok'),'integration saved '+pf);}
+expect((await p.$$('#i-justdial .pill.good')).length===1,'JustDial shows On');
+const jdUrl=await p.$eval('#i-justdial p.secret',e=>e.textContent.trim());
+r=await p.request.get(jdUrl+'?leadid=JD'+RUN+'&name=Ajay+Medicos&mobile=9822233344&category=Pharma+Distributors&city=Pune');expect(r.status()===200&&(await r.text())==='RECEIVED','JustDial push accepted');
+const gUrl=await p.$eval('#i-google_ads dl dd',e=>e.textContent.trim());const gKey=await p.$$eval('#i-google_ads dl dd',e=>e[1].textContent.trim());
+r=await p.request.post(gUrl,{data:{lead_id:'G'+RUN,google_key:gKey,campaign_id:77,user_column_data:[{column_id:'FULL_NAME',string_value:'Kiran Rao'},{column_id:'PHONE_NUMBER',string_value:'+91 99000 11122'},{column_id:'CITY',string_value:'Hyderabad'}]}});expect(r.status()===200,'Google Ads lead accepted '+r.status());
+r=await p.request.post(gUrl,{data:{lead_id:'G2',google_key:'wrong',user_column_data:[]}});expect(r.status()===403,'Google Ads wrong key refused');
+const cUrl=await p.$eval('#i-custom p.secret',e=>e.textContent.trim());
+r=await p.request.post(cUrl,{data:{name:'Linked Lead',phone:'9000011111',company:'LL Pharma',source:'LinkedIn Ads',tags:['Webinar']}});expect(r.status()===200,'other app lead accepted');
+await p.goto(B+'/integrations');expect(await has(p,'Ajay Medicos')===false,'integrations page shows no client data');
+expect(await has(p,'JustDial')&&await has(p,'LinkedIn Ads'),'this month by source lists platforms');
+await p.goto(B+'/leads');expect(await has(p,'Ajay Medicos')&&await has(p,'Kiran Rao')&&await has(p,'LL Pharma'),'integration leads in list');
+expect(await has(p,'src-justdial')&&await has(p,'src-google-ads'),'source tags coloured');
+await Promise.all([p.waitForNavigation(),p.click('a.tag:has-text("Webinar")')]);expect(p.url().includes('tag=Webinar')&&await has(p,'LL Pharma')&&!(await has(p,'Ajay Medicos')),'tag filter works');
+await p.goto(B+'/leads?source=JustDial');expect(await has(p,'Ajay Medicos')&&!(await has(p,'Kiran Rao')),'source filter works');
+expect((await p.goto(B+'/notifications')).status()===200,'alerts page opens');
+{const m=await newPage({width:390,height:844});await login(m.p,'owner@e2e.in');for(const u of ['/integrations','/leads']){await m.p.goto(B+u);const o=await overflow(m.p);expect(o<=0,'mobile overflow '+u+' '+o)}await m.c.close();}
+step();
+for(const u of ['/inbox','/quotes','/quotes/new','/campaigns','/campaigns/new','/ready-replies','/whatsapp','/automations','/system','/integrations']){const rr=await p.goto(B+u);expect(rr.status()===200,'admin page '+u+' '+rr.status());expect(await has(p,'Solvix Web'),'credit on '+u)}
 await p.goto(B+'/automations');await Promise.all([p.waitForNavigation(),p.click('form[action$="/automations"] button.p')]);expect(await has(p,'flash ok'),'automations saved');
 await p.goto(B+'/ready-replies');await Promise.all([p.waitForNavigation(),p.click('form[action$="/ready-replies"] button.p')]);expect(await has(p,'flash ok'),'ready replies saved');
 await p.goto(B+'/campaigns/new');await p.fill('#name','E2E Diwali');await p.fill('#template_name','diwali_offer');await Promise.all([p.waitForNavigation(),p.click('button[name="preview"]')]);

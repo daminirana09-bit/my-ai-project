@@ -147,6 +147,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/automations', [AutomationController::class, 'edit'])->name('automations');
         Route::post('/automations', [AutomationController::class, 'update'])->name('automations.update');
         Route::get('/system', SystemController::class)->name('system');
+        Route::get('/integrations', [\App\Http\Controllers\IntegrationController::class, 'index'])->name('integrations.index');
+        Route::post('/integrations/facebook/subscribe', [\App\Http\Controllers\IntegrationController::class, 'subscribeFacebook'])->middleware('throttle:10,1')->name('integrations.facebook');
+        Route::post('/integrations/{platform}', [\App\Http\Controllers\IntegrationController::class, 'update'])->name('integrations.update')->where('platform', '[a-z_]+');
+        Route::post('/integrations/{platform}/fetch', [\App\Http\Controllers\IntegrationController::class, 'fetch'])->middleware('throttle:10,1')->name('integrations.fetch')->where('platform', '[a-z_]+');
+        Route::post('/integrations/{platform}/new-link', [\App\Http\Controllers\IntegrationController::class, 'rotate'])->name('integrations.rotate')->where('platform', '[a-z_]+');
         Route::get('/roles', [RoleController::class, 'edit'])->name('roles');
         Route::post('/roles', [RoleController::class, 'update'])->name('roles.update');
     });

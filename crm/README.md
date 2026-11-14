@@ -34,7 +34,12 @@ One installation per company. Each company sets its own name, logo, timings and 
 - **Marketing:** approved WhatsApp templates to a filtered group of clients, sent in the background.
 - **Automations:** auto-reply, after-hours reply, auto-assign new leads, daily tasks for
   stale leads, late follow-up alerts, urgent alerts (each can be switched off).
-- **Website enquiry form:** a secret link; enquiries become leads automatically.
+- **Lead integrations:** IndiaMART (API key fetch + push), TradeIndia, ExportersIndia, JustDial,
+  Facebook & Instagram lead ads, Google Ads lead forms, any portal API link, and other apps
+  (Zapier, Pabbly, LinkedIn, IVR). Every lead is tagged with its platform; repeats are ignored;
+  a known client gets a note instead of a second lead.
+- **Website enquiry form:** a secret link; tags Google Ads, Google search, Facebook/Instagram ads.
+- **Tags:** source and tags on every lead (reference, walk-in…), filter by source or tag, in export/import.
 - **System check** page for hosting (PHP, extensions, HTTPS, cron, queue, WhatsApp, 2-step login).
 - **Global search** in the top bar. **Languages:** English, Hinglish, Hindi per user.
 - **Who sees what:** admin everything; manager own team; sales rep only own data.
@@ -55,4 +60,4 @@ php artisan test
 **Install for a company:** build the zip with `tools/make-release.sh` (includes `vendor/`, no
 tests, no `.env`), then follow `../docs/INSTALL-HOSTINGER.md`.
 
-**Tests:** `php artisan test` (84 feature tests) and the browser run in `tests/e2e/README.md`.
+**Tests:** `php artisan test` (101 feature tests) and the browser run in `tests/e2e/README.md`.

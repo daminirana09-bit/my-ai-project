@@ -67,6 +67,7 @@
         <span class="sb-grp">{{ __('Admin') }}</span>
         <a class="sb-link {{ $on('users.*') }}" href="{{ route('users.index') }}"><x-icon name="users"/>{{ __('Users') }}</a>
         <a class="sb-link {{ $on('roles') }}" href="{{ route('roles') }}"><x-icon name="shield"/>{{ __('Roles & permissions') }}</a>
+        <a class="sb-link {{ $on('integrations.*') }}" href="{{ route('integrations.index') }}"><x-icon name="plug"/>{{ __('Lead integrations') }}</a>
         <a class="sb-link {{ $on('whatsapp.*') }}" href="{{ route('whatsapp.settings') }}"><x-icon name="chat"/>{{ __('WhatsApp settings') }}</a>
         <a class="sb-link {{ $on('automations') }}" href="{{ route('automations') }}"><x-icon name="bolt"/>{{ __('Automations') }}</a>
         <a class="sb-link {{ $on('masters.*') }}" href="{{ route('masters.index') }}"><x-icon name="list"/>{{ __('Masters') }}</a>

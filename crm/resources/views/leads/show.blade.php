@@ -3,7 +3,7 @@
 @section('content')
 @php $me = auth()->user(); @endphp
 <div class="head">
-  <div><h1>{{ $lead->firm_name }}</h1><p>{{ $lead->contact_name }} · {{ $lead->city }}{{ $lead->state ? ', '.$lead->state : '' }} · <span class="pill {{ $lead->status }}">{{ __(\App\Models\Lead::STATUSES[$lead->status]) }}</span>@if($lead->temperature) <span class="pill {{ $lead->temperature }}">{{ __(\App\Models\Lead::TEMPERATURES[$lead->temperature]) }}</span>@endif</p></div>
+  <div><h1>{{ $lead->firm_name }}</h1><p>{{ implode(' · ', array_filter([$lead->contact_name, implode(', ', array_filter([$lead->city, $lead->state]))])) }}@if($lead->contact_name || $lead->city || $lead->state) · @endif<span class="pill {{ $lead->status }}">{{ __(\App\Models\Lead::STATUSES[$lead->status]) }}</span>@if($lead->temperature) <span class="pill {{ $lead->temperature }}">{{ __(\App\Models\Lead::TEMPERATURES[$lead->temperature]) }}</span>@endif</p></div>
   <div class="row"><a class="btn" href="{{ route('quotes.create', ['lead' => $lead->id]) }}"><x-icon name="plus"/>{{ __('New quote') }}</a><a class="btn" href="{{ route('leads.edit', $lead) }}"><x-icon name="edit"/>{{ __('Edit') }}</a></div>
 </div>
 
@@ -74,14 +74,16 @@
         <tr><td class="muted">{{ __('Email') }}</td><td>{{ $lead->email ?: '—' }}</td></tr>
         <tr><td class="muted">GSTIN</td><td class="mono">{{ $lead->gstin ?: '—' }}</td></tr>
         <tr><td class="muted">{{ __('Orders') }}</td><td>{{ $lead->sales->where('status', 'confirmed')->count() }} · {{ inr($lead->sales->where('status', 'confirmed')->sum('amount')) }}</td></tr>
-        <tr><td class="muted">{{ __('Source') }}</td><td>{{ $lead->source ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Source and tags') }}</td><td>@forelse($lead->tagList() as $i => $t)<a class="{{ $i === 0 && $lead->source ? \App\Models\Lead::tagClass($t) : 'tag' }}" href="{{ route('leads.index', $i === 0 && $lead->source ? ['source' => $t] : ['tag' => $t]) }}">{{ $t }}</a>@empty — @endforelse</td></tr>
+        @if($lead->campaign)<tr><td class="muted">{{ __('Campaign / form') }}</td><td>{{ $lead->campaign }}</td></tr>@endif
+        @if($lead->referred_by)<tr><td class="muted">{{ __('Referred by') }}</td><td>{{ $lead->referred_by }}</td></tr>@endif
         <tr><td class="muted">{{ __('Client type') }}</td><td>{{ $lead->client_type ?: '—' }}</td></tr>
         <tr><td class="muted">{{ __('Requirement') }}</td><td>{{ $lead->requirement ?: '—' }}</td></tr>
         <tr><td class="muted">{{ __('Expected value') }}</td><td>{{ $lead->expected_value ? inr($lead->expected_value) : '—' }}</td></tr>
         <tr><td class="muted">{{ __('Next follow-up') }}</td><td>{{ $lead->next_follow_up_on?->format('d M Y') ?? '—' }}</td></tr>
         <tr><td class="muted">{{ __('Last contact') }}</td><td>{{ $lead->last_contact_at?->diffForHumans() ?? '—' }}</td></tr>
         <tr><td class="muted">{{ __('Salesperson') }}</td><td>{{ $lead->owner?->name ?? __('Unassigned') }}</td></tr>
-        <tr><td class="muted">{{ __('Added') }}</td><td>{{ $lead->created_at->format('d M Y') }} · {{ $lead->created_via === 'import' ? __('Import') : __('Manual') }}</td></tr>
+        <tr><td class="muted">{{ __('Added') }}</td><td>{{ $lead->created_at->format('d M Y') }} · {{ match ($lead->created_via) { 'import' => __('Import'), 'integration' => __('Came in automatically'), 'website' => __('Website form'), 'whatsapp' => 'WhatsApp', default => __('Manual') } }}@if($lead->external_ref) <span class="muted small mono">#{{ $lead->external_ref }}</span>@endif</td></tr>
       </tbody></table>
       @if($lead->notes)<p class="note">{{ $lead->notes }}</p>@endif
     </div>

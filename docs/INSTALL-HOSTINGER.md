@@ -85,27 +85,46 @@ Charges for WhatsApp messages are billed by Meta to the payment method on the Wh
 Account (it can be your card). Replies within 24 hours of a client's message are free under Meta's
 current pricing; templates are charged per message. Check Meta's current price list.
 
-## 7. Website enquiry form
+## 7. Lead integrations (IndiaMART, TradeIndia, JustDial, Facebook, Google Ads, website…)
 
-WhatsApp settings shows a private link like `https://crm.company.com/webhook/lead/XXXX`.
-Point the website's contact form at it (method POST) with fields `name`, `phone`, `email`, `firm`,
-`city`, `message`. Optional `redirect` = thank-you page URL. Leave a hidden empty field named
-`website` in the form: bots fill it and are ignored.
+Admin → **Lead integrations**. Each platform has a card: switch it on, paste the key, save.
+Every lead is tagged with its platform (IndiaMART, Google Ads, Instagram Ads, Website,
+Google (search), Reference…). The same enquiry never becomes two leads; a client already in
+the CRM gets an "enquiry again" note and their salesperson is told. "Who gets these leads"
+can send one platform's leads to chosen people; otherwise the Automations setting decides.
 
-```html
-<form method="post" action="https://crm.company.com/webhook/lead/XXXX">
-  <input name="name" required> <input name="phone" required> <input name="email" type="email">
-  <input name="firm"> <input name="city"> <textarea name="message"></textarea>
-  <input name="website" style="display:none" tabindex="-1" autocomplete="off">
-  <input type="hidden" name="redirect" value="https://company.com/thank-you">
-  <button>Send</button>
-</form>
-```
+| Platform | What to do |
+|---|---|
+| IndiaMART | Seller panel → Lead Manager → CRM integration → generate the **CRM key**, paste it. Leads are fetched every 10 minutes (IndiaMART allows one fetch in 5 minutes). For instant leads also give IndiaMART the receiving link (Push API). |
+| TradeIndia | My TradeIndia → Inquiries → CRM API: **User ID, Profile ID, key**. Fetched every 10 minutes. |
+| ExportersIndia | Ask their support for the lead API link; paste it with `{from}` and `{to}` where the dates go. Or give them the receiving link. |
+| JustDial | Send the receiving link to the JustDial account manager (they push leads to it). |
+| Facebook / Instagram lead ads | Meta app → Webhooks → *Page* → field `leadgen`, with the callback URL and verify token shown. Enter Page ID, a Page access token (System user, `leads_retrieval`, `pages_manage_metadata`, `pages_show_list`) and the app secret, save, press **Connect Page**. Instagram leads are tagged Instagram Ads. |
+| Google Ads lead forms | Lead form asset → Lead delivery → Webhook: paste URL and key, press *Send test data* (a test proves the link and makes no lead). |
+| Any other portal | If a portal gives an API link returning JSON, paste it (with `{from}`/`{to}`) and the name to show as source. |
+| Other apps | Zapier, Pabbly, LinkedIn lead forms (via Zapier), IVR / missed-call systems: POST `name`, `phone`, `email`, `firm`, `city`, `message`, optional `source` and `tags` to the receiving link. |
+
+The **receiving links are secret** (like a password): "Create a new link" stops the old one.
+If a platform sends fields with other names, the card shows "Fields received last time"
+(names only, never values) so the mapping can be checked. Errors show on the card and in System check.
+
+Reference, walk-in, exhibition, cold call and Google Maps leads are added by the team: pick the
+source and, for a reference, fill "Referred by". Any lead can have tags (comma separated) and the
+lead list filters by source and by tag.
+
+### Website enquiry form
+
+The Lead integrations page shows a private link like `https://crm.company.com/webhook/lead/XXXX`
+and the full form code to paste on the website. Fields: `name`, `phone`, `email`, `firm`, `city`,
+`message`; optional `redirect` = thank-you page. The hidden empty `website` field catches bots.
+The small script in the code fills `utm_source`, `utm_medium`, `utm_campaign`, `gclid`, `fbclid`
+and `referrer`, so a lead is tagged **Google Ads**, **Facebook Ads**, **Instagram Ads**,
+**Google (search)** or **Website** correctly.
 
 ## 8. Lock it down (Rule 1)
 
 - Put the office's fixed IP (and VPN IP, if any) in `CRM_ALLOWED_IPS` in `.env`, then
-  `php artisan config:cache`. The WhatsApp webhook and website form keep working from anywhere.
+  `php artisan config:cache`. The WhatsApp webhook, lead integrations and website form keep working from anywhere.
 - Keep *Export leads* off for sales reps (Roles & permissions) unless really needed.
 - hPanel daily backups are on; also download a database backup weekly.
 

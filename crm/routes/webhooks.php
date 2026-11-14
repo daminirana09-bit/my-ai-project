@@ -7,3 +7,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/webhook/whatsapp', [WebhookController::class, 'verify'])->middleware('throttle:30,1');
 Route::post('/webhook/whatsapp', [WebhookController::class, 'receive'])->middleware('throttle:600,1');
 Route::post('/webhook/lead/{token}', [WebhookController::class, 'leadCapture'])->middleware('throttle:20,1')->where('token', '[A-Za-z0-9]{20,64}');
+Route::match(['get', 'post'], '/webhook/leads/{platform}/{token}', [\App\Http\Controllers\LeadWebhookController::class, 'handle'])
+    ->middleware('throttle:300,1')->where(['platform' => '[a-z_]{3,20}', 'token' => '[A-Za-z0-9]{20,64}']);

@@ -29,13 +29,14 @@
 </div>
 
 <form method="get" class="card filters">
-  @foreach(['status', 'temperature', 'stale', 'due'] as $keep)@if(request($keep))<input type="hidden" name="{{ $keep }}" value="{{ request($keep) }}">@endif @endforeach
+  @foreach(['status', 'temperature', 'stale', 'due', 'tag'] as $keep)@if(request($keep))<input type="hidden" name="{{ $keep }}" value="{{ request($keep) }}">@endif @endforeach
   <div class="field"><label for="q">{{ __('Search firm, contact, city, GSTIN or full phone') }}</label><input id="q" name="q" value="{{ request('q') }}"></div>
   <div class="field"><label for="source">{{ __('Source') }}</label><select id="source" name="source"><option value="">{{ __('All') }}</option>@foreach(\App\Models\MasterOption::values('source') as $s)<option @selected(request('source') === $s)>{{ $s }}</option>@endforeach</select></div>
   @if($owners->isNotEmpty())
     <div class="field"><label for="owner">{{ __('Salesperson') }}</label><select id="owner" name="owner"><option value="">{{ __('All') }}</option>@foreach($owners as $o)<option value="{{ $o->id }}" @selected((int) request('owner') === $o->id)>{{ $o->name }}</option>@endforeach</select></div>
   @endif
   <button class="btn"><x-icon name="search"/>{{ __('Filter') }}</button>
+  @if(request('tag'))<a class="chip on" href="{{ route('leads.index', array_merge($q, ['tag' => null, 'page' => null])) }}">{{ __('Tag') }}: {{ request('tag') }} ✕</a>@endif
 </form>
 
 <div class="card flush">
@@ -47,7 +48,9 @@
         <td><a href="{{ route('leads.show', $l) }}"><b>{{ $l->firm_name }}</b></a><span class="sub">{{ $l->city }}{{ $l->client_type ? ' · '.$l->client_type : '' }}</span></td>
         <td>{{ $l->contact_name }}<span class="sub mono">{{ $l->maskedPhone() }}</span></td>
         <td><span class="pill {{ $l->status }}">{{ __(\App\Models\Lead::STATUSES[$l->status]) }}</span>@if($l->temperature) <span class="pill {{ $l->temperature }}">{{ __(\App\Models\Lead::TEMPERATURES[$l->temperature]) }}</span>@endif</td>
-        <td>{{ $l->source }}</td>
+        <td>@if($l->source)<a class="{{ \App\Models\Lead::tagClass($l->source) }}" href="{{ route('leads.index', array_merge($q, ['source' => $l->source, 'page' => null])) }}">{{ $l->source }}</a>@else — @endif
+          @php $extra = array_slice(array_values(array_filter($l->tagList(), fn ($t) => mb_strtolower($t) !== mb_strtolower((string) $l->source))), 0, 3); @endphp
+          @if($extra)<span class="tags">@foreach($extra as $t)<a class="tag" href="{{ route('leads.index', array_merge($q, ['tag' => $t, 'page' => null])) }}">{{ $t }}</a>@endforeach</span>@endif</td>
         <td class="r num">{{ $l->expected_value ? inr($l->expected_value) : '—' }}</td>
         <td class="nowrap">{{ $l->next_follow_up_on?->format('d M') ?? '—' }}</td>
         @if($me->canManage())<td>{{ $l->owner?->name ?? __('Unassigned') }}</td>@endif

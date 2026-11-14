@@ -19,6 +19,10 @@
     <div class="field"><label for="expected_value">{{ __('Expected value (₹)') }}</label><input type="number" min="0" step="1" id="expected_value" name="expected_value" value="{{ old('expected_value', $lead->expected_value) }}"></div>
     <div class="field"><label for="next_follow_up_on">{{ __('Next follow-up') }}</label><input type="date" id="next_follow_up_on" name="next_follow_up_on" value="{{ old('next_follow_up_on', $lead->next_follow_up_on?->format('Y-m-d')) }}"></div>
   </div>
+  <div class="f2">
+    <div class="field"><label for="tags">{{ __('Tags (comma separated)') }}</label><input id="tags" name="tags" value="{{ old('tags', implode(', ', $lead->tags ?? [])) }}" placeholder="{{ __('e.g. PCD, Diwali offer, North zone') }}"></div>
+    <div class="field"><label for="referred_by">{{ __('Referred by (if it came by reference)') }}</label><input id="referred_by" name="referred_by" value="{{ old('referred_by', $lead->referred_by) }}" maxlength="150"></div>
+  </div>
   <div class="field"><label for="requirement">{{ __('Requirement') }}</label><input id="requirement" name="requirement" value="{{ old('requirement', $lead->requirement) }}" placeholder="{{ __('e.g. PCD for 40 products, or Pan-D 50,000 strips') }}"></div>
   @if(! $lead->exists && $owners->isNotEmpty())
     <div class="field"><label for="owner_id">{{ __('Assign to') }}</label><select id="owner_id" name="owner_id">@foreach($owners as $o)<option value="{{ $o->id }}" @selected((int) old('owner_id', auth()->id()) === $o->id)>{{ $o->name }}</option>@endforeach</select></div>

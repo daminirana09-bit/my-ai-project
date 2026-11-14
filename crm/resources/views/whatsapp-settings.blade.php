@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', __('WhatsApp settings'))
 @section('content')
-@php $hook = url('/webhook/whatsapp'); $form = url('/webhook/lead/'.$c->lead_capture_token); @endphp
+@php $hook = url('/webhook/whatsapp'); @endphp
 <div class="head"><div><h1>{{ __('WhatsApp settings') }}</h1><p>{{ __('Connect your WhatsApp Business account (Meta Cloud API) and give each salesperson their own number. Keys are stored encrypted and never shown again.') }}</p></div></div>
 <div class="grid g2 stretch">
   <form method="post" action="{{ route('whatsapp.update') }}" class="card form">
@@ -41,11 +41,5 @@
       <button class="btn sm p"><x-icon name="plus"/>{{ __('Add number') }}</button>
     </form>
   </div>
-</section>
-<section class="card form">
-  <h2>{{ __('Website enquiry form') }}</h2>
-  <p class="small muted">{{ __('Point your website\'s contact form here. New enquiries become leads and are given to a salesperson automatically. Fields: name, phone, email, firm, city, message.') }}</p>
-  <p class="secret">{{ $form }}</p>
-  <form method="post" action="{{ route('whatsapp.token') }}">@csrf<button class="btn sm" data-confirm="{{ __('The old link will stop working. Continue?') }}">{{ __('Create a new link') }}</button></form>
 </section>
 @endsection

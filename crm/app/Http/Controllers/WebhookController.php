@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\CompanySetting;
-use App\Models\Lead;
-use App\Models\LeadActivity;
-use App\Services\ClashDetector;
-use App\Services\WhatsApp\AutoAssigner;
+use App\Services\Leads\LeadIntake;
+use App\Services\Leads\Normalizer;
+use App\Services\Leads\WebsiteSource;
 use App\Services\WhatsApp\Inbound;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,7 +51,7 @@ class WebhookController extends Controller
     }
 
     /** Website enquiry form posts here with the company's secret token. */
-    public function leadCapture(Request $request, string $token, ClashDetector $clashes, AutoAssigner $assigner)
+    public function leadCapture(Request $request, string $token, LeadIntake $intake)
     {
         $c = CompanySetting::current();
         if (! $c?->lead_capture_token || ! hash_equals($c->lead_capture_token, $token)) {
@@ -67,19 +66,21 @@ class WebhookController extends Controller
             'email' => ['nullable', 'email', 'max:150'],
             'firm' => ['nullable', 'string', 'max:150'],
             'city' => ['nullable', 'string', 'max:80'],
+            'product' => ['nullable', 'string', 'max:150'],
             'message' => ['nullable', 'string', 'max:2000'],
+            'utm_source' => ['nullable', 'string', 'max:100'],
+            'utm_medium' => ['nullable', 'string', 'max:100'],
+            'utm_campaign' => ['nullable', 'string', 'max:150'],
+            'gclid' => ['nullable', 'string', 'max:255'],
+            'fbclid' => ['nullable', 'string', 'max:255'],
+            'referrer' => ['nullable', 'string', 'max:500'],
         ]);
-        $existing = $clashes->findExisting($data['phone'], null);
-        if ($existing) {
-            LeadActivity::create(['lead_id' => $existing->id, 'type' => 'note', 'note' => 'Website enquiry again: '.mb_substr((string) ($data['message'] ?? ''), 0, 300), 'occurred_at' => now()]);
-            $existing->forceFill(['last_contact_at' => now()])->save();
-        } else {
-            Lead::create([
-                'firm_name' => $data['firm'] ?: $data['name'], 'contact_name' => $data['name'], 'phone' => $data['phone'], 'email' => $data['email'] ?? null,
-                'city' => $data['city'] ?? null, 'requirement' => isset($data['message']) ? mb_substr($data['message'], 0, 255) : null,
-                'notes' => $data['message'] ?? null, 'source' => 'Website', 'status' => 'new', 'owner_id' => $assigner->pick()?->id, 'created_via' => 'website',
-            ]);
-        }
+        [$source, $tags, $campaign] = WebsiteSource::classify($data);
+        $d = app(Normalizer::class)->generic(array_intersect_key($data, array_flip(['name', 'phone', 'email', 'firm', 'city', 'product', 'message'])));
+        $d->source = $source;
+        $d->tags = $tags;
+        $d->campaign = $campaign;
+        $intake->receive('website', null, $d, 'Website');
 
         return $this->captureReply($request, true);
     }
