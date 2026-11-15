@@ -10,6 +10,7 @@ import * as r_desk from "./desk-text/Reel";
 import * as r_pharma_dialogue from "./pharma-dialogue/Reel";
 import * as r_clinic_dialogue from "./clinic-dialogue/Reel";
 import * as r_pharma_trust from "./pharma-trust/Reel";
+import * as r_realestate_leaks from "./realestate-leaks/Reel";
 // <new-reel-imports>
 
 export type ReelEntry = {
@@ -39,6 +40,7 @@ export const REELS: ReelEntry[] = [
   { id: "pharma-dialogue", Component: r_pharma_dialogue.Reel, durationInFrames: r_pharma_dialogue.durationInFrames },
   { id: "clinic-dialogue", Component: r_clinic_dialogue.Reel, durationInFrames: r_clinic_dialogue.durationInFrames },
   { id: "pharma-trust", Component: r_pharma_trust.Reel, durationInFrames: r_pharma_trust.durationInFrames },
+  { id: "realestate-leaks", Component: r_realestate_leaks.Reel, durationInFrames: r_realestate_leaks.durationInFrames },
   // <new-reel-entries>
 ];
 

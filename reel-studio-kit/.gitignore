@@ -9,3 +9,5 @@ __pycache__
 .git
 /public/broll/*.mp4
 /public/reels/*/lines/
+/public/music/*.mp3
+/public/sfx/*.mp3
