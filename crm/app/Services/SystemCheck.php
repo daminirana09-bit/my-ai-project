@@ -57,6 +57,8 @@ class SystemCheck
         $on = \App\Models\LeadIntegration::where('enabled', true)->get();
         $broken = $on->filter(fn ($i) => $i->last_error_at && (! $i->last_success_at || $i->last_error_at->gt($i->last_success_at)));
         $add($broken->isEmpty() ? 'ok' : 'warn', 'Lead integrations working', $on->isEmpty() ? 'none switched on' : ($broken->isEmpty() ? $on->count().' on' : 'check: '.$broken->map->name()->implode(', ')));
+        $mailOk = ($c?->mail('host') && $c?->mail('password')) || ! in_array(config('mail.default'), ['log', null, ''], true);
+        $add($mailOk ? 'ok' : 'warn', 'Email for "Forgot password"', $mailOk ? '' : 'Company settings → Email (until then the admin resets passwords)');
         $no2fa = User::active()->whereIn('role', ['admin', 'manager'])->whereNull('two_factor_secret')->count();
         $add($no2fa === 0 ? 'ok' : 'warn', 'Admins and managers use 2-step login', $no2fa ? $no2fa.' without it' : '');
         $add(filled(config('crm.allowed_ips')) ? 'ok' : 'warn', 'CRM limited to office IPs (CRM_ALLOWED_IPS)', filled(config('crm.allowed_ips')) ? '' : 'Optional, recommended');

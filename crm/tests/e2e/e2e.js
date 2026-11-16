@@ -25,7 +25,7 @@ expect(await has(p,'E2E Pharma Pvt Ltd'),'company name shown after setup');
 expect(await has(p,'Solvix Web')&&await has(p,'82190 60177')&&await has(p,'Damini Rana'),'credit footer shown');
 // 2. Team
 const addUser=async(name,email,role,locale,mgr)=>{await p.goto(B+'/users/new');await p.fill('#name',name);await p.fill('#email',email);await p.selectOption('#role',role);await p.selectOption('#locale',locale);
-  if(mgr)await p.selectOption('#manager_id',{label:mgr});await p.fill('#password',PW);await Promise.all([p.waitForNavigation(),p.click('form button.p')]);expect(await has(p,name),'user added '+name)};
+  if(mgr)await p.selectOption('#manager_id',{label:mgr});await p.fill('#password',PW);await p.uncheck('#must_change_password');await Promise.all([p.waitForNavigation(),p.click('form button.p')]);expect(await has(p,name),'user added '+name)};
 await addUser('Mona Manager','mgr@e2e.in','manager','hing');
 await addUser('Rita Rep','rita@e2e.in','rep','hi','Mona Manager');
 await addUser('Sohan Rep','sohan@e2e.in','rep','hing','Mona Manager');step();
@@ -199,6 +199,8 @@ expect((await p.goto(B+'/campaigns')).status()===403,'rep blocked from campaigns
 expect((await p.goto(B+'/whatsapp')).status()===403,'rep blocked from WhatsApp settings');
 {const m=await newPage({width:390,height:844});await login(m.p,'sohan@e2e.in');for(const u of ['/inbox','/quotes','/quotes/new','/profile']){await m.p.goto(B+u);const o=await overflow(m.p);expect(o<=0,'mobile overflow '+u+' '+o)}await m.c.close();}
 await p.goto(B+'/');await logout(p);step();
+await p.goto(B+'/login');await Promise.all([p.waitForNavigation(),p.click('a[href$="/forgot-password"]')]);await p.fill('#email','sohan@e2e.in');
+await Promise.all([p.waitForNavigation(),p.click('form button.p')]);expect(await has(p,'flash ok'),'forgot password answered');
 const r404=await p.goto(B+'/nope-page');expect(r404.status()===404&&await has(p,'Solvix Web'),'own 404 page with credit');
 await b.close();
 console.log(`\nRUN ${RUN}: ${issues.length?'ISSUES':'OK'}`);issues.forEach(i=>console.log('  '+i));process.exit(issues.length?1:0);

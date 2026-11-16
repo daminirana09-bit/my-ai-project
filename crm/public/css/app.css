@@ -329,3 +329,5 @@ pre.msg{white-space:pre-wrap;font-family:var(--font);font-size:.88rem;background
 .sharebox .row{flex-wrap:wrap;gap:6px}.field.grow{flex:1 1 220px;min-width:0}
 small.err{color:var(--bad)}
 @media (max-width:900px){.linkrow{grid-template-columns:minmax(0,1fr) auto}.linkrow .lbl{grid-column:1/-1}.actions{justify-content:flex-start}details.more .menu{left:0;right:auto}}
+
+.center{text-align:center}

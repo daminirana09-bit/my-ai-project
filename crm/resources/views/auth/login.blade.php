@@ -8,5 +8,6 @@
   <div class="field"><label for="email">{{ __('Email') }}</label><input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username"></div>
   <div class="field"><label for="password">{{ __('Password') }}</label><input type="password" id="password" name="password" required autocomplete="current-password"></div>
   <button class="btn p">{{ __('Log in') }}</button>
+  <p class="small center"><a href="{{ route('password.request') }}">{{ __('Forgot password?') }}</a></p>
 </form>
 @endsection

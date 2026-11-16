@@ -47,7 +47,7 @@ class ProfileController extends Controller
             'current_password' => ['required', 'current_password'],
             'password' => ['required', 'confirmed', Password::min(10)->letters()->numbers()],
         ]);
-        $request->user()->update(['password' => $request->password]);
+        $request->user()->update(['password' => $request->password, 'must_change_password' => false]);
         AuditLog::record('profile.password');
 
         return back()->with('ok', __('Password changed.'));

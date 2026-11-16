@@ -36,6 +36,22 @@ Artisan::command('leads:pull', function (\App\Services\Leads\Puller $puller) {
     }
 })->purpose('Fetch new leads from IndiaMART, TradeIndia and portal API links');
 
+// Last resort when the only admin forgot the password and email is not set up (run over SSH).
+Artisan::command('crm:reset-password {email}', function (string $email) {
+    $u = \App\Models\User::where('email', strtolower(trim($email)))->first();
+    if (! $u) {
+        $this->error('No user with this email.');
+
+        return 1;
+    }
+    $temp = \Illuminate\Support\Str::password(14, symbols: false);
+    $u->forceFill(['password' => $temp, 'must_change_password' => true, 'active' => true])->save();
+    \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $u->id)->delete();
+    \App\Models\AuditLog::record('password.console_reset', 'user:'.$u->id);
+    $this->info("Temporary password for {$u->email}: {$temp}");
+    $this->line('They must choose their own password right after logging in.');
+})->purpose('Give a user a temporary password (for a locked-out admin)');
+
 // One cron line on the hosting runs all of this every minute: php artisan schedule:run
 // Shared hosting (Hostinger and others) turns off proc_open, so every task runs inside the same PHP
 // process with Artisan::call, never as a separate process. Each task notes when it last ran and

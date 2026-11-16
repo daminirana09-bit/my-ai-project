@@ -319,5 +319,18 @@ class FlowsTest extends CrmTestCase
         }
         $this->assertSame('queue', end($names), 'the queue runs last because it may work for up to 50 seconds');
     }
+    public function test_each_page_has_its_own_request_limit(): void
+    {
+        // Many logins from the shared office IP must not block "Forgot password" (or the other way round)
+        for ($i = 0; $i < 15; $i++) {
+            $this->post('/login', ['email' => "x{$i}@nowhere.test", 'password' => 'wrong-pass-1']);
+        }
+        $this->post('/forgot-password', ['email' => 'someone@nowhere.test'])->assertSessionHas('ok');
+        // …and the page's own limit still works
+        for ($i = 0; $i < 10; $i++) {
+            $this->post('/forgot-password', ['email' => "y{$i}@nowhere.test"]);
+        }
+        $this->post('/forgot-password', ['email' => 'z@nowhere.test'])->assertStatus(429);
+    }
 }
 

@@ -10,7 +10,7 @@ class CompanySetting extends Model
         'company_name', 'logo_path', 'address', 'gstin', 'drug_licence_no', 'phone', 'email',
         'office_start', 'office_end', 'lunch_start', 'lunch_end', 'late_grace_minutes',
         'full_day_minutes', 'half_day_minutes', 'weekly_off', 'reps_can_export_own_leads', 'permissions',
-        'whatsapp_config', 'automations', 'lead_capture_token', 'links', 'share_messages',
+        'whatsapp_config', 'automations', 'lead_capture_token', 'links', 'share_messages', 'mail_config',
     ];
 
     /** Automation switches and their defaults. */
@@ -37,7 +37,7 @@ class CompanySetting extends Model
 
     protected function casts(): array
     {
-        return ['reps_can_export_own_leads' => 'boolean', 'permissions' => 'array', 'whatsapp_config' => 'encrypted:array', 'automations' => 'array', 'links' => 'array', 'share_messages' => 'array'];
+        return ['reps_can_export_own_leads' => 'boolean', 'permissions' => 'array', 'whatsapp_config' => 'encrypted:array', 'automations' => 'array', 'links' => 'array', 'share_messages' => 'array', 'mail_config' => 'encrypted:array'];
     }
 
     private static ?CompanySetting $cached = null;
@@ -104,6 +104,13 @@ class CompanySetting extends Model
         'profile' => "Namaste {name}, thank you for your interest in {company}.\nWebsite: {website}\nPhone: {phone}\nEmail: {email}\n\nFollow us for new products and offers:\n{links}\n\n– {rep}, {company}",
         'review' => "Namaste {name}, thank you for choosing {company}. If you are happy with our products and service, please give us a Google review. It takes one minute:\n{review}\n\nThank you!\n– {rep}, {company}",
     ];
+
+    public function mail(string $key, mixed $default = null): mixed
+    {
+        $v = ($this->mail_config ?? [])[$key] ?? null;
+
+        return ($v === null || $v === '') ? $default : $v;
+    }
 
     public function link(string $key): ?string
     {

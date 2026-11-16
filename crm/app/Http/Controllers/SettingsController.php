@@ -43,6 +43,57 @@ class SettingsController extends Controller
         return back()->with('ok', __('Settings saved.'));
     }
 
+    /** The company's own mailbox for "forgot password" emails. */
+    public function updateMail(Request $request)
+    {
+        $data = $request->validate([
+            'mail_host' => ['nullable', 'string', 'max:100', 'regex:/^[a-z0-9.\-]+$/i'],
+            'mail_port' => ['nullable', 'integer', 'in:465,587'],
+            'mail_username' => ['nullable', 'email', 'max:150'],
+            'mail_password' => ['nullable', 'string', 'max:200'],
+            'mail_from' => ['nullable', 'email', 'max:150'],
+        ], ['mail_host.regex' => __('Write only the server name, e.g. smtp.hostinger.com')]);
+        $c = CompanySetting::current();
+        $host = strtolower(trim((string) ($data['mail_host'] ?? '')));
+        if ($host !== '') {
+            try {
+                \App\Services\Leads\Puller::assertSafeUrl('https://'.$host.'/');
+            } catch (\App\Services\Leads\PullFailed) {
+                return back()->withErrors(['mail_host' => __('The email server address is not reachable or not allowed.')])->withInput();
+            }
+        }
+        $cfg = $c->mail_config ?? [];
+        $cfg['host'] = $host ?: null;
+        $cfg['port'] = (string) ($data['mail_port'] ?? 465);
+        $cfg['username'] = $data['mail_username'] ?? null;
+        $cfg['from'] = $data['mail_from'] ?? null;
+        if (filled($data['mail_password'] ?? null)) {
+            $cfg['password'] = $data['mail_password']; // empty = keep the saved one
+        }
+        $c->update(['mail_config' => $cfg]);
+        CompanySetting::forget();
+        AuditLog::record('settings.mail');
+
+        return back()->with('ok', __('Email settings saved. Send a test email to check them.'));
+    }
+
+    public function testMail(Request $request)
+    {
+        if (! \App\Services\MailSettings::apply()) {
+            return back()->withErrors(['mail_host' => __('Fill in the email server, address and password first.')]);
+        }
+        try {
+            \Illuminate\Support\Facades\Mail::raw(__('This is a test from your sales CRM. Email works, so "Forgot password" links will arrive.'), function ($m) use ($request) {
+                $m->to($request->user()->email)->subject(__('Test email from your sales CRM'));
+            });
+        } catch (\Throwable $e) {
+            return back()->withErrors(['mail_host' => __('The email could not be sent: :e', ['e' => mb_substr($e->getMessage(), 0, 200)])]);
+        }
+        AuditLog::record('settings.mail_test');
+
+        return back()->with('ok', __('Test email sent to :email. Check the inbox (and spam).', ['email' => $request->user()->email]));
+    }
+
     public function officeHours()
     {
         return view('office-hours', ['c' => CompanySetting::current(), 'people' => \App\Models\User::active()->orderBy('name')->get()]);

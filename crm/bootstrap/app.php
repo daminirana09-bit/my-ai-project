@@ -19,8 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(prepend: [AllowedIps::class], append: [SecurityHeaders::class, EnsureSetupDone::class, SetUserLocale::class]);
-        $middleware->alias(['role' => RequireRole::class]);
+        $middleware->web(prepend: [AllowedIps::class], append: [SecurityHeaders::class, EnsureSetupDone::class, SetUserLocale::class, \App\Http\Middleware\ForcePasswordChange::class]);
+        $middleware->alias(['role' => RequireRole::class, 'throttle' => \App\Http\Middleware\ThrottlePerRoute::class]);
         $middleware->redirectGuestsTo(fn () => route('login'));
         $middleware->redirectUsersTo(fn () => route('dashboard'));
     })

@@ -19,4 +19,19 @@
   <p class="note">{{ __('Office and lunch timing are under Office hours. Who may export or import is under Roles & permissions.') }}</p>
   <div><button class="btn p">{{ __('Save settings') }}</button></div>
 </form>
+
+<form method="post" action="{{ route('settings.mail') }}" class="card form" id="mail">
+  @csrf
+  <h2>{{ __('Email for "Forgot password"') }}</h2>
+  <p class="small muted">{{ __('Your own mailbox sends the password-reset links. Hostinger: create e.g. noreply@yourcompany.com under Emails, server smtp.hostinger.com, port 465. Gmail: smtp.gmail.com, port 465, with an app password. Until this is set, a forgotten password goes to the admin as an alert.') }}</p>
+  @foreach(['mail_host', 'mail_port', 'mail_username', 'mail_password'] as $f)@error($f)<p class="flash bad">{{ $message }}</p>@enderror @endforeach
+  <div class="f3">
+    <div class="field"><label for="mail_host">{{ __('Email server (SMTP)') }}</label><input id="mail_host" name="mail_host" value="{{ old('mail_host', $c->mail('host')) }}" placeholder="smtp.hostinger.com"></div>
+    <div class="field"><label for="mail_port">{{ __('Port') }}</label><select id="mail_port" name="mail_port">@foreach([465 => '465 (SSL)', 587 => '587 (TLS)'] as $p => $l)<option value="{{ $p }}" @selected((int) old('mail_port', $c->mail('port', 465)) === $p)>{{ $l }}</option>@endforeach</select></div>
+    <div class="field"><label for="mail_username">{{ __('Email address (login)') }}</label><input type="email" id="mail_username" name="mail_username" value="{{ old('mail_username', $c->mail('username')) }}" placeholder="noreply@yourcompany.com"></div>
+    <div class="field"><label for="mail_password">{{ __('Email password') }}</label><input type="password" id="mail_password" name="mail_password" autocomplete="off" placeholder="{{ $c->mail('password') ? __('Saved. Leave empty to keep.') : '' }}"></div>
+    <div class="field"><label for="mail_from">{{ __('Send as (optional)') }}</label><input type="email" id="mail_from" name="mail_from" value="{{ old('mail_from', $c->mail('from')) }}"></div>
+  </div>
+  <div class="row"><button class="btn p">{{ __('Save') }}</button><button class="btn" formaction="{{ route('settings.mail.test') }}"><x-icon name="mail"/>{{ __('Send a test email to me') }}</button></div>
+</form>
 @endsection

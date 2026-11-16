@@ -157,7 +157,20 @@ and `referrer`, so a lead is tagged **Google Ads**, **Facebook Ads**, **Instagra
 - **Catalogue & files**: upload price lists and catalogues (up to 25 MB). Files stay outside the website
   folder; share links end after the chosen days and can be stopped.
 
-## 9. Lock it down (Rule 1)
+## 9. Passwords: forgot, reset, login ID
+
+- **Forgot password** on the login page sends a one-time link (60 minutes) to the person's email.
+  For that, Company settings → **Email for "Forgot password"**: e.g. create `noreply@company.com`
+  in hPanel → Emails, server `smtp.hostinger.com`, port 465, its password → **Send a test email to me**.
+  Until email is set, a forgotten password appears to the admins as an alert.
+- **Admin → Users → person**: type a new password (with "choose their own password at next
+  login"), or **Email a reset link**. The login ID is the email, changed in the same form.
+  Resetting logs the person out on every device.
+- **The only admin is locked out** and email is not set: over SSH run
+  `/opt/alt/php83/usr/bin/php artisan crm:reset-password admin@company.com` in the CRM folder.
+  It prints a temporary password; a new one must be chosen right after logging in.
+
+## 10. Lock it down (Rule 1)
 
 - Put the office's fixed IP (and VPN IP, if any) in `CRM_ALLOWED_IPS` in `.env`, then
   `php artisan config:cache`. The WhatsApp webhook, lead integrations and website form keep working from anywhere.

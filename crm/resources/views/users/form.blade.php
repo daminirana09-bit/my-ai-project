@@ -21,6 +21,8 @@
     <div class="field"><label for="lunch_end">{{ __('Lunch ends') }}</label><input type="time" id="lunch_end" name="lunch_end" value="{{ old('lunch_end', $user->lunch_end ? substr($user->lunch_end, 0, 5) : '') }}"></div>
   </div>
   <div class="field"><label for="password">{{ $user->exists ? __('New password (leave empty to keep)') : __('Password (10+ characters, letters and numbers)') }}</label><input type="password" id="password" name="password" autocomplete="new-password" @required(! $user->exists)></div>
+  <input type="hidden" name="must_change_password" value="0">
+  <label class="check"><input type="checkbox" id="must_change_password" name="must_change_password" value="1" @checked(old('must_change_password', true))> {{ __('Ask them to choose their own password at next login') }}</label>
   <label class="check"><input type="checkbox" name="active" value="1" @checked(old('active', $user->active ?? true))> {{ __('Can log in (active)') }}</label>
   @if($user->exists)
     <div class="note">
@@ -32,4 +34,13 @@
   @endif
   <div class="row"><button class="btn p">{{ __('Save') }}</button><a class="btn" href="{{ route('users.index') }}">{{ __('Cancel') }}</a></div>
 </form>
+@if($user->exists && $user->id !== auth()->id())
+<form method="post" action="{{ route('users.send-reset', $user) }}" class="card form">
+  @csrf
+  <h2>{{ __('Forgot password?') }}</h2>
+  <p class="small muted">{{ __('Email :name a link to set a new password (works once, for 60 minutes). Or type a new password above and tell them in person.', ['name' => $user->name]) }}</p>
+  @error('password')<p class="flash bad">{{ $message }}</p>@enderror
+  <div><button class="btn"><x-icon name="mail"/>{{ __('Email a reset link') }}</button></div>
+</form>
+@endif
 @endsection

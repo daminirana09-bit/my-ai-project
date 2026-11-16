@@ -38,6 +38,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:60,1'); // per-email lock is inside the controller
     Route::get('/login/otp', [AuthController::class, 'showOtp'])->name('login.otp');
     Route::post('/login/otp', [AuthController::class, 'verifyOtp'])->middleware('throttle:60,1');
+    Route::get('/forgot-password', [\App\Http\Controllers\PasswordResetController::class, 'showForgot'])->name('password.request');
+    Route::post('/forgot-password', [\App\Http\Controllers\PasswordResetController::class, 'sendLink'])->middleware('throttle:10,1')->name('password.email');
+    Route::get('/reset-password/{token}', [\App\Http\Controllers\PasswordResetController::class, 'showReset'])->name('password.reset')->where('token', '[A-Za-z0-9]{20,100}');
+    Route::post('/reset-password', [\App\Http\Controllers\PasswordResetController::class, 'reset'])->middleware('throttle:10,1')->name('password.update');
 });
 
 Route::middleware('auth')->group(function () {
@@ -144,6 +148,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/users', [UserController::class, 'store'])->name('users.store');
         Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
         Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::post('/users/{user}/send-reset', [\App\Http\Controllers\PasswordResetController::class, 'adminSend'])->middleware('throttle:10,1')->name('users.send-reset');
+        Route::post('/settings/mail', [SettingsController::class, 'updateMail'])->name('settings.mail');
+        Route::post('/settings/mail/test', [SettingsController::class, 'testMail'])->middleware('throttle:5,1')->name('settings.mail.test');
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');
         Route::post('/settings', [SettingsController::class, 'update'])->name('settings.update');
         Route::get('/audit', AuditController::class)->name('audit');

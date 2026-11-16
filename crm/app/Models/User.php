@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements \Illuminate\Contracts\Translation\HasLocalePreference
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -23,7 +23,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name', 'email', 'password', 'role', 'manager_id', 'phone', 'active',
-        'office_start', 'office_end', 'lunch_start', 'lunch_end', 'locale', 'theme',
+        'office_start', 'office_end', 'lunch_start', 'lunch_end', 'locale', 'theme', 'must_change_password',
         'away_type', 'away_until', 'backup_user_id', 'salutation',
     ];
 
@@ -34,6 +34,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
+            'must_change_password' => 'boolean',
             'email_verified_at' => 'datetime',
             'last_login_at' => 'datetime',
             'away_until' => 'datetime',
@@ -125,5 +126,11 @@ class User extends Authenticatable
             'lunch_start' => $this->lunch_start ?: $c->lunch_start,
             'lunch_end' => $this->lunch_end ?: $c->lunch_end,
         ];
+    }
+
+    /** Emails (password reset) go out in the person's own language. */
+    public function preferredLocale(): string
+    {
+        return $this->locale ?: 'en';
     }
 }

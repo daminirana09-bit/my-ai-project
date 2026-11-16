@@ -40,6 +40,8 @@ One installation per company. Each company sets its own name, logo, timings and 
   (Zapier, Pabbly, LinkedIn, IVR). Every lead is tagged with its platform; repeats are ignored;
   a known client gets a note instead of a second lead.
 - **Email inbox:** enquiry mails from any portal or client become leads (IMAP, read-only), tagged with the portal.
+- **Passwords:** forgot-password email link (company's own SMTP), admin reset with "choose your own at
+  next login", email reset link, server command for a locked-out admin; limits counted per page.
 - **Catalogue & files:** price lists, catalogues, COAs in any common format (PDF, Excel, CSV, ODS, Word,
   PowerPoint, photos) for the whole team, with versions, team alerts, expiring share links and
   "send on WhatsApp" from a lead; a spreadsheet there fills the product list.
@@ -69,4 +71,4 @@ php artisan test
 **Install for a company:** build the zip with `tools/make-release.sh` (includes `vendor/`, no
 tests, no `.env`), then follow `../docs/INSTALL-HOSTINGER.md`.
 
-**Tests:** `php artisan test` (121 feature tests) and the browser run in `tests/e2e/README.md`.
+**Tests:** `php artisan test` (133 feature tests) and the browser run in `tests/e2e/README.md`.

@@ -25,6 +25,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $this->validated($request, null);
+        $data['must_change_password'] = $request->boolean('must_change_password');
         $user = User::create($data);
         AuditLog::record('user.create', "user:{$user->id}", ['role' => $user->role]);
 
@@ -41,6 +42,11 @@ class UserController extends Controller
         $data = $this->validated($request, $user);
         if (empty($data['password'])) {
             unset($data['password']);
+        } elseif ($user->id !== $request->user()->id) {
+            // A password typed by the admin is temporary: the person picks their own at next login.
+            $data['must_change_password'] = $request->boolean('must_change_password', true);
+            \Illuminate\Support\Facades\DB::table('sessions')->where('user_id', $user->id)->delete();
+            AuditLog::record('password.admin_reset', "user:{$user->id}");
         }
         if ($user->id === $request->user()->id) {
             unset($data['role'], $data['active']); // nobody can lock themselves out
