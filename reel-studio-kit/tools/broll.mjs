@@ -16,6 +16,17 @@ export const CLIPS = {
   "typing-close": { id: 1781, page: "typing-on-a-laptop-close-up-1781" },
   "laptop-man": { id: 308, page: "man-working-on-his-laptop-308" },
   "dentist-checking": { id: 12146, page: "dentist-checking-teeth-12146" },
+  // cafe
+  "cafe-tea-prep": { id: 41864, page: "table-of-a-coffee-shop-a-girl-preparing-tea-41864" },
+  "cafe-waiter": { id: 205, page: "a-waiter-serves-coffee-to-a-customer-205" },
+  "cafe-busy": { id: 4385, page: "customers-in-a-minimalist-style-restaurant-4385" },
+  "cafe-drinking": { id: 223, page: "woman-drinking-coffee-in-a-cafe-223" },
+  "cafe-counter": { id: 41222, page: "two-girls-chatting-at-the-counter-of-a-coffee-shop-41222" },
+  // hotel
+  "hotel-room": { id: 4198, page: "pan-shot-of-the-interior-of-a-hotel-room-4198" },
+  "hotel-mountains": { id: 41545, page: "flying-over-tree-covered-mountains-41545" },
+  "hotel-clouds": { id: 4695, page: "clouds-covering-the-mountains-4695" },
+  "hotel-terrace": { id: 4029, page: "interior-of-a-room-with-terrace-4029" },
 };
 
 const dir = path.join(root, "public/broll");

@@ -1,0 +1,492 @@
+[
+  {
+    "word": "Agar",
+    "start": 0,
+    "end": 0.24
+  },
+  {
+    "word": "main",
+    "start": 0.32,
+    "end": 0.44
+  },
+  {
+    "word": "aapke",
+    "start": 0.48,
+    "end": 0.8
+  },
+  {
+    "word": "cafe",
+    "start": 0.84,
+    "end": 1.16
+  },
+  {
+    "word": "ki",
+    "start": 1.2,
+    "end": 1.32
+  },
+  {
+    "word": "website",
+    "start": 1.36,
+    "end": 1.76
+  },
+  {
+    "word": "banata…",
+    "start": 1.84,
+    "end": 2.72
+  },
+  {
+    "word": "toh",
+    "start": 2.96,
+    "end": 3.12
+  },
+  {
+    "word": "pehle",
+    "start": 3.16,
+    "end": 3.44
+  },
+  {
+    "word": "din",
+    "start": 3.52,
+    "end": 3.6
+  },
+  {
+    "word": "se",
+    "start": 3.68,
+    "end": 3.8
+  },
+  {
+    "word": "ye",
+    "start": 3.84,
+    "end": 3.92
+  },
+  {
+    "word": "karta.",
+    "start": 4,
+    "end": 4.4
+  },
+  {
+    "word": "Pehla",
+    "start": 4.96,
+    "end": 5.493
+  },
+  {
+    "word": "aisa",
+    "start": 5.493,
+    "end": 5.92
+  },
+  {
+    "word": "domain",
+    "start": 5.92,
+    "end": 6.56
+  },
+  {
+    "word": "jo",
+    "start": 6.56,
+    "end": 6.773
+  },
+  {
+    "word": "yaad",
+    "start": 6.773,
+    "end": 7.2
+  },
+  {
+    "word": "rahe:",
+    "start": 7.2,
+    "end": 7.733
+  },
+  {
+    "word": "kulhadcorner.in.",
+    "start": 7.733,
+    "end": 9.44
+  },
+  {
+    "word": "Upar",
+    "start": 10,
+    "end": 10.28
+  },
+  {
+    "word": "ek",
+    "start": 10.32,
+    "end": 10.4
+  },
+  {
+    "word": "photo,",
+    "start": 10.48,
+    "end": 10.88
+  },
+  {
+    "word": "aur",
+    "start": 11.12,
+    "end": 11.24
+  },
+  {
+    "word": "ek",
+    "start": 11.28,
+    "end": 11.4
+  },
+  {
+    "word": "line:",
+    "start": 11.44,
+    "end": 12.32
+  },
+  {
+    "word": "C-Scheme",
+    "start": 12.36,
+    "end": 12.88
+  },
+  {
+    "word": "ka",
+    "start": 12.96,
+    "end": 13.04
+  },
+  {
+    "word": "cozy",
+    "start": 13.2,
+    "end": 13.52
+  },
+  {
+    "word": "chai",
+    "start": 13.6,
+    "end": 13.76
+  },
+  {
+    "word": "cafe.",
+    "start": 13.84,
+    "end": 14.72
+  },
+  {
+    "word": "Phir",
+    "start": 14.8,
+    "end": 14.96
+  },
+  {
+    "word": "menu",
+    "start": 15,
+    "end": 15.36
+  },
+  {
+    "word": "price",
+    "start": 15.8,
+    "end": 16
+  },
+  {
+    "word": "ke",
+    "start": 16.08,
+    "end": 16.16
+  },
+  {
+    "word": "saath,",
+    "start": 16.24,
+    "end": 16.8
+  },
+  {
+    "word": "taaki",
+    "start": 16.84,
+    "end": 17.12
+  },
+  {
+    "word": "koi",
+    "start": 17.16,
+    "end": 17.28
+  },
+  {
+    "word": "pooche",
+    "start": 17.36,
+    "end": 17.68
+  },
+  {
+    "word": "hi",
+    "start": 17.707,
+    "end": 17.76
+  },
+  {
+    "word": "nahi,",
+    "start": 17.8,
+    "end": 18.32
+  },
+  {
+    "word": "rate",
+    "start": 18.4,
+    "end": 18.64
+  },
+  {
+    "word": "kya",
+    "start": 18.68,
+    "end": 18.84
+  },
+  {
+    "word": "hai?",
+    "start": 18.88,
+    "end": 19.36
+  },
+  {
+    "word": "Location,",
+    "start": 19.68,
+    "end": 20.48
+  },
+  {
+    "word": "timing",
+    "start": 20.52,
+    "end": 21.12
+  },
+  {
+    "word": "aur",
+    "start": 21.2,
+    "end": 21.32
+  },
+  {
+    "word": "Google",
+    "start": 21.36,
+    "end": 21.6
+  },
+  {
+    "word": "reviews",
+    "start": 21.68,
+    "end": 22.347
+  },
+  {
+    "word": "sab",
+    "start": 22.587,
+    "end": 22.8
+  },
+  {
+    "word": "ek",
+    "start": 22.88,
+    "end": 23.04
+  },
+  {
+    "word": "hi",
+    "start": 23.08,
+    "end": 23.16
+  },
+  {
+    "word": "scroll",
+    "start": 23.2,
+    "end": 23.52
+  },
+  {
+    "word": "mein.",
+    "start": 23.56,
+    "end": 24.24
+  },
+  {
+    "word": "Aur",
+    "start": 24.32,
+    "end": 24.44
+  },
+  {
+    "word": "sabse",
+    "start": 24.48,
+    "end": 24.8
+  },
+  {
+    "word": "zaroori",
+    "start": 24.88,
+    "end": 25.28
+  },
+  {
+    "word": "Table",
+    "start": 25.653,
+    "end": 25.92
+  },
+  {
+    "word": "book",
+    "start": 26,
+    "end": 26.16
+  },
+  {
+    "word": "karo",
+    "start": 26.24,
+    "end": 26.4
+  },
+  {
+    "word": "button,",
+    "start": 26.48,
+    "end": 27.12
+  },
+  {
+    "word": "seedha",
+    "start": 27.2,
+    "end": 27.52
+  },
+  {
+    "word": "WhatsApp",
+    "start": 27.6,
+    "end": 28
+  },
+  {
+    "word": "pe.",
+    "start": 28.08,
+    "end": 28.8
+  },
+  {
+    "word": "Instagram",
+    "start": 29.08,
+    "end": 29.36
+  },
+  {
+    "word": "bio",
+    "start": 29.44,
+    "end": 29.68
+  },
+  {
+    "word": "mein",
+    "start": 29.76,
+    "end": 29.92
+  },
+  {
+    "word": "bas",
+    "start": 30.08,
+    "end": 30.32
+  },
+  {
+    "word": "yahi",
+    "start": 30.4,
+    "end": 30.6
+  },
+  {
+    "word": "ek",
+    "start": 30.64,
+    "end": 30.8
+  },
+  {
+    "word": "link.",
+    "start": 30.84,
+    "end": 31.52
+  },
+  {
+    "word": "Taaki",
+    "start": 31.56,
+    "end": 31.84
+  },
+  {
+    "word": "weekend",
+    "start": 31.92,
+    "end": 32.28
+  },
+  {
+    "word": "pe",
+    "start": 32.32,
+    "end": 32.64
+  },
+  {
+    "word": "ek",
+    "start": 32.72,
+    "end": 32.88
+  },
+  {
+    "word": "bhi",
+    "start": 32.92,
+    "end": 33.04
+  },
+  {
+    "word": "table",
+    "start": 33.08,
+    "end": 33.36
+  },
+  {
+    "word": "khaali",
+    "start": 33.44,
+    "end": 33.68
+  },
+  {
+    "word": "na",
+    "start": 33.72,
+    "end": 33.84
+  },
+  {
+    "word": "rahe.",
+    "start": 33.88,
+    "end": 34.64
+  },
+  {
+    "word": "Website",
+    "start": 34.72,
+    "end": 35.2
+  },
+  {
+    "word": "hum",
+    "start": 35.24,
+    "end": 35.36
+  },
+  {
+    "word": "sambhalenge",
+    "start": 35.44,
+    "end": 36
+  },
+  {
+    "word": "aap",
+    "start": 36.48,
+    "end": 36.64
+  },
+  {
+    "word": "bas",
+    "start": 36.72,
+    "end": 36.96
+  },
+  {
+    "word": "chai",
+    "start": 37.04,
+    "end": 37.2
+  },
+  {
+    "word": "pe",
+    "start": 37.28,
+    "end": 37.36
+  },
+  {
+    "word": "dhyaan",
+    "start": 37.4,
+    "end": 37.6
+  },
+  {
+    "word": "do.",
+    "start": 37.68,
+    "end": 38.4
+  },
+  {
+    "word": "Cafe",
+    "start": 38.44,
+    "end": 38.72
+  },
+  {
+    "word": "hai?",
+    "start": 38.76,
+    "end": 39.36
+  },
+  {
+    "word": "Comment",
+    "start": 39.44,
+    "end": 39.76
+  },
+  {
+    "word": "karo",
+    "start": 39.8,
+    "end": 40
+  },
+  {
+    "word": "CAFE",
+    "start": 40.16,
+    "end": 40.56
+  },
+  {
+    "word": "free",
+    "start": 40.987,
+    "end": 41.2
+  },
+  {
+    "word": "checklist",
+    "start": 41.28,
+    "end": 41.76
+  },
+  {
+    "word": "DM",
+    "start": 41.84,
+    "end": 42.16
+  },
+  {
+    "word": "mein.",
+    "start": 42.2,
+    "end": 42.8
+  }
+]

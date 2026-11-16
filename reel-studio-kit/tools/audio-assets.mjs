@@ -9,6 +9,7 @@ import { root } from "./env.mjs";
 export const MUSIC = {
   "hiphop-02": { url: "https://assets.mixkit.co/music/738/738.mp3", title: "Hip Hop 02 — Lily J" },
   "digital-clouds": { url: "https://assets.mixkit.co/music/175/175.mp3", title: "Digital Clouds — Alejandro Magaña" },
+  "sleepy-cat": { url: "https://assets.mixkit.co/music/135/135.mp3", title: "Sleepy Cat — Alejandro Magaña" },
 };
 const sfx = (id) => `https://assets.mixkit.co/active_storage/sfx/${id}/${id}-preview.mp3`;
 export const SFX = {
