@@ -1,0 +1,727 @@
+[
+  {
+    "word": "Pharma",
+    "start": 0.0,
+    "end": 0.327
+  },
+  {
+    "word": "company",
+    "start": 0.364,
+    "end": 0.691
+  },
+  {
+    "word": "ho?",
+    "start": 0.727,
+    "end": 1.091
+  },
+  {
+    "word": "Aapki",
+    "start": 1.309,
+    "end": 1.673
+  },
+  {
+    "word": "sales",
+    "start": 1.745,
+    "end": 1.964
+  },
+  {
+    "word": "team",
+    "start": 2.036,
+    "end": 2.182
+  },
+  {
+    "word": "ki",
+    "start": 2.255,
+    "end": 2.4
+  },
+  {
+    "word": "ye",
+    "start": 2.473,
+    "end": 2.618
+  },
+  {
+    "word": "6",
+    "start": 2.691,
+    "end": 2.909
+  },
+  {
+    "word": "problems",
+    "start": 2.945,
+    "end": 3.418
+  },
+  {
+    "word": "ek",
+    "start": 3.806,
+    "end": 3.927
+  },
+  {
+    "word": "CRM",
+    "start": 4.0,
+    "end": 4.364
+  },
+  {
+    "word": "mein",
+    "start": 4.388,
+    "end": 4.509
+  },
+  {
+    "word": "solve.",
+    "start": 4.582,
+    "end": 5.018
+  },
+  {
+    "word": "Ek:",
+    "start": 5.527,
+    "end": 6.182
+  },
+  {
+    "word": "IndiaMART,",
+    "start": 6.255,
+    "end": 6.982
+  },
+  {
+    "word": "JustDial,",
+    "start": 7.055,
+    "end": 7.782
+  },
+  {
+    "word": "Facebook",
+    "start": 7.855,
+    "end": 8.218
+  },
+  {
+    "word": "ki",
+    "start": 8.255,
+    "end": 8.327
+  },
+  {
+    "word": "leads",
+    "start": 8.364,
+    "end": 8.655
+  },
+  {
+    "word": "alag-alag",
+    "start": 8.994,
+    "end": 9.345
+  },
+  {
+    "word": "jagah",
+    "start": 9.382,
+    "end": 9.6
+  },
+  {
+    "word": "bikhri",
+    "start": 9.673,
+    "end": 9.927
+  },
+  {
+    "word": "hui.",
+    "start": 9.964,
+    "end": 10.436
+  },
+  {
+    "word": "Solvix",
+    "start": 10.691,
+    "end": 11.103
+  },
+  {
+    "word": "CRM",
+    "start": 11.127,
+    "end": 11.491
+  },
+  {
+    "word": "mein",
+    "start": 11.564,
+    "end": 11.709
+  },
+  {
+    "word": "har",
+    "start": 11.782,
+    "end": 11.927
+  },
+  {
+    "word": "lead",
+    "start": 12.0,
+    "end": 12.218
+  },
+  {
+    "word": "apne",
+    "start": 12.255,
+    "end": 12.509
+  },
+  {
+    "word": "aap",
+    "start": 12.582,
+    "end": 12.691
+  },
+  {
+    "word": "aati",
+    "start": 12.727,
+    "end": 12.945
+  },
+  {
+    "word": "hai,",
+    "start": 12.982,
+    "end": 13.382
+  },
+  {
+    "word": "platform",
+    "start": 13.4,
+    "end": 13.818
+  },
+  {
+    "word": "tag",
+    "start": 13.891,
+    "end": 14.109
+  },
+  {
+    "word": "ke",
+    "start": 14.145,
+    "end": 14.218
+  },
+  {
+    "word": "saath.",
+    "start": 14.255,
+    "end": 15.127
+  },
+  {
+    "word": "Do:",
+    "start": 15.2,
+    "end": 15.855
+  },
+  {
+    "word": "follow-up",
+    "start": 15.927,
+    "end": 16.291
+  },
+  {
+    "word": "bhool",
+    "start": 16.327,
+    "end": 16.509
+  },
+  {
+    "word": "gaye,",
+    "start": 16.582,
+    "end": 17.018
+  },
+  {
+    "word": "client",
+    "start": 17.055,
+    "end": 17.382
+  },
+  {
+    "word": "gaya.",
+    "start": 17.418,
+    "end": 18.109
+  },
+  {
+    "word": "Yahan",
+    "start": 18.182,
+    "end": 18.473
+  },
+  {
+    "word": "aaj",
+    "start": 18.545,
+    "end": 18.691
+  },
+  {
+    "word": "ke,",
+    "start": 18.764,
+    "end": 19.127
+  },
+  {
+    "word": "overdue",
+    "start": 19.2,
+    "end": 19.709
+  },
+  {
+    "word": "aur",
+    "start": 19.745,
+    "end": 19.855
+  },
+  {
+    "word": "agle",
+    "start": 19.927,
+    "end": 20.145
+  },
+  {
+    "word": "hafte",
+    "start": 20.182,
+    "end": 20.4
+  },
+  {
+    "word": "ke",
+    "start": 20.436,
+    "end": 20.582
+  },
+  {
+    "word": "follow-ups",
+    "start": 20.6,
+    "end": 21.018
+  },
+  {
+    "word": "sab",
+    "start": 21.309,
+    "end": 21.455
+  },
+  {
+    "word": "saamne.",
+    "start": 21.527,
+    "end": 22.4
+  },
+  {
+    "word": "Teen:",
+    "start": 22.436,
+    "end": 23.127
+  },
+  {
+    "word": "ek",
+    "start": 23.2,
+    "end": 23.345
+  },
+  {
+    "word": "hi",
+    "start": 23.37,
+    "end": 23.418
+  },
+  {
+    "word": "client,",
+    "start": 23.491,
+    "end": 24.0
+  },
+  {
+    "word": "do",
+    "start": 24.073,
+    "end": 24.145
+  },
+  {
+    "word": "salesperson",
+    "start": 24.291,
+    "end": 24.873
+  },
+  {
+    "word": "jhagda.",
+    "start": 25.236,
+    "end": 26.036
+  },
+  {
+    "word": "Lead",
+    "start": 26.109,
+    "end": 26.327
+  },
+  {
+    "word": "clash",
+    "start": 26.4,
+    "end": 26.691
+  },
+  {
+    "word": "phone",
+    "start": 26.764,
+    "end": 27.055
+  },
+  {
+    "word": "aur",
+    "start": 27.091,
+    "end": 27.2
+  },
+  {
+    "word": "GSTIN",
+    "start": 27.273,
+    "end": 27.927
+  },
+  {
+    "word": "se",
+    "start": 27.964,
+    "end": 28.073
+  },
+  {
+    "word": "pakda",
+    "start": 28.109,
+    "end": 28.345
+  },
+  {
+    "word": "jaata",
+    "start": 28.364,
+    "end": 28.655
+  },
+  {
+    "word": "hai,",
+    "start": 28.691,
+    "end": 29.091
+  },
+  {
+    "word": "admin",
+    "start": 29.164,
+    "end": 29.418
+  },
+  {
+    "word": "decide",
+    "start": 29.455,
+    "end": 29.745
+  },
+  {
+    "word": "karta",
+    "start": 29.818,
+    "end": 30.073
+  },
+  {
+    "word": "hai.",
+    "start": 30.109,
+    "end": 30.836
+  },
+  {
+    "word": "Chaar:",
+    "start": 30.909,
+    "end": 31.564
+  },
+  {
+    "word": "rep",
+    "start": 31.709,
+    "end": 31.927
+  },
+  {
+    "word": "chhutti",
+    "start": 32.0,
+    "end": 32.255
+  },
+  {
+    "word": "pe,",
+    "start": 32.291,
+    "end": 32.727
+  },
+  {
+    "word": "aur",
+    "start": 32.764,
+    "end": 32.836
+  },
+  {
+    "word": "client",
+    "start": 32.873,
+    "end": 33.164
+  },
+  {
+    "word": "ka",
+    "start": 33.2,
+    "end": 33.309
+  },
+  {
+    "word": "WhatsApp",
+    "start": 33.491,
+    "end": 33.673
+  },
+  {
+    "word": "aaya.",
+    "start": 33.745,
+    "end": 34.4
+  },
+  {
+    "word": "Away",
+    "start": 34.473,
+    "end": 34.691
+  },
+  {
+    "word": "cover",
+    "start": 34.764,
+    "end": 34.982
+  },
+  {
+    "word": "client",
+    "start": 35.127,
+    "end": 35.418
+  },
+  {
+    "word": "ko",
+    "start": 35.455,
+    "end": 35.636
+  },
+  {
+    "word": "uski",
+    "start": 35.673,
+    "end": 35.927
+  },
+  {
+    "word": "bhasha",
+    "start": 35.964,
+    "end": 36.218
+  },
+  {
+    "word": "mein",
+    "start": 36.255,
+    "end": 36.364
+  },
+  {
+    "word": "jawab",
+    "start": 36.4,
+    "end": 36.655
+  },
+  {
+    "word": "deta",
+    "start": 36.691,
+    "end": 36.945
+  },
+  {
+    "word": "hai,",
+    "start": 36.982,
+    "end": 37.309
+  },
+  {
+    "word": "aur",
+    "start": 37.382,
+    "end": 37.527
+  },
+  {
+    "word": "urgent",
+    "start": 37.6,
+    "end": 37.964
+  },
+  {
+    "word": "message",
+    "start": 38.036,
+    "end": 38.327
+  },
+  {
+    "word": "manager",
+    "start": 38.364,
+    "end": 38.655
+  },
+  {
+    "word": "tak.",
+    "start": 38.691,
+    "end": 39.418
+  },
+  {
+    "word": "Paanch:",
+    "start": 39.491,
+    "end": 40.218
+  },
+  {
+    "word": "quotation",
+    "start": 40.255,
+    "end": 40.655
+  },
+  {
+    "word": "banane",
+    "start": 40.727,
+    "end": 40.982
+  },
+  {
+    "word": "mein",
+    "start": 41.018,
+    "end": 41.127
+  },
+  {
+    "word": "ghanta.",
+    "start": 41.164,
+    "end": 41.745
+  },
+  {
+    "word": "Product",
+    "start": 41.964,
+    "end": 42.327
+  },
+  {
+    "word": "list",
+    "start": 42.364,
+    "end": 42.545
+  },
+  {
+    "word": "se",
+    "start": 42.618,
+    "end": 42.764
+  },
+  {
+    "word": "GST",
+    "start": 42.909,
+    "end": 43.273
+  },
+  {
+    "word": "quotation",
+    "start": 43.345,
+    "end": 43.709
+  },
+  {
+    "word": "PDF,",
+    "start": 43.782,
+    "end": 44.582
+  },
+  {
+    "word": "ek",
+    "start": 44.655,
+    "end": 44.8
+  },
+  {
+    "word": "click",
+    "start": 44.836,
+    "end": 45.018
+  },
+  {
+    "word": "mein",
+    "start": 45.055,
+    "end": 45.164
+  },
+  {
+    "word": "WhatsApp",
+    "start": 45.236,
+    "end": 45.6
+  },
+  {
+    "word": "pe.",
+    "start": 45.673,
+    "end": 46.4
+  },
+  {
+    "word": "Chhe:",
+    "start": 46.509,
+    "end": 47.127
+  },
+  {
+    "word": "target",
+    "start": 47.164,
+    "end": 47.491
+  },
+  {
+    "word": "kitna",
+    "start": 47.564,
+    "end": 47.782
+  },
+  {
+    "word": "hua,",
+    "start": 47.855,
+    "end": 48.291
+  },
+  {
+    "word": "kaun",
+    "start": 48.327,
+    "end": 48.509
+  },
+  {
+    "word": "late",
+    "start": 48.582,
+    "end": 48.727
+  },
+  {
+    "word": "aaya",
+    "start": 48.8,
+    "end": 49.091
+  },
+  {
+    "word": "pata",
+    "start": 49.285,
+    "end": 49.455
+  },
+  {
+    "word": "hi",
+    "start": 49.491,
+    "end": 49.564
+  },
+  {
+    "word": "nahi.",
+    "start": 49.6,
+    "end": 50.255
+  },
+  {
+    "word": "Targets,",
+    "start": 50.291,
+    "end": 50.836
+  },
+  {
+    "word": "attendance",
+    "start": 50.873,
+    "end": 51.418
+  },
+  {
+    "word": "aur",
+    "start": 51.455,
+    "end": 51.564
+  },
+  {
+    "word": "analytics",
+    "start": 51.636,
+    "end": 52.145
+  },
+  {
+    "word": "sab",
+    "start": 52.534,
+    "end": 52.655
+  },
+  {
+    "word": "live",
+    "start": 52.727,
+    "end": 52.945
+  },
+  {
+    "word": "dashboard",
+    "start": 53.018,
+    "end": 53.479
+  },
+  {
+    "word": "pe.",
+    "start": 53.527,
+    "end": 54.109
+  },
+  {
+    "word": "Aur",
+    "start": 54.145,
+    "end": 54.255
+  },
+  {
+    "word": "har",
+    "start": 54.327,
+    "end": 54.473
+  },
+  {
+    "word": "rep",
+    "start": 54.545,
+    "end": 54.836
+  },
+  {
+    "word": "sirf",
+    "start": 54.909,
+    "end": 55.127
+  },
+  {
+    "word": "apna",
+    "start": 55.2,
+    "end": 55.418
+  },
+  {
+    "word": "data",
+    "start": 55.491,
+    "end": 55.709
+  },
+  {
+    "word": "dekhta",
+    "start": 55.745,
+    "end": 56.036
+  },
+  {
+    "word": "hai.",
+    "start": 56.073,
+    "end": 56.655
+  },
+  {
+    "word": "Demo",
+    "start": 56.691,
+    "end": 56.873
+  },
+  {
+    "word": "chahiye?",
+    "start": 56.945,
+    "end": 57.6
+  },
+  {
+    "word": "Comment",
+    "start": 57.673,
+    "end": 57.964
+  },
+  {
+    "word": "karo",
+    "start": 58.0,
+    "end": 58.182
+  },
+  {
+    "word": "CRM.",
+    "start": 58.327,
+    "end": 59.055
+  }
+]

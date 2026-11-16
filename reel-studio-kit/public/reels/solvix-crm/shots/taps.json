@@ -1,0 +1,44 @@
+{
+ "leads_source": {
+  "x": 33,
+  "y": 551.765625,
+  "width": 364,
+  "height": 38
+ },
+ "leads_filter": {
+  "x": 33,
+  "y": 672.71875,
+  "width": 80.6875,
+  "height": 36
+ },
+ "activity_note": {
+  "x": 33,
+  "y": 600.125,
+  "width": 364,
+  "height": 38
+ },
+ "activity_save": {
+  "x": 33,
+  "y": 725.078125,
+  "width": 57.84375,
+  "height": 36
+ },
+ "quote_client": {
+  "x": 33,
+  "y": 248.3125,
+  "width": 364,
+  "height": 38
+ },
+ "quote_save": {
+  "x": 33,
+  "y": 755.4375,
+  "width": 103.640625,
+  "height": 36
+ },
+ "away_save": {
+  "x": 33,
+  "y": 906.828125,
+  "width": 141.5625,
+  "height": 36
+ }
+}
