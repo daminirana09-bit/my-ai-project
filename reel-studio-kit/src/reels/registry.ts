@@ -13,6 +13,7 @@ import * as r_pharma_trust from "./pharma-trust/Reel";
 import * as r_realestate_leaks from "./realestate-leaks/Reel";
 import * as r_cafe_makeover from "./cafe-makeover/Reel";
 import * as r_hotel_makeover from "./hotel-makeover/Reel";
+import * as r_google_profile from "./google-profile/Reel";
 // <new-reel-imports>
 
 export type ReelEntry = {
@@ -45,6 +46,7 @@ export const REELS: ReelEntry[] = [
   { id: "realestate-leaks", Component: r_realestate_leaks.Reel, durationInFrames: r_realestate_leaks.durationInFrames },
   { id: "cafe-makeover", Component: r_cafe_makeover.Reel, durationInFrames: r_cafe_makeover.durationInFrames },
   { id: "hotel-makeover", Component: r_hotel_makeover.Reel, durationInFrames: r_hotel_makeover.durationInFrames },
+  { id: "google-profile", Component: r_google_profile.Reel, durationInFrames: r_google_profile.durationInFrames },
   // <new-reel-entries>
 ];
 

@@ -267,7 +267,7 @@ export const StoryOutro: React.FC<{ at: number; handle: string }> = ({ at, handl
   const s = sp(at + 4);
   return (
     <div style={{ position: "absolute", inset: 0, background: `rgba(20,16,15,${0.72 * o})`, display: "grid", placeItems: "center" }}>
-      <div style={{ textAlign: "center", fontFamily: FONT, transform: `scale(${0.8 + 0.2 * s})`, opacity: o }}>
+      <div data-el="title" data-kind="content" style={{ textAlign: "center", fontFamily: FONT, transform: `scale(${0.8 + 0.2 * s})`, opacity: o }}>
         <svg width="150" height="150" viewBox="0 0 24 24">
           <defs>
             <linearGradient id="ig" x1="0" y1="1" x2="1" y2="0">
