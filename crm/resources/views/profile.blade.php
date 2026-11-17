@@ -9,6 +9,7 @@
     @csrf
     <h2>{{ __('Language') }}</h2>
     <div class="field"><label for="locale">{{ __('Show the app in') }}</label><select id="locale" name="locale" data-autosubmit>@foreach(\App\Models\User::LOCALES as $k => $l)<option value="{{ $k }}" @selected($me->locale === $k)>{{ $l }}</option>@endforeach</select></div>
+    <div class="field"><label for="read_lang">{{ __('Show client WhatsApp messages in') }}</label><select id="read_lang" name="read_lang" data-autosubmit>@foreach(\App\Services\Translation\Translator::READ_LANGS as $k => $l)<option value="{{ $k }}" @selected(\App\Services\Translation\Translator::readerLang($me) === $k)>{{ $l }}</option>@endforeach</select></div>
   </form>
   <form method="post" action="{{ route('profile.theme') }}" class="card form">
     @csrf

@@ -10,7 +10,8 @@ class LanguageDetector
         'ne' => ['Nepali', 'नेपाली'], 'gu' => ['Gujarati', 'ગુજરાતી'], 'bn' => ['Bengali', 'বাংলা'], 'as' => ['Assamese', 'অসমীয়া'],
         'pa' => ['Punjabi', 'ਪੰਜਾਬੀ'], 'or' => ['Odia', 'ଓଡ଼ିଆ'], 'ta' => ['Tamil', 'தமிழ்'], 'te' => ['Telugu', 'తెలుగు'],
         'kn' => ['Kannada', 'ಕನ್ನಡ'], 'ml' => ['Malayalam', 'മലയാളം'], 'ur' => ['Urdu', 'اردو'], 'sat' => ['Santali', 'ᱥᱟᱱᱛᱟᱲᱤ'],
-        'mni' => ['Manipuri', 'ꯃꯤꯇꯩꯂꯣꯟ'],
+        'mni' => ['Manipuri', 'ꯃꯤꯇꯩꯂꯣꯟ'], 'kok' => ['Konkani', 'कोंकणी'], 'mai' => ['Maithili', 'मैथिली'], 'sd' => ['Sindhi', 'سنڌي'],
+        'ks' => ['Kashmiri', 'کٲشُر'], 'doi' => ['Dogri', 'डोगरी'], 'brx' => ['Bodo', 'बड़ो'], 'sa' => ['Sanskrit', 'संस्कृतम्'],
     ];
 
     private const HINGLISH = ['hai', 'hain', 'kya', 'nahi', 'nahin', 'kab', 'bhej', 'bhejo', 'bhejiye', 'bhai', 'aap', 'apka', 'aapka', 'karo', 'kar', 'chahiye',

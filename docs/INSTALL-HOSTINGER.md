@@ -170,7 +170,27 @@ and `referrer`, so a lead is tagged **Google Ads**, **Facebook Ads**, **Instagra
   `/opt/alt/php83/usr/bin/php artisan crm:reset-password admin@company.com` in the CRM folder.
   It prints a temporary password; a new one must be chosen right after logging in.
 
-## 10. Lock it down (Rule 1)
+## 10. Chat translation (every Indian language)
+
+The client writes in their language (Tamil, Malayalam, Bengali, Marathi, Hinglish…); the salesperson
+sees the meaning in English, Hindi or Hinglish under each message. The salesperson replies in
+English, Hindi or Hinglish, presses **Translate**, checks the translated text and the **Meaning check**
+(the translation turned back into their language), corrects it if needed, and sends.
+
+1. Get a free key from **Bhashini** (Government of India, 22 Indian languages, runs in India):
+   open bhashini.gov.in → Sign up / Log in → **My Profile** → note the **User ID** and generate the
+   **ULCA API key**.
+2. CRM → **WhatsApp settings** → card **Translation**: service *Bhashini*, paste User ID and API key,
+   tick "Translate client messages automatically", **Save**, then **Test** (e.g. Tamil).
+3. Each person picks the language they read client messages in under **Profile**.
+4. In a chat, the **Client's language** box fixes the language when it was guessed wrong.
+
+Instead of Bhashini, the company can use its own Google Cloud Translation or Microsoft Translator
+key (billed by Google/Microsoft to the company). Phone numbers, emails and links are never sent to
+the translation service; every translation is kept encrypted so the same line is not sent twice.
+A changed number (quantity, rate, date) is flagged before sending.
+
+## 11. Lock it down (Rule 1)
 
 - Put the office's fixed IP (and VPN IP, if any) in `CRM_ALLOWED_IPS` in `.env`, then
   `php artisan config:cache`. The WhatsApp webhook, lead integrations and website form keep working from anywhere.

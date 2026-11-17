@@ -23,7 +23,7 @@ class User extends Authenticatable implements \Illuminate\Contracts\Translation\
 
     protected $fillable = [
         'name', 'email', 'password', 'role', 'manager_id', 'phone', 'active',
-        'office_start', 'office_end', 'lunch_start', 'lunch_end', 'locale', 'theme', 'must_change_password',
+        'office_start', 'office_end', 'lunch_start', 'lunch_end', 'locale', 'theme', 'must_change_password', 'read_lang',
         'away_type', 'away_until', 'backup_user_id', 'salutation',
     ];
 

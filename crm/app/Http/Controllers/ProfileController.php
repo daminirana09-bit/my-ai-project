@@ -25,7 +25,9 @@ class ProfileController extends Controller
 
     public function language(Request $request)
     {
-        $data = $request->validate(['locale' => ['required', Rule::in(array_keys(User::LOCALES))]]);
+        $data = $request->validate(['locale' => ['required', Rule::in(array_keys(User::LOCALES))],
+            'read_lang' => ['nullable', Rule::in(array_keys(\App\Services\Translation\Translator::READ_LANGS))]]);
+
         $request->user()->update($data);
 
         return back();

@@ -52,18 +52,33 @@ class ReplySuggester
         $vars = $this->vars($c);
         $meaningLang = in_array($viewerLocale, ['en', 'hing', 'hi'], true) ? $viewerLocale : 'en';
 
-        return $intents->map(function ($intent) use ($lang, $vars, $meaningLang) {
+        $tr = app(\App\Services\Translation\Translator::class);
+
+        return $intents->map(function ($intent) use ($lang, $vars, $meaningLang, $tr) {
             $t = $this->template($intent, $lang);
             if (! $t) {
                 return null;
             }
             $m = $this->template($intent, $meaningLang);
+            $text = ReplyTemplate::render($t->body, $vars);
+            $language = $t->language;
+            $machine = false;
+            // No ready reply in the client's language (e.g. Konkani, Bodo): translate one, clearly marked.
+            if ($t->language !== $lang && ! ($lang === 'hing' && $t->language === 'hi') && $tr->enabled()) {
+                try {
+                    $text = $tr->translate(ReplyTemplate::render(($this->template($intent, 'en') ?? $t)->body, $vars), 'en', $lang)['text'];
+                    [$language, $machine] = [$lang, true];
+                } catch (\App\Services\Translation\TranslationFailed) {
+                    // keep the Hindi / English reply
+                }
+            }
 
             return (object) [
                 'intent' => $intent,
-                'language' => $t->language,
-                'text' => ReplyTemplate::render($t->body, $vars),
-                'meaning' => $m && $m->language !== $t->language ? ReplyTemplate::render($m->body, $vars) : null,
+                'language' => $language,
+                'text' => $text,
+                'machine' => $machine,
+                'meaning' => $m && $m->language !== $language ? ReplyTemplate::render($m->body, $vars) : null,
             ];
         })->filter()->values();
     }

@@ -122,6 +122,10 @@ const vtok=await p.$$eval('dl.dl dt',dts=>{const i=dts.findIndex(d=>/Verify|स�
 const addForm='form[action$="/whatsapp/numbers"]';
 await p.fill(addForm+' input[name="label"]','Sohan WhatsApp');await p.fill(addForm+' input[name="display_phone"]','+91 90000 00001');await p.fill(addForm+' input[name="phone_number_id"]','109876543210987');
 await p.selectOption(addForm+' select[name="user_id"]',{label:'Sohan Rep'});await Promise.all([p.waitForNavigation(),p.click(addForm+' button')]);expect(await has(p,'Sohan WhatsApp'),'WhatsApp number added');
+// Translation settings: keys kept secret
+await p.goto(B+'/whatsapp');await p.selectOption('#provider','bhashini');await p.fill('#bhashini_user','e2e-user');await p.fill('#bhashini_key','e2e-ulca-secret');
+await Promise.all([p.waitForNavigation(),p.click('#translation button.p')]);expect(await has(p,'flash ok')&&!(await has(p,'e2e-ulca-secret')),'translation settings saved, key hidden');
+expect((await p.inputValue('#provider'))==='bhashini','translation service kept');
 await p.goto(B+'/integrations');const formUrl=(await p.$eval('#i-website p.secret',e=>e.textContent.trim()));await p.goto(B+'/whatsapp');
 let r=await p.request.get(B+'/webhook/whatsapp?hub.mode=subscribe&hub.verify_token='+encodeURIComponent(vtok)+'&hub.challenge=4242');expect(vtok.length>10&&r.status()===200&&(await r.text())==='4242','Meta webhook verification works');
 r=await p.request.get(B+'/webhook/whatsapp?hub.mode=subscribe&hub.verify_token=wrong&hub.challenge=4242');expect(r.status()===403,'wrong verify token refused '+r.status());
@@ -183,6 +187,9 @@ await Promise.all([p.waitForNavigation(),p.click('a.conv')]);
 expect(await has(p,'कृपया रेट लिस्ट'),'client message shown');expect((await p.$$('form.sug')).length>0,'ready replies suggested');
 expect(/[ऀ-ॿ]/.test(await p.$eval('form.sug .o',e=>e.textContent).catch(()=>'')),'suggestion is in Hindi (client language)');
 const bubbles=await p.$$eval('.bubble',e=>e.map(x=>x.className));expect(bubbles.length===2&&bubbles.some(c=>c.includes('auto')),'one inbound + one auto-reply (duplicate ignored), got '+bubbles.join('|'));
+// Client language: Tamil shows the translate box; back to Hindi shows the plain reply box
+await Promise.all([p.waitForNavigation(),p.selectOption('#clang','ta')]);expect(await has(p,'flash ok')&&(await p.locator('form[action$="/draft"]').count())===1,'Tamil client: translate box shown');
+await Promise.all([p.waitForNavigation(),p.selectOption('#clang','hi')]);expect((await p.locator('form.compose').count())===1,'Hindi client: plain reply box');
 await p.fill('#body','Ji, rate list bhej raha hoon');await Promise.all([p.waitForNavigation(),p.click('form.compose button')]);expect(await has(p,'Ji, rate list bhej raha hoon'),'reply recorded (fake token: failed, shown)');
 // Share card on the lead page: WhatsApp not reachable with the fake token, so a clear error, never a crash
 await p.goto(B+'/leads');await Promise.all([p.waitForNavigation(),p.click('a:has-text("Clash Firm")')]);

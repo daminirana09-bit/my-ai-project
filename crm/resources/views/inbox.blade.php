@@ -25,7 +25,11 @@
     @if($current)
       <div class="ch chat-h">
         <div><h2>{{ $current->lead?->firm_name ?? $current->contact_name ?? __('Client') }}</h2>
-          <span class="small muted"><span class="mono">{{ $current->maskedNumber() }}</span> · {{ __('Language') }}: <b>{{ $L[$current->language][1] ?? '—' }}</b> ({{ $L[$current->language][0] ?? '' }}) · {{ __('to') }} {{ $current->number?->label }}</span></div>
+          <span class="small muted"><span class="mono">{{ $current->maskedNumber() }}</span> · {{ __('to') }} {{ $current->number?->label }}</span>
+          <form method="post" action="{{ route('inbox.language', $current) }}" class="row langpick">@csrf
+            <label for="clang" class="small muted">{{ __('Client\'s language') }}</label>
+            <select id="clang" name="language" class="sm" data-autosubmit>@foreach($L as $code => [$en, $native])<option value="{{ $code }}" @selected(($current->language ?: 'en') === $code)>{{ $native }} ({{ $en }})</option>@endforeach</select>
+          </form></div>
         <div class="row">
           @if($current->lead_id)<a class="btn sm" href="{{ route('leads.show', $current->lead_id) }}">{{ __('Open lead') }}</a><a class="btn sm" href="{{ route('quotes.create', ['lead' => $current->lead_id]) }}">{{ __('New quote') }}</a>@endif
           @if($current->waiting_callback || $current->urgent)<form method="post" action="{{ route('inbox.done', $current) }}">@csrf<button class="btn sm good"><x-icon name="check"/>{{ __('Handled') }}</button></form>@endif
@@ -38,6 +42,11 @@
             <div class="txt" lang="{{ $m->language === 'hing' ? 'hi-Latn' : ($m->language ?: 'en') }}">{{ $m->body }}</div>
             <span class="meta">{{ $m->sent_at->format('d M, g:i A') }}@if($m->direction === 'in' && $m->intent && $m->intent !== 'other') · {{ __(\App\Models\ReplyTemplate::INTENTS[$m->intent]) }}@endif @if($m->direction === 'out') · {{ $m->user?->name ?? __('Automatic') }} · {{ __(ucfirst($m->status)) }}@endif</span>
             @if($m->error)<span class="meta err">{{ $m->error }}</span>@endif
+            @if($m->translation)
+              <div class="tr"><span>{{ $m->direction === 'in' ? __('Meaning (:lang)', ['lang' => $L[$m->translation_lang][0] ?? '']) : __('You wrote') }}:</span> {{ $m->translation }}</div>
+            @elseif($translator && $m->direction === 'in' && ! \App\Services\Translation\Translator::understands($readLang, $m->language ?: $current->language))
+              <form method="post" action="{{ route('inbox.translate', $m) }}">@csrf<button class="linkbtn">{{ __('Translate') }}</button></form>
+            @endif
           </div>
         @endforeach
       </div>
@@ -49,7 +58,7 @@
               @foreach($suggestions as $i => $s)
                 <form method="post" action="{{ route('inbox.send', $current) }}" class="sug">@csrf
                   <input type="hidden" name="body" value="{{ $s->text }}">
-                  <span class="pill">{{ __(\App\Models\ReplyTemplate::INTENTS[$s->intent]) }}</span>
+                  <span class="pill">{{ __(\App\Models\ReplyTemplate::INTENTS[$s->intent]) }}</span>@if($s->machine ?? false) <span class="pill warn">{{ __('Machine translated: check before sending') }}</span>@endif
                   <div class="o">{{ $s->text }}</div>
                   @if($s->meaning)<div class="m">{{ __('Meaning') }}: {{ $s->meaning }}</div>@endif
                   <button class="btn sm p">{{ __('Send') }}</button>
@@ -57,11 +66,32 @@
               @endforeach
             </div>
           @endif
-          <form method="post" action="{{ route('inbox.send', $current) }}" class="row compose">@csrf
-            <label class="sr" for="body">{{ __('Your reply') }}</label>
-            <textarea id="body" name="body" rows="2" maxlength="4000" required placeholder="{{ __('Type a reply…') }}">{{ old('body') }}</textarea>
-            <button class="btn p">{{ __('Send') }}</button>
-          </form>
+          @php $clientLang = $current->language ?: 'en'; $draft = session('draft'); @endphp
+          @if($draft)
+            <form method="post" action="{{ route('inbox.send', $current) }}" class="form translate-box">@csrf
+              <input type="hidden" name="original" value="{{ $draft['original'] }}"><input type="hidden" name="original_lang" value="{{ $draft['from'] }}">
+              <div class="field"><label for="body">{{ __('In :lang (this is what the client gets; you can correct it)', ['lang' => $L[$clientLang][0] ?? $clientLang]) }}</label>
+                <textarea id="body" name="body" rows="3" maxlength="4000" required lang="{{ $clientLang === 'hing' ? 'hi-Latn' : $clientLang }}">{{ $draft['text'] }}</textarea></div>
+              <div class="check-meaning"><b>{{ __('Meaning check') }}</b> <span class="small muted">{{ __('(translated back, to confirm it says what you meant)') }}</span><p>{{ $draft['check'] }}</p></div>
+              @foreach($draft['warnings'] ?? [] as $w)<p class="flash warn">{{ $w }}</p>@endforeach
+              <p class="small muted">{{ __('You wrote') }}: {{ $draft['original'] }}</p>
+              <div class="row"><button class="btn p"><x-icon name="chat"/>{{ __('Send') }}</button><a class="btn" href="{{ route('inbox.show', $current) }}">{{ __('Write again') }}</a></div>
+            </form>
+          @elseif($translator && ! \App\Services\Translation\Translator::understands($readLang, $clientLang))
+            <form method="post" action="{{ route('inbox.draft', $current) }}" class="form translate-box">@csrf
+              @error('draft')<p class="flash bad">{{ $message }}</p>@enderror
+              <div class="field"><label for="draft">{{ __('Write in English, Hindi or Hinglish — the client gets it in :lang', ['lang' => ($L[$clientLang][1] ?? '').' ('.($L[$clientLang][0] ?? $clientLang).')']) }}</label>
+                <textarea id="draft" name="draft" rows="2" maxlength="2000" required placeholder="{{ __('Type a reply…') }}">{{ old('draft') }}</textarea></div>
+              <div class="row"><button class="btn p"><x-icon name="globe"/>{{ __('Translate to :lang', ['lang' => $L[$clientLang][0] ?? $clientLang]) }}</button>
+                <button class="btn" formaction="{{ route('inbox.send', $current) }}">{{ __('Send as written') }}</button></div>
+            </form>
+          @else
+            <form method="post" action="{{ route('inbox.send', $current) }}" class="row compose">@csrf
+              <label class="sr" for="body">{{ __('Your reply') }}</label>
+              <textarea id="body" name="body" rows="2" maxlength="4000" required placeholder="{{ __('Type a reply…') }}">{{ old('body') }}</textarea>
+              <button class="btn p">{{ __('Send') }}</button>
+            </form>
+          @endif
         @else
           <p class="note">{{ __('More than 24 hours since the client\'s last message, so WhatsApp only allows an approved template. Use Marketing to send one, or call the client.') }}</p>
         @endif

@@ -42,4 +42,32 @@
     </form>
   </div>
 </section>
+<form method="post" action="{{ route('whatsapp.translation') }}" class="card form" id="translation">
+  @csrf
+  <h2>{{ __('Translation: talk to every client in their own language') }}</h2>
+  <p class="small muted">{{ __('Client messages are shown with their meaning in each salesperson\'s language. A salesperson writes in English, Hindi or Hinglish; the client gets it in their language, after a meaning check. Phone numbers, emails and links are never sent to the translation service.') }}</p>
+  @error('translation')<p class="flash bad">{{ $message }}</p>@enderror
+  <div class="f3">
+    <div class="field"><label for="provider">{{ __('Translation service') }}</label><select id="provider" name="provider">@foreach(\App\Services\Translation\Translator::PROVIDERS as $k => $l)<option value="{{ $k }}" @selected($c->tr('provider', 'off') === $k)>{{ __($l) }}</option>@endforeach</select></div>
+    <label class="check"><input type="checkbox" name="auto" value="1" @checked($c->tr('auto', true))> {{ __('Translate client messages automatically') }}</label>
+  </div>
+  <h3>Bhashini <span class="small muted">{{ __('(free; register at bhashini.gov.in → My Profile)') }}</span></h3>
+  <div class="f3">
+    <div class="field"><label for="bhashini_user">{{ __('User ID') }}</label><input id="bhashini_user" name="bhashini_user" value="{{ $c->tr('bhashini_user') }}" autocomplete="off"></div>
+    <div class="field"><label for="bhashini_key">{{ __('ULCA API key') }}</label><input type="password" id="bhashini_key" name="bhashini_key" autocomplete="off" placeholder="{{ $c->tr('bhashini_key') ? __('Saved. Leave empty to keep.') : '' }}"></div>
+    <div class="field"><label for="bhashini_pipeline">{{ __('Pipeline ID (leave as is)') }}</label><input id="bhashini_pipeline" name="bhashini_pipeline" value="{{ $c->tr('bhashini_pipeline', \App\Services\Translation\BhashiniProvider::DEFAULT_PIPELINE) }}"></div>
+  </div>
+  <h3>Google / Microsoft <span class="small muted">{{ __('(the company\'s own key and bill)') }}</span></h3>
+  <div class="f3">
+    <div class="field"><label for="google_key">{{ __('Google Cloud API key') }}</label><input type="password" id="google_key" name="google_key" autocomplete="off" placeholder="{{ $c->tr('google_key') ? __('Saved. Leave empty to keep.') : '' }}"></div>
+    <div class="field"><label for="ms_key">{{ __('Microsoft Translator key') }}</label><input type="password" id="ms_key" name="ms_key" autocomplete="off" placeholder="{{ $c->tr('ms_key') ? __('Saved. Leave empty to keep.') : '' }}"></div>
+    <div class="field"><label for="ms_region">{{ __('Microsoft region (e.g. centralindia)') }}</label><input id="ms_region" name="ms_region" value="{{ $c->tr('ms_region') }}"></div>
+  </div>
+  <div class="row">
+    <button class="btn p">{{ __('Save') }}</button>
+    <label class="sr" for="tlang">{{ __('Test language') }}</label>
+    <select id="tlang" name="lang" class="sm">@foreach(\App\Services\WhatsApp\LanguageDetector::NAMES as $code => [$en, $native])@if($code !== 'en')<option value="{{ $code }}" @selected($code === 'ta')>{{ $native }} ({{ $en }})</option>@endif @endforeach</select>
+    <button class="btn" formaction="{{ route('whatsapp.translation.test') }}"><x-icon name="globe"/>{{ __('Test') }}</button>
+  </div>
+</form>
 @endsection

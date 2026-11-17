@@ -27,6 +27,11 @@ One installation per company. Each company sets its own name, logo, timings and 
 - **WhatsApp inbox (Meta Cloud API):** each salesperson their own number; chats come in
   through a signed webhook; the client's language and request are detected and ready replies
   are offered in that language (14 Indian languages, editable under Ready replies).
+- **Chat translation (main feature):** every client message shows its meaning in the salesperson's
+  language (English / Hindi / Hinglish); the salesperson writes in English, Hindi or Hinglish and the
+  client gets it in their own language (22 Indian languages) after a meaning check (translated back),
+  with changed numbers flagged. Bhashini (Govt. of India, free), Google or Microsoft key; phone numbers,
+  emails and links never leave the CRM.
 - **Away cover:** a rep marks half day, leave or meeting, or simply is not at work (no punch-in an
   hour after start, or punched out and gone), or it is after office hours / weekly off; clients who
   message get an automatic reply in their language with the time the rep is back, urgent messages alert the backup person and managers, and on return

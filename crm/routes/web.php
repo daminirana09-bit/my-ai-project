@@ -96,6 +96,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/inbox/{conversation}', [InboxController::class, 'index'])->name('inbox.show');
     Route::post('/inbox/{conversation}/send', [InboxController::class, 'send'])->middleware('throttle:30,1')->name('inbox.send');
     Route::post('/inbox/{conversation}/done', [InboxController::class, 'done'])->name('inbox.done');
+    Route::post('/inbox/{conversation}/draft', [InboxController::class, 'draft'])->middleware('throttle:60,1')->name('inbox.draft');
+    Route::post('/inbox/{conversation}/language', [InboxController::class, 'language'])->name('inbox.language');
+    Route::post('/inbox/message/{message}/translate', [InboxController::class, 'translateMessage'])->middleware('throttle:60,1')->name('inbox.translate');
     Route::post('/availability', [AvailabilityController::class, 'update'])->name('availability');
     Route::post('/availability/{user}', [AvailabilityController::class, 'update'])->name('availability.user');
 
@@ -164,6 +167,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/whatsapp/numbers', [WhatsAppSettingsController::class, 'storeNumber'])->name('whatsapp.numbers.store');
         Route::put('/whatsapp/numbers/{number}', [WhatsAppSettingsController::class, 'updateNumber'])->name('whatsapp.numbers.update');
         Route::post('/whatsapp/lead-form-token', [WhatsAppSettingsController::class, 'rotateToken'])->name('whatsapp.token');
+        Route::post('/whatsapp/translation', [WhatsAppSettingsController::class, 'updateTranslation'])->name('whatsapp.translation');
+        Route::post('/whatsapp/translation/test', [WhatsAppSettingsController::class, 'testTranslation'])->middleware('throttle:10,1')->name('whatsapp.translation.test');
         Route::get('/automations', [AutomationController::class, 'edit'])->name('automations');
         Route::post('/automations', [AutomationController::class, 'update'])->name('automations.update');
         Route::get('/system', SystemController::class)->name('system');
