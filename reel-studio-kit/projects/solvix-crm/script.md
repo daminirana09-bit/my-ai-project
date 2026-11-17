@@ -1,24 +1,24 @@
 # solvix-crm — promo for "Pharma Sales CRM by Solvix Web"
 
-Structure: 6 problems of a pharma sales team -> each fixed on REAL CRM screens.
-Every feature named in the voice is in the CRM README (branch claude/zen-feynman-pkptd6, crm/README.md).
+Main feature first: no language barrier between client and sales team. Then 6 more fixes. Every feature named in
+the voice is in the CRM (branch claude/zen-feynman-pkptd6, crm/README.md and the code it points to):
+- WhatsApp inbox: the client's language (LanguageDetector, 17 scripts/languages) and request (IntentDetector) are
+  detected; ready replies are offered in that language with their meaning in the rep's own app language
+  (ReplySuggester). Ready replies exist in 14 languages: English, Hinglish, Hindi, Marathi, Gujarati, Punjabi,
+  Bengali, Assamese, Odia, Tamil, Telugu, Kannada, Malayalam, Urdu.
+- The app itself runs in English, Hindi or Hinglish, per user (Profile -> Language -> "Show the app in").
+- Away cover replies in the client's language; urgent messages alert backup + managers.
 
-How the screens were made (reproducible):
-- CRM run locally from branch claude/zen-feynman-pkptd6 with SQLite and `php artisan db:seed --class=DemoSeeder`
-  (demo company "Demo Pharma Pvt. Ltd.", demo users, no real client data).
-- Features performed with Playwright on a 430x932 mobile viewport @2x: filter leads by IndiaMART, log a call with
-  next follow-up, view lead clash + clashes page, set rep away (leave), create a GST quotation (rate/GST filled from
-  the product list) and download its PDF, targets / attendance / analytics, admin vs rep lead lists.
-- WhatsApp: two client messages pushed through the CRM's own Inbound service (language + intent detection, Hindi
-  away auto-reply, urgent alert, waiting-for-call). Only the call to Meta was stubbed (no WhatsApp account locally).
-Screens: public/reels/solvix-crm/shots. Logo: CRM public/brand/solvix-logo.png.
+How the screens were made (reproducible, scratchpad scripts):
+- CRM run locally with SQLite and `php artisan db:seed --class=DemoSeeder` (demo company, demo users, no real data).
+- Client messages in Tamil, Malayalam, Gujarati, Bengali, Telugu, English and Hinglish pushed through the CRM's own
+  Inbound service; the CRM detected every language and request itself. Only the send to Meta was stubbed (no
+  WhatsApp account locally). Rep Amit was set "at work" and the night-time auto-reply automations switched off
+  (they are normal CRM settings) so the chats show the rep's view.
+- Playwright, 430x932 mobile @2x, logged in as the rep: inbox, the Tamil chat with the app in English, Hindi and
+  Hinglish (switched on the real profile page), tap "Bhejein" -> reply sent in Tamil. Other screens as before
+  (leads, follow-ups, lead clash, away cover, GST quotation + PDF, targets, attendance, analytics, admin vs rep).
 
-Problems -> fixes
-1 Leads scattered (IndiaMART, JustDial, Facebook) -> lead integrations, platform tag on every lead
-2 Forgotten follow-ups -> today / overdue / next-7-days follow-ups, call log with next follow-up
-3 Two reps on one client -> lead clash by phone/GSTIN, admin + managers decide
-4 Rep on leave, client messages -> away cover: auto reply in the client's language, urgent alert to manager/backup
-5 Slow quotations -> GST quotation from the product list, PDF, send on WhatsApp
-6 No visibility -> targets, attendance, analytics; each rep sees only own data
-CTA: comment CRM -> demo.
-Voice: George (free premade), sped up 10% to stay under 60 s. Music/SFX: Mixkit free licences.
+Voice: George (free premade), 10% faster; the "sales person ... English, Hindi ya Hinglish" line was voiced
+separately and spliced in after line 3, then long pauses trimmed and everything sped up 2.5% to stay under 60 s.
+Music/SFX: Mixkit free licences.

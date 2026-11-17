@@ -1,6 +1,8 @@
 // Reel "solvix-crm" (~60 s): promo for the Pharma Sales CRM by Solvix Web.
-// 6 problems of a pharma sales team -> each solved on REAL CRM screens (captured from the CRM running
-// locally with its demo data; the WhatsApp away reply was produced by the CRM's own Inbound service).
+// Main feature first: no language barrier between client and sales team (client writes in Tamil, Malayalam,
+// Gujarati...; the CRM detects language + request and offers the reply in that language, with its meaning in
+// the rep's language). Then 6 more fixes. All screens are REAL: the CRM run locally with its demo data; client
+// messages and the away reply went through the CRM's own Inbound service, only the send to Meta was stubbed.
 // Screens: public/reels/solvix-crm/shots (430x932 CSS px @2x). Voice: George, sped up 10%.
 // Music + SFX: Mixkit free licences (npm run audio-assets).
 import React from "react";
@@ -15,7 +17,7 @@ import words from "../../../public/reels/solvix-crm/captions.words.json";
 export const t = timing(words);
 const at = (i: number) => t.at(i, 0);
 export const durationInFrames = t.duration(0.85);
-const LINES = [0, 14, 24, 37, 43, 54, 61, 74, 83, 98, 103, 114, 124, 132, 140, words.length];
+const LINES = [0, 12, 22, 35, 45, 59, 68, 76, 87, 96, 106, 119, 130, 135, 143, words.length];
 const L = (i: number) => at(LINES[i]);
 
 const C = { bg: "#070A08", ink: "#F2F5F1", dim: "#8E9A91", green: "#2BD94A", green2: "#1E7F3C", red: "#FF4D4D", card: "#111712", line: "#223026" };
@@ -39,49 +41,68 @@ const useA = () => {
 type State = { from: number; img: string; zoom?: number; cx?: number; cy?: number; tap?: { x: number; y: number; at: number }; ring?: { x: number; y: number; w: number; h: number; at: number } };
 const PHONE_BEATS: { from: number; to: number; states: State[] }[] = [
   {
-    // L2: every lead comes in by itself, tagged with its platform
-    from: L(2), to: L(3),
+    // L2-L5: client writes in any language -> CRM detects language + request -> reply in that language, meaning in
+    // the rep's app language (English / Hindi / Hinglish, chosen on the profile page) -> Bhejein
+    from: L(2), to: L(6),
     states: [
-      { from: L(2), img: "02_integrations", zoom: 1.35, cx: 215, cy: 260, ring: { x: 18, y: 160, w: 394, h: 250, at: L(2) + 10 } },
-      { from: at(28), img: "03b_leads_source_selected", zoom: 1.2, cx: 215, cy: 560, tap: { x: 215, y: 571, at: at(28) + 4 } },
-      { from: at(31), img: "04_leads_indiamart", zoom: 1.3, cx: 300, cy: 690, tap: { x: 73, y: 691, at: at(31) - 2 }, ring: { x: 330, y: 650, w: 95, h: 70, at: at(33) } },
+      { from: L(2), img: "30_lang_inbox", zoom: 1.1, cx: 200, cy: 330, ring: { x: 22, y: 196, w: 250, h: 26, at: at(25) } },
+      { from: at(29), img: "30b_lang_inbox_more", zoom: 1.1, cx: 200, cy: 360, ring: { x: 22, y: 210, w: 300, h: 296, at: at(31) } },
+      { from: L(3), img: "31_lang_ta", zoom: 1.12, cx: 200, cy: 470, ring: { x: 38, y: 503, w: 354, h: 68, at: at(36) } },
+      { from: at(40), img: "31_lang_ta", zoom: 1.15, cx: 205, cy: 590, ring: { x: 38, y: 567, w: 354, h: 42, at: at(41) } },
+      // L4: the rep picks the app language: English -> Hindi -> Hinglish, same Tamil chat
+      { from: L(4), img: "35_profile_lang_en", zoom: 1.15, cx: 200, cy: 330, ring: { x: 26, y: 324, w: 378, h: 48, at: at(46) }, tap: { x: 215, y: 349, at: at(47) } },
+      { from: at(48), img: "31_lang_ta", zoom: 1.12, cx: 200, cy: 520, ring: { x: 28, y: 438, w: 374, h: 172, at: at(48) + 4 } },
+      { from: at(50), img: "31_lang_ta_hi", zoom: 1.12, cx: 200, cy: 520, ring: { x: 28, y: 438, w: 374, h: 172, at: at(50) + 4 } },
+      { from: at(53), img: "31_lang_ta_hing", zoom: 1.12, cx: 200, cy: 520, ring: { x: 28, y: 438, w: 374, h: 188, at: at(53) + 4 } },
+      // L5: tap Bhejein -> reply goes out in Tamil
+      { from: L(5), img: "31b_lang_ta_hing_send", zoom: 1.12, cx: 200, cy: 560, tap: { x: 74, y: 641, at: at(60) + 2 } },
+      { from: at(61) + 4, img: "32_lang_ta_sent", zoom: 1.12, cx: 215, cy: 470, ring: { x: 104, y: 416, w: 302, h: 128, at: at(63) } },
     ],
   },
   {
-    // L4: today, overdue and next-7-days follow-ups
-    from: L(4), to: L(5),
+    // L7: every lead comes in by itself, tagged with its platform
+    from: L(7), to: L(8),
     states: [
-      { from: L(4), img: "05_dashboard_followups", zoom: 1.25, cx: 215, cy: 700, ring: { x: 120, y: 600, w: 130, h: 270, at: at(46) } },
-      { from: at(50), img: "08_activity_filled", zoom: 1.25, cx: 215, cy: 640, tap: { x: 62, y: 743, at: at(52) } },
-      { from: at(53), img: "09b_activity_log", zoom: 1.2, cx: 215, cy: 500 },
+      { from: L(7), img: "02_integrations", zoom: 1.35, cx: 215, cy: 260, ring: { x: 18, y: 160, w: 394, h: 250, at: L(7) + 10 } },
+      { from: at(78), img: "03b_leads_source_selected", zoom: 1.2, cx: 215, cy: 560, tap: { x: 215, y: 571, at: at(78) + 4 } },
+      { from: at(80), img: "04_leads_indiamart", zoom: 1.3, cx: 300, cy: 690, tap: { x: 73, y: 691, at: at(80) - 2 }, ring: { x: 330, y: 650, w: 95, h: 70, at: at(83) } },
     ],
   },
   {
-    // L6: lead clash by phone / GSTIN, admin decides
-    from: L(6), to: L(7),
-    states: [
-      { from: L(6), img: "06_lead_clash", zoom: 1.7, cx: 215, cy: 140, ring: { x: 10, y: 118, w: 410, h: 44, at: L(6) + 6 } },
-      { from: at(66), img: "26_manager_notifications", zoom: 1.12, cx: 215, cy: 260, ring: { x: 12, y: 228, w: 405, h: 82, at: at(67) } },
-      { from: at(70), img: "10_clashes", zoom: 1.2, cx: 215, cy: 330, tap: { x: 180, y: 345, at: at(71) } },
-    ],
-  },
-  {
-    // L8: away cover replies in the client's language, urgent goes to the manager
+    // L8: today, overdue and next-7-days follow-ups
     from: L(8), to: L(9),
     states: [
-      { from: L(8), img: "20_away_filled", zoom: 1.2, cx: 215, cy: 760, tap: { x: 104, y: 925, at: L(8) + 10 } },
-      { from: L(8) + 18, img: "21_away_set", zoom: 1.2, cx: 215, cy: 380 },
-      { from: at(85), img: "23_inbox_chat", zoom: 1.35, cx: 215, cy: 640, ring: { x: 100, y: 580, w: 320, h: 180, at: at(88) } },
-      { from: at(94), img: "26_manager_notifications", zoom: 1.12, cx: 215, cy: 200, ring: { x: 12, y: 148, w: 405, h: 70, at: at(95) } },
+      { from: L(8), img: "05_dashboard_followups", zoom: 1.25, cx: 215, cy: 700, ring: { x: 120, y: 600, w: 130, h: 270, at: at(89) } },
+      { from: at(92), img: "08_activity_filled", zoom: 1.25, cx: 215, cy: 640, tap: { x: 62, y: 743, at: at(93) + 4 } },
+      { from: at(94), img: "09b_activity_log", zoom: 1.2, cx: 215, cy: 500 },
     ],
   },
   {
-    // L10: GST quotation PDF from the product list, one click to WhatsApp
+    // L9: lead clash by phone / GSTIN, admin decides
+    from: L(9), to: L(10),
+    states: [
+      { from: L(9), img: "06_lead_clash", zoom: 1.7, cx: 215, cy: 140, ring: { x: 10, y: 118, w: 410, h: 44, at: L(9) + 6 } },
+      { from: at(100), img: "26_manager_notifications", zoom: 1.12, cx: 215, cy: 260, ring: { x: 12, y: 228, w: 405, h: 82, at: at(101) } },
+      { from: at(103), img: "10_clashes", zoom: 1.2, cx: 215, cy: 330, tap: { x: 180, y: 345, at: at(104) } },
+    ],
+  },
+  {
+    // L10: away cover replies in the client's language, urgent goes to the manager
     from: L(10), to: L(11),
     states: [
-      { from: L(10), img: "11_quote_empty", zoom: 1.3, cx: 215, cy: 200, tap: { x: 215, y: 267, at: L(10) + 6 } },
-      { from: at(104), img: "12_quote_filled", zoom: 1.25, cx: 215, cy: 420, ring: { x: 18, y: 300, w: 400, h: 130, at: at(106) } },
-      { from: at(108), img: "13_quote_saved", zoom: 1.2, cx: 215, cy: 360, tap: { x: 200, y: 197, at: at(112) } },
+      { from: L(10), img: "20_away_filled", zoom: 1.2, cx: 215, cy: 760, tap: { x: 104, y: 925, at: L(10) + 8 } },
+      { from: L(10) + 16, img: "21_away_set", zoom: 1.2, cx: 215, cy: 380 },
+      { from: at(109), img: "23_inbox_chat", zoom: 1.35, cx: 215, cy: 640, ring: { x: 100, y: 580, w: 320, h: 180, at: at(111) } },
+      { from: at(115), img: "26_manager_notifications", zoom: 1.12, cx: 215, cy: 200, ring: { x: 12, y: 148, w: 405, h: 70, at: at(116) } },
+    ],
+  },
+  {
+    // L11: GST quotation PDF from the product list, one click to WhatsApp
+    from: L(11), to: L(12),
+    states: [
+      { from: L(11), img: "11_quote_empty", zoom: 1.3, cx: 215, cy: 200, tap: { x: 215, y: 267, at: L(11) + 6 } },
+      { from: at(121), img: "12_quote_filled", zoom: 1.25, cx: 215, cy: 420, ring: { x: 18, y: 300, w: 400, h: 130, at: at(122) } },
+      { from: at(124), img: "13_quote_saved", zoom: 1.2, cx: 215, cy: 360, tap: { x: 200, y: 197, at: at(128) } },
     ],
   },
   {
@@ -89,41 +110,50 @@ const PHONE_BEATS: { from: number; to: number; states: State[] }[] = [
     from: L(12), to: L(13),
     states: [
       { from: L(12), img: "01_dashboard", zoom: 1.2, cx: 215, cy: 560, ring: { x: 10, y: 470, w: 410, h: 170, at: L(12) + 4 } },
-      { from: at(125), img: "14_targets", zoom: 1.15, cx: 215, cy: 360 },
-      { from: at(126), img: "15_attendance", zoom: 1.1, cx: 215, cy: 400 },
-      { from: at(127), img: "16_analytics", zoom: 1.1, cx: 215, cy: 400 },
+      { from: at(130) + 10, img: "14_targets", zoom: 1.15, cx: 215, cy: 360 },
+      { from: at(131), img: "15_attendance", zoom: 1.1, cx: 215, cy: 400 },
+      { from: at(132), img: "16_analytics", zoom: 1.1, cx: 215, cy: 400 },
     ],
   },
 ];
+
+// the 14 languages that have ready replies in the CRM (crm/README: "14 Indian languages")
+const LANG_TILES = (
+  [
+    ["English", "English", 68], ["हिन्दी", "Hindi", 69], ["Hinglish", "Hinglish", 70], ["தமிழ்", "Tamil", 71], ["తెలుగు", "Telugu", 72], ["বাংলা", "Bengali", 73],
+    ["മലയാളം", "Malayalam", -1], ["ગુજરાતી", "Gujarati", -1], ["ಕನ್ನಡ", "Kannada", -1], ["मराठी", "Marathi", -1], ["ਪੰਜਾਬੀ", "Punjabi", -1], ["ଓଡ଼ିଆ", "Odia", -1],
+    ["অসমীয়া", "Assamese", -1], ["اردو", "Urdu", -1],
+  ] as [string, string, number][]
+).map(([native, en, w], k) => ({ native, en, at: w >= 0 ? at(w) : at(73) + 8 + (k - 6) * 3 }));
 
 // ---------- sound ----------
 type Cue = { at: number; name: string; vol?: number; len?: number };
 const SFX: Cue[] = [
   { at: 2, name: "impact", vol: 0.3 },
-  ...[0, 1, 2, 3, 4, 5].map((k) => ({ at: 8 + k * 5, name: "pop", vol: 0.4 })),
-  { at: at(10), name: "whoosh", vol: 0.35 },
-  { at: at(11), name: "success", vol: 0.45 },
-  // problems: buzz at their start
-  ...[1, 3, 5, 7, 9, 11].map((i) => ({ at: L(i), name: "buzz", vol: 0.25 })),
-  ...[1, 3, 5, 7, 9, 11].map((i) => ({ at: L(i) + 2, name: "whoosh", vol: 0.3 })),
-  { at: L(3) + 20, name: "stamp", vol: 0.6 },
-  { at: L(5) + 18, name: "stamp", vol: 0.55 },
-  { at: L(7) + 4, name: "ring", vol: 0.3, len: 45 },
-  { at: L(9) + 6, name: "typing", vol: 0.25, len: 40 },
-  // solutions: whoosh in, then a click/pop on every state, taps and rings
+  // hook: client messages in three languages, the rep is lost
+  ...[0, 4, 6].map((i) => ({ at: i === 0 ? 1 : at(i), name: "message", vol: 0.45 })),
+  { at: at(10), name: "buzz", vol: 0.25 },
+  // the language wall breaks
+  { at: L(1), name: "whoosh", vol: 0.3 },
+  { at: at(19), name: "impact", vol: 0.55 },
+  { at: at(19) + 8, name: "success", vol: 0.4 },
+  // 14 languages pop in
+  ...LANG_TILES.map((x) => ({ at: x.at, name: "pop", vol: 0.32 })),
+  // phones: whoosh in, then a click/pop on every state, taps and rings
   ...PHONE_BEATS.map((b) => ({ at: b.from - 3, name: "whoosh", vol: 0.35 })),
   ...PHONE_BEATS.flatMap((b) => b.states.slice(1).map((s) => ({ at: s.from, name: "ui", vol: 0.45 }))),
   ...PHONE_BEATS.flatMap((b) => b.states.filter((s) => s.tap).map((s) => ({ at: s.tap!.at, name: "click", vol: 0.5 }))),
   ...PHONE_BEATS.flatMap((b) => b.states.filter((s) => s.ring).map((s) => ({ at: s.ring!.at, name: "tick", vol: 0.28 }))),
-  { at: at(108) + 6, name: "pop", vol: 0.5 },
-  { at: at(112) + 4, name: "message", vol: 0.55 },
-  { at: at(94) + 2, name: "message", vol: 0.45 },
+  { at: at(61) + 4, name: "message", vol: 0.55 },
+  { at: at(115) + 2, name: "message", vol: 0.45 },
+  { at: at(124) + 6, name: "pop", vol: 0.5 },
+  { at: at(128) + 4, name: "message", vol: 0.55 },
   { at: L(13), name: "whoosh", vol: 0.35 },
-  { at: at(136), name: "success", vol: 0.4 },
+  { at: at(139), name: "success", vol: 0.4 },
   { at: L(14), name: "whoosh", vol: 0.35 },
-  { at: at(144), name: "impact", vol: 0.4 },
-  { at: at(144) + 6, name: "typing", vol: 0.3, len: 20 },
-  { at: at(144) + 26, name: "message", vol: 0.5 },
+  { at: at(147), name: "impact", vol: 0.4 },
+  { at: at(147) + 6, name: "typing", vol: 0.3, len: 20 },
+  { at: at(147) + 26, name: "message", vol: 0.5 },
 ];
 
 const SoundTrack: React.FC = () => {
@@ -174,26 +204,23 @@ const TopBar: React.FC = () => {
   );
 };
 
-const PROBLEM_LINES = [1, 3, 5, 7, 9, 11];
-const SOLUTION_LINES = [2, 4, 6, 8, 10, 12];
 const Pill: React.FC = () => {
   const { frame, sp } = useA();
   let li = 0;
   for (let i = 0; i < LINES.length - 1; i++) if (frame >= L(i)) li = i;
-  const pi = PROBLEM_LINES.indexOf(li);
-  const si = SOLUTION_LINES.indexOf(li);
-  const text = pi >= 0 ? `PROBLEM ${pi + 1}/6` : si >= 0 ? `SOLVIX CRM · FIX ${si + 1}/6` : li === 13 ? "DATA SAFE" : li === 14 ? "FREE DEMO" : "6 PROBLEMS · 1 CRM";
-  const col = pi >= 0 ? C.red : C.green;
+  const bad = li === 0;
+  const text = bad ? "LANGUAGE BARRIER" : li === 4 ? "APP: ENGLISH · हिन्दी · HINGLISH" : li <= 6 ? "MAIN FEATURE · HAR BHASHA" : li <= 12 ? `SOLVIX CRM · FIX ${li - 6}/6` : li === 13 ? "DATA SAFE" : "FREE DEMO";
+  const col = bad ? C.red : C.green;
   const s = sp(L(li), { damping: 12, stiffness: 220, mass: 0.6 });
   return (
     <div style={{ position: "absolute", left: 0, right: 0, top: 232, display: "flex", justifyContent: "center" }}>
-      <div style={{ transform: `scale(${0.75 + 0.25 * s})`, background: col, color: pi >= 0 ? "#fff" : C.bg, fontFamily: MONO, fontWeight: 600, fontSize: 24, letterSpacing: 2, padding: "6px 18px", borderRadius: 8 }}>{text}</div>
+      <div style={{ transform: `scale(${0.75 + 0.25 * s})`, background: col, color: bad ? "#fff" : C.bg, fontFamily: MONO, fontWeight: 600, fontSize: 24, letterSpacing: 2, padding: "6px 18px", borderRadius: 8 }}>{text}</div>
     </div>
   );
 };
 
-const BOX = new Set([8, 11, 24, 25, 33, 34, 51, 62, 65, 83, 84, 88, 106, 108, 112, 124, 125, 127, 136, 144]);
-const RED = new Set([15, 16, 17, 22, 39, 42, 60, 76, 81, 102, 119, 123]);
+const BOX = new Set([1, 4, 6, 19, 28, 39, 41, 60, 66, 74, 75, 80, 84, 93, 102, 114, 117, 124, 128, 132, 134, 140, 147]);
+const RED = new Set([10, 11, 17, 18, 99, 107]);
 const Headline: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
@@ -236,7 +263,7 @@ const Phone: React.FC<{ beat: (typeof PHONE_BEATS)[number] }> = ({ beat }) => {
   let idx = 0;
   beat.states.forEach((st, i) => { if (frame >= st.from) idx = i; });
   return (
-    <div data-scene="crm" data-el="card" data-kind="content" style={{ position: "absolute", left: 218, top: 520, width: SCREEN_W + 24, height: SCREEN_H + 24, borderRadius: 54, background: "#050505", border: "3px solid #2B332D", padding: 12, boxShadow: `0 40px 100px rgba(0,0,0,.7), 0 0 80px ${C.green}22`, transform: `translateY(${(1 - s) * 260 - out * 40}px) scale(${0.94 + 0.06 * s})`, opacity: Math.min(1, s * 1.6) * (1 - out) }}>
+    <div data-scene={`crm-${beat.from}`} data-el="card" data-kind="content" style={{ position: "absolute", left: 218, top: 520, width: SCREEN_W + 24, height: SCREEN_H + 24, borderRadius: 54, background: "#050505", border: "3px solid #2B332D", padding: 12, boxShadow: `0 40px 100px rgba(0,0,0,.7), 0 0 80px ${C.green}22`, transform: `translateY(${(1 - s) * 260 - out * 40}px) scale(${0.94 + 0.06 * s})`, opacity: Math.min(1, s * 1.6) * (1 - out) }}>
       <div style={{ position: "relative", width: SCREEN_W, height: SCREEN_H, borderRadius: 42, clipPath: "inset(0 round 42px)", background: "#F4F6F4" }}>
         {beat.states.map((st, i) => {
           if (i < idx - 1 || i > idx) return null;
@@ -271,130 +298,127 @@ const Phone: React.FC<{ beat: (typeof PHONE_BEATS)[number] }> = ({ beat }) => {
   );
 };
 
-// ---------- problem graphics ----------
-const ProblemStage: React.FC<{ li: number; children: React.ReactNode }> = ({ li, children }) => {
+// ---------- language story graphics ----------
+const Stage: React.FC<{ li: number; name: string; children: React.ReactNode }> = ({ li, name, children }) => {
   const { frame, fade } = useA();
-  if (frame < L(li) - 2 || frame >= L(li + 1)) return null;
+  const end = L(li + 1);
+  if (frame < L(li) - 2 || frame >= end) return null;
   return (
-    <div data-scene={`problem-${li}`} style={{ position: "absolute", left: 70, right: 130, top: 560, height: 820, opacity: fade(L(li) - 2, 6) * (1 - interpolate(frame, [L(li + 1) - 5, L(li + 1)], [0, 1], CL)) }}>
+    <div data-scene={name} style={{ position: "absolute", left: 70, right: 130, top: 560, height: 820, opacity: fade(L(li) - 2, 6) * (1 - interpolate(frame, [end - 5, end], [0, 1], CL)) }}>
       {children}
     </div>
   );
 };
-const Chip: React.FC<{ text: string; x: number; y: number; at: number; color?: string; rot?: number }> = ({ text, x, y, at: a, color = C.ink, rot = 0 }) => {
-  const { frame, sp } = useA();
-  const s = sp(a, { damping: 10, stiffness: 200, mass: 0.6 });
-  const jit = Math.sin(frame / 5 + x) * 4;
-  return (
-    <div style={{ position: "absolute", left: x, top: y + jit, transform: `rotate(${rot}deg) scale(${Math.min(1, s)})`, background: C.card, border: `2px solid ${C.line}`, color, borderRadius: 16, padding: "14px 20px", fontFamily: FONT, fontWeight: 800, fontSize: 32, whiteSpace: "nowrap", boxShadow: "0 16px 40px rgba(0,0,0,.5)" }}>{text}</div>
-  );
-};
-const Stamp: React.FC<{ text: string; at: number; x: number; y: number }> = ({ text, at: a, x, y }) => {
-  const { frame, sp } = useA();
-  if (frame < a) return null;
-  return (
-    <div data-el="sticker" data-kind="content" style={{ position: "absolute", left: x, top: y, transform: `rotate(-8deg) scale(${1.7 - 0.7 * Math.min(1, sp(a, { damping: 9, stiffness: 260, mass: 0.6 }))})`, border: `7px solid ${C.red}`, color: C.red, borderRadius: 14, padding: "4px 22px", fontFamily: FONT, fontWeight: 800, fontSize: 72, letterSpacing: 3, background: "rgba(7,10,8,.8)", whiteSpace: "nowrap" }}>{text}</div>
-  );
-};
 
-const Problems: React.FC = () => {
-  const { frame } = useA();
-  return (
-    <>
-      <ProblemStage li={1}>
-        <div data-el="card" data-kind="content" style={{ position: "absolute", inset: 0 }}>
-          <Chip text="IndiaMART" x={20} y={40} at={L(1) + 2} rot={-6} />
-          <Chip text="JustDial" x={420} y={120} at={at(16)} rot={5} />
-          <Chip text="Facebook" x={60} y={300} at={at(17)} rot={4} />
-          <Chip text="Email" x={460} y={380} at={at(18)} rot={-5} />
-          <Chip text="WhatsApp" x={130} y={540} at={at(19)} rot={-3} />
-          <Chip text="Excel" x={480} y={620} at={at(20)} rot={7} />
-          <div style={{ position: "absolute", left: 330, top: 230, fontFamily: FONT, fontWeight: 800, fontSize: 200, color: C.red, opacity: interpolate(frame - at(22), [0, 6], [0, 1], CL) }}>?</div>
-        </div>
-      </ProblemStage>
-      <ProblemStage li={3}>
-        <div data-el="card" data-kind="content" style={{ position: "absolute", left: 140, top: 60, width: 520, padding: 34, background: "#FFE97A", color: "#2A2A12", fontFamily: FONT, fontWeight: 800, fontSize: 40, transform: `rotate(${-4 + interpolate(frame - L(3), [0, 30], [0, -10], CL)}deg) translateY(${interpolate(frame - L(3), [12, 30], [0, 140], CL)}px)`, boxShadow: "0 20px 50px rgba(0,0,0,.5)" }}>
-          Kal call karna:<br />Shree Pharma — order
-          <div style={{ fontSize: 26, fontWeight: 600, marginTop: 12 }}>(3 din pehle)</div>
-        </div>
-        <Stamp text="CLIENT GAYA" at={L(3) + 20} x={150} y={460} />
-      </ProblemStage>
-      <ProblemStage li={5}>
-        <div data-el="card" data-kind="content" style={{ position: "absolute", inset: 0 }}>
-          <Chip text="Amit" x={0} y={120} at={L(5) + 2} />
-          <Chip text="Sunita" x={560} y={120} at={L(5) + 6} />
-          <div style={{ position: "absolute", left: 250, top: 330, background: "#fff", color: "#111", borderRadius: 20, padding: "24px 30px", fontFamily: FONT, fontWeight: 800, fontSize: 38, transform: `translateX(${Math.sin(frame / 2.2) * 10}px)` }}>Shree Pharma</div>
-          <svg width="840" height="420" style={{ position: "absolute", left: 0, top: 150 }}>
-            <path d="M120 60 C 200 140, 250 170, 300 190" stroke={C.red} strokeWidth="6" fill="none" strokeDasharray="14 10" strokeDashoffset={-frame * 2} />
-            <path d="M650 60 C 580 140, 540 170, 520 190" stroke={C.red} strokeWidth="6" fill="none" strokeDasharray="14 10" strokeDashoffset={-frame * 2} />
-          </svg>
-          <Stamp text="JHAGDA" at={L(5) + 18} x={210} y={520} />
-        </div>
-      </ProblemStage>
-      <ProblemStage li={7}>
-        <div data-el="card" data-kind="content" style={{ position: "absolute", inset: 0 }}>
-          <svg width="160" height="160" viewBox="0 0 24 24" style={{ position: "absolute", left: 560, top: 0 }}><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z" fill="#F2E3A0" /></svg>
-          <div style={{ position: "absolute", left: 60, top: 170, width: 640, background: "#fff", color: "#111", borderRadius: 26, padding: "22px 26px", fontFamily: FONT, transform: `translateX(${frame < L(7) + 30 ? Math.sin(frame * 1.4) * 6 : 0}px)`, boxShadow: "0 20px 60px rgba(0,0,0,.5)" }}>
-            <div style={{ fontSize: 24, fontWeight: 700, color: "#25A244" }}>WhatsApp · 10:53 PM</div>
-            <div style={{ fontSize: 34, fontWeight: 800, marginTop: 6 }}>Ramesh Medicos</div>
-            <div style={{ fontSize: 30, marginTop: 4 }}>PCM 650 ka rate bhejo, urgent order…</div>
-          </div>
-          <Chip text="Amit: chhutti par" x={150} y={470} at={at(76)} color={C.red} />
-        </div>
-      </ProblemStage>
-      <ProblemStage li={9}>
-        <div data-el="card" data-kind="content" style={{ position: "absolute", left: 60, top: 40, width: 640, background: "#fff", borderRadius: 16, overflow: "hidden", fontFamily: MONO, fontSize: 22, color: "#333" }}>
-          {Array.from({ length: 7 }, (_, r) => (
-            <div key={r} style={{ display: "flex", borderBottom: "1px solid #ddd" }}>
-              {Array.from({ length: 5 }, (_, c2) => <div key={c2} style={{ flex: 1, height: 52, borderRight: "1px solid #ddd", background: r === 0 ? "#E8F5E9" : "#fff", display: "grid", placeItems: "center" }}>{r === 0 ? ["Item", "Qty", "Rate", "GST", "Amt"][c2] : random(`x${r}${c2}`) > 0.5 && frame > L(9) + r * 4 ? "…" : ""}</div>)}
-            </div>
-          ))}
-        </div>
-        <div data-el="sticker" data-kind="content" style={{ position: "absolute", left: 260, top: 470, display: "flex", alignItems: "center", gap: 18, fontFamily: FONT, fontWeight: 800, fontSize: 64, color: C.red }}>
-          <svg width="90" height="90" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke={C.red} strokeWidth="2" /><path d={`M12 12 L ${12 + 7 * Math.sin(frame / 3)} ${12 - 7 * Math.cos(frame / 3)}`} stroke={C.red} strokeWidth="2" strokeLinecap="round" /></svg>
-          1 ghanta
-        </div>
-      </ProblemStage>
-      <ProblemStage li={11}>
-        <div data-el="card" data-kind="content" style={{ position: "absolute", left: 60, top: 80, width: 640, background: C.card, border: `2px solid ${C.line}`, borderRadius: 24, padding: 30, fontFamily: FONT, color: C.ink }}>
-          <div style={{ fontSize: 30, fontWeight: 800 }}>Target · November</div>
-          <div style={{ marginTop: 16, height: 26, borderRadius: 13, background: "#1E2A22" }}>
-            <div style={{ width: `${30 + 20 * Math.sin(frame / 6)}%`, height: "100%", borderRadius: 13, background: C.red, opacity: 0.6 }} />
-          </div>
-          <div style={{ marginTop: 18, fontSize: 64, fontWeight: 800, color: C.red }}>?? %</div>
-          <div style={{ marginTop: 10, fontSize: 30, color: C.dim }}>Kaun late aaya? Kaun field mein hai?</div>
-        </div>
-      </ProblemStage>
-    </>
-  );
-};
-
-// ---------- hook, data-safe split, CTA ----------
+// the same client messages that were sent through the CRM in the demo
+const HOOK_MSGS = [
+  { who: "Murugan Pharma", text: "வணக்கம், Azithromycin 500 விலை பட்டியல் அனுப்புங்கள்.", lang: "Tamil", x: 0, y: 0, w: 0 },
+  { who: "Kerala Med Agencies", text: "നമസ്കാരം, PCM 650 ന്റെ വില എത്രയാണ്?", lang: "Malayalam", x: 150, y: 215, w: 4 },
+  { who: "Shree Krishna Medical", text: "નમસ્તે, Cetirizine ના ભાવ મોકલો.", lang: "Gujarati", x: 40, y: 400, w: 6 },
+];
 const Hook: React.FC = () => {
   const { frame, sp } = useA();
-  if (frame >= L(1)) return null;
-  const items = ["Bikhri leads", "Bhoole follow-up", "Lead clash", "Rep chhutti par", "Slow quotation", "Target ka pata nahi"];
-  const crm = sp(at(10), { damping: 11, stiffness: 180, mass: 0.7 });
   return (
-    <div data-scene="hook" data-el="card" data-kind="content" style={{ position: "absolute", left: 70, right: 130, top: 560 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, opacity: 1 - 0.75 * Math.min(1, crm) }}>
-        {items.map((s, k) => (
-          <div key={s} style={{ background: C.card, border: `2px solid ${C.red}66`, borderRadius: 18, padding: "18px 20px", fontFamily: FONT, fontWeight: 800, fontSize: 30, color: C.ink, transform: `scale(${Math.min(1, sp(8 + k * 5, { damping: 10, stiffness: 220, mass: 0.6 }))})` }}>
-            <span style={{ color: C.red }}>✕ </span>{s}
+    <Stage li={0} name="hook">
+      <div data-el="card" data-kind="content" style={{ position: "absolute", inset: 0 }}>
+        {HOOK_MSGS.map((m) => {
+          const s = Math.min(1, sp(m.w === 0 ? -6 : at(m.w) - 2, { damping: 12, stiffness: 200, mass: 0.6 }));
+          return (
+            <div key={m.who} style={{ position: "absolute", left: m.x, top: m.y, width: 690, background: "#fff", color: "#111", borderRadius: "8px 28px 28px 28px", padding: "18px 24px", fontFamily: FONT, boxShadow: "0 20px 50px rgba(0,0,0,.5)", opacity: s, transform: `scale(${0.6 + 0.4 * s})`, transformOrigin: "left top" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, fontWeight: 700 }}>
+                <span style={{ color: "#25A244" }}>WhatsApp · {m.who}</span>
+                <span style={{ color: "#999", fontFamily: MONO, fontSize: 18 }}>{m.lang}</span>
+              </div>
+              <div style={{ fontSize: 34, fontWeight: 600, marginTop: 6, lineHeight: 1.35 }}>{m.text}</div>
+            </div>
+          );
+        })}
+        {frame >= at(8) ? (
+          <div style={{ position: "absolute", left: 180, top: 630, display: "flex", alignItems: "center", gap: 18, transform: `scale(${Math.min(1, sp(at(8)))})` }}>
+            <div style={{ background: C.card, border: `2px solid ${C.red}88`, borderRadius: 18, padding: "16px 24px", fontFamily: FONT, fontWeight: 800, fontSize: 36, color: C.ink }}>Sales rep</div>
+            <div style={{ fontFamily: FONT, fontWeight: 800, fontSize: 110, color: C.red, transform: `translateY(${Math.sin(frame / 3) * 8}px)` }}>???</div>
+          </div>
+        ) : null}
+      </div>
+    </Stage>
+  );
+};
+
+/** "Language barrier" wall that breaks on "khatam", then the CRM steps in. */
+const Barrier: React.FC = () => {
+  const { frame, sp } = useA();
+  const hit = at(19);
+  const br = interpolate(frame - hit, [0, 14], [0, 1], { ...CL, easing: Easing.out(Easing.cubic) });
+  const shake = frame < hit && frame > at(17) ? Math.sin(frame * 2.1) * 4 : 0;
+  const brick = { background: "#8A3B2B", backgroundImage: "linear-gradient(#5A2219 4px, transparent 4px), linear-gradient(90deg, #5A2219 4px, transparent 4px)", backgroundSize: "120px 60px, 120px 120px", boxShadow: "inset 0 0 40px rgba(0,0,0,.4)" } as const;
+  const logo = sp(hit + 4, { damping: 11, stiffness: 180, mass: 0.7 });
+  return (
+    <Stage li={1} name="barrier">
+      <div data-el="card" data-kind="content" style={{ position: "absolute", inset: 0 }}>
+        {[0, 1].map((k) => (
+          <div key={k} style={{ ...brick, position: "absolute", top: 80, left: k === 0 ? 60 : 440, width: 380, height: 380, borderRadius: k === 0 ? "18px 0 0 18px" : "0 18px 18px 0", display: "grid", placeItems: "center", opacity: 1 - br, transform: `translateX(${(k === 0 ? -1 : 1) * br * 25 + shake}px) rotate(${(k === 0 ? -1 : 1) * br * 6}deg)` }}>
+            <div style={{ fontFamily: FONT, fontWeight: 800, fontSize: 58, color: "#fff", letterSpacing: 2, textShadow: "0 4px 0 rgba(0,0,0,.4)" }}>{k === 0 ? "LANGUAGE" : "BARRIER"}</div>
           </div>
         ))}
-      </div>
-      {frame >= at(10) ? (
-        <div style={{ position: "absolute", left: 0, right: 0, top: 120, display: "flex", justifyContent: "center", transform: `scale(${Math.min(1, 0.4 + 0.6 * crm)})` }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 20, background: "#fff", borderRadius: 28, padding: "20px 34px", boxShadow: `0 0 90px ${C.green}66` }}>
-            <Img src={staticFile("reels/solvix-crm/solvix-logo.png")} style={{ width: 110, height: 110 }} />
-            <div style={{ fontFamily: FONT, color: "#111" }}>
-              <div style={{ fontSize: 56, fontWeight: 800, letterSpacing: -1 }}>1 CRM</div>
-              <div style={{ fontSize: 26, fontWeight: 700, color: C.green2 }}>sab solve</div>
+        {frame >= hit + 4 ? (
+          <div style={{ position: "absolute", left: 0, right: 0, top: 150, display: "flex", justifyContent: "center", transform: `scale(${Math.min(1, 0.4 + 0.6 * logo)})` }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 20, background: "#fff", borderRadius: 28, padding: "20px 34px", boxShadow: `0 0 90px ${C.green}66` }}>
+              <Img src={staticFile("reels/solvix-crm/solvix-logo.png")} style={{ width: 110, height: 110 }} />
+              <div style={{ fontFamily: FONT, color: "#111" }}>
+                <div style={{ fontSize: 52, fontWeight: 800, letterSpacing: -1 }}>Har bhasha</div>
+                <div style={{ fontSize: 28, fontWeight: 700, color: C.green2 }}>client ↔ sales team</div>
+              </div>
             </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+        {frame >= hit + 10 ? (
+          <div style={{ position: "absolute", left: 0, right: 0, top: 420, display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap" }}>
+            {["தமிழ்", "മലയാളം", "ગુજરાતી", "বাংলা", "తెలుగు", "हिन्दी", "English"].map((w, k) => (
+              <span key={w} style={{ background: C.card, border: `2px solid ${C.green}66`, color: C.ink, borderRadius: 999, padding: "8px 20px", fontFamily: FONT, fontWeight: 700, fontSize: 32, opacity: interpolate(frame - (hit + 10 + k * 2), [0, 5], [0, 1], CL) }}>{w}</span>
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </Stage>
+  );
+};
+
+const LangGrid: React.FC = () => {
+  const { frame, sp } = useA();
+  const done = at(74);
+  return (
+    <Stage li={6} name="languages">
+      <div data-el="card" data-kind="content" style={{ position: "absolute", left: 0, right: 0, top: 0, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
+        {LANG_TILES.map((x) => {
+          const s = Math.min(1, sp(x.at, { damping: 10, stiffness: 220, mass: 0.6 }));
+          return (
+            <div key={x.en} style={{ height: 124, borderRadius: 18, background: C.card, border: `2px solid ${frame >= done ? C.green : C.line}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", opacity: s, transform: `scale(${0.5 + 0.5 * s})` }}>
+              <div style={{ fontFamily: FONT, fontWeight: 700, fontSize: 42, color: C.ink, lineHeight: 1.2 }}>{x.native}</div>
+              <div style={{ fontFamily: MONO, fontSize: 18, color: C.dim, letterSpacing: 1 }}>{x.en.toUpperCase()}</div>
+            </div>
+          );
+        })}
+        {frame >= done ? (
+          <div style={{ height: 124, borderRadius: 18, background: C.green, display: "flex", alignItems: "center", justifyContent: "center", gap: 10, fontFamily: FONT, fontWeight: 800, color: "#05140A", transform: `scale(${Math.min(1, 0.4 + 0.6 * sp(done))})` }}>
+            <span style={{ fontSize: 64 }}>14</span><span style={{ fontSize: 28 }}>bhashayein</span>
+          </div>
+        ) : null}
+      </div>
+    </Stage>
+  );
+};
+
+/** During L4: which language the rep's app is in, switching with the screens. */
+const AppLang: React.FC = () => {
+  const { frame, sp } = useA();
+  if (frame < at(48) - 2 || frame >= L(5)) return null;
+  const cur = frame >= at(53) ? 2 : frame >= at(50) ? 1 : 0;
+  const since = [at(48), at(50), at(53)][cur];
+  return (
+    <div data-el="sticker" data-kind="content" data-overlap-ok="card" style={{ position: "absolute", left: 768, width: 182, top: 660, display: "flex", flexDirection: "column", gap: 12, fontFamily: FONT }}>
+      {["English", "हिन्दी", "Hinglish"].map((l, k) => (
+        <div key={l} style={{ background: k === cur ? C.green : C.card, color: k === cur ? "#05140A" : C.dim, border: `2px solid ${k === cur ? C.green : C.line}`, borderRadius: 14, padding: "8px 6px", fontWeight: 800, fontSize: 26, textAlign: "center", whiteSpace: "nowrap", boxShadow: "0 12px 30px rgba(0,0,0,.5)", transform: `scale(${k === cur ? 0.9 + 0.1 * Math.min(1, sp(since)) : 0.9})` }}>{k === cur ? "✓ " : ""}{l}</div>
+      ))}
     </div>
   );
 };
@@ -402,7 +426,7 @@ const Hook: React.FC = () => {
 /** The real quotation PDF (rendered from the CRM's own PDF) slides in next to the phone. */
 const QuotePdf: React.FC = () => {
   const { frame, sp } = useA();
-  const a = at(108) + 4;
+  const a = at(124) + 4;
   if (frame < a || frame >= L(11)) return null;
   const s2 = sp(a, { damping: 14, stiffness: 160, mass: 0.7 });
   const out = interpolate(frame, [L(11) - 6, L(11)], [0, 1], CL);
@@ -416,7 +440,7 @@ const QuotePdf: React.FC = () => {
 
 const DataSafe: React.FC = () => {
   const { frame, sp, fade } = useA();
-  if (frame < L(13) - 2 || frame >= L(14)) return null;
+  if (frame < L(13) - 6 || frame >= L(14)) return null;
   const mini = (img: string, label: string, sub: string, a: number, x: number) => (
     <div style={{ position: "absolute", left: x, top: 0, width: 300, opacity: fade(a, 6), transform: `translateY(${(1 - Math.min(1, sp(a))) * 60}px)` }}>
       <div style={{ borderRadius: 34, background: "#050505", border: "3px solid #2B332D", padding: 8 }}>
@@ -430,8 +454,8 @@ const DataSafe: React.FC = () => {
   );
   return (
     <div data-scene="data-safe" data-el="card" data-kind="content" style={{ position: "absolute", left: 90, right: 150, top: 560, height: 740 }}>
-      {mini("17_admin_leads", "Admin", "sab leads · 12", L(13), 0)}
-      {mini("18_rep_leads", "Rep (Amit)", "sirf apni · 3", at(135), 540 - 150 + 20)}
+      {mini("17_admin_leads", "Admin", "sab leads · 12", L(13) - 8, 0)}
+      {mini("18_rep_leads", "Rep (Amit)", "sirf apni · 3", at(137), 540 - 150 + 20)}
     </div>
   );
 };
@@ -439,19 +463,19 @@ const DataSafe: React.FC = () => {
 const CTA: React.FC = () => {
   const { frame, sp, fade } = useA();
   if (frame < L(14) - 2) return null;
-  const typedLen = Math.round(interpolate(frame, [at(144) + 6, at(144) + 20], [0, 3], CL));
+  const typedLen = Math.round(interpolate(frame, [at(147) + 6, at(147) + 20], [0, 3], CL));
   return (
     <div data-scene="cta" style={{ position: "absolute", inset: 0, opacity: fade(L(14) - 2, 6) }}>
       <div data-el="card" data-kind="content" style={{ position: "absolute", left: 90, right: 150, top: 580, background: "#fff", borderRadius: 32, padding: 34, fontFamily: FONT, color: "#111", textAlign: "center", boxShadow: `0 0 100px ${C.green}44` }}>
         <Img src={staticFile("reels/solvix-crm/solvix-logo.png")} style={{ width: 120, height: 120 }} />
         <div style={{ fontSize: 44, fontWeight: 800, marginTop: 6 }}>Free demo chahiye?</div>
-        <div style={{ display: "inline-block", marginTop: 16, background: C.green, color: "#05140A", fontSize: 96, fontWeight: 800, letterSpacing: 6, padding: "4px 36px", borderRadius: 18, transform: `scale(${Math.min(1.05, 0.5 + 0.5 * sp(at(144), { damping: 8, stiffness: 200, mass: 0.6 }))})` }}>CRM</div>
+        <div style={{ display: "inline-block", marginTop: 16, background: C.green, color: "#05140A", fontSize: 96, fontWeight: 800, letterSpacing: 6, padding: "4px 36px", borderRadius: 18, transform: `scale(${Math.min(1.05, 0.5 + 0.5 * sp(at(147), { damping: 8, stiffness: 200, mass: 0.6 }))})` }}>CRM</div>
         <div style={{ marginTop: 20, display: "flex", alignItems: "center", gap: 12, background: "#F2F4F2", borderRadius: 999, padding: "12px 20px", fontSize: 30, fontWeight: 800, textAlign: "left" }}>
-          <span style={{ flex: 1 }}>{frame >= at(144) + 26 ? <span style={{ color: "#999", fontWeight: 600 }}>Add a comment…</span> : "CRM".slice(0, typedLen)}</span>
+          <span style={{ flex: 1 }}>{frame >= at(147) + 26 ? <span style={{ color: "#999", fontWeight: 600 }}>Add a comment…</span> : "CRM".slice(0, typedLen)}</span>
           <span style={{ color: "#3797F0" }}>Post</span>
         </div>
-        {frame >= at(144) + 26 ? (
-          <div style={{ marginTop: 12, textAlign: "left", fontSize: 24, fontWeight: 700, color: C.green2, transform: `scale(${Math.min(1, sp(at(144) + 26))})`, transformOrigin: "left" }}>✓ Demo link DM mein · {myBrand.handle}</div>
+        {frame >= at(147) + 26 ? (
+          <div style={{ marginTop: 12, textAlign: "left", fontSize: 24, fontWeight: 700, color: C.green2, transform: `scale(${Math.min(1, sp(at(147) + 26))})`, transformOrigin: "left" }}>✓ Demo link DM mein · {myBrand.handle}</div>
         ) : null}
       </div>
     </div>
@@ -466,8 +490,10 @@ export const Reel: React.FC<ReelProps> = ({ debugSafeZones, probe }) => (
     <Pill />
     <Headline />
     <Hook />
-    <Problems />
+    <Barrier />
+    <LangGrid />
     {PHONE_BEATS.map((b, i) => <Phone key={i} beat={b} />)}
+    <AppLang />
     <QuotePdf />
     <DataSafe />
     <CTA />
