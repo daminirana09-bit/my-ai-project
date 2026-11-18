@@ -45,6 +45,24 @@ class AnalyticsController extends Controller
             'tempCounts' => (clone $leads)->open()->selectRaw("COALESCE(temperature, 'none') as t, COUNT(*) as n")->groupBy('t')->pluck('n', 't'),
             'people' => $people,
             'perUser' => $perUser,
+            'funnel' => $this->whatsAppFunnel($me, $leads),
         ]);
+    }
+
+    /** Last 30 days: chats → leads from WhatsApp → interested → won, and what the chatbot did. */
+    private function whatsAppFunnel(User $me, $leads): array
+    {
+        $since = now()->subDays(30);
+        $wa = (clone $leads)->where('created_via', 'whatsapp')->where('created_at', '>=', $since);
+        $chats = \App\Models\WaConversation::visibleTo($me)->where('last_inbound_at', '>=', $since);
+
+        return [
+            'chats' => (clone $chats)->count(),
+            'leads' => (clone $wa)->count(),
+            'interested' => (clone $wa)->whereIn('status', ['interested', 'quote_sent', 'negotiation', 'won'])->count(),
+            'won' => (clone $wa)->where('status', 'won')->count(),
+            'bot' => (clone $chats)->whereNotNull('bot_replied_at')->where('bot_replied_at', '>=', $since)->count(),
+            'replied' => \App\Models\CampaignRecipient::whereIn('lead_id', (clone $leads)->select('id'))->where('replied_at', '>=', $since)->count(),
+        ];
     }
 }

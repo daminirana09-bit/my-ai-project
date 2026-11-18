@@ -39,14 +39,35 @@ class Client
     }
 
     /** A message approved as a template in WhatsApp Manager; needed outside the 24-hour window. */
-    public function sendTemplate(WhatsappNumber $from, string $to, string $name, string $language, array $params = []): array
+    public function sendTemplate(WhatsappNumber $from, string $to, string $name, string $language, array $params = [], ?array $header = null): array
     {
         $template = ['name' => $name, 'language' => ['code' => $language]];
+        $components = [];
+        // A template with an image or PDF on top: WhatsApp fetches it from this https address.
+        if ($header && in_array($header['type'] ?? '', ['image', 'document'], true) && str_starts_with((string) ($header['link'] ?? ''), 'https://')) {
+            $media = ['link' => $header['link']] + ($header['type'] === 'document' ? ['filename' => $header['filename'] ?? 'document.pdf'] : []);
+            $components[] = ['type' => 'header', 'parameters' => [['type' => $header['type'], $header['type'] => $media]]];
+        }
         if ($params) {
-            $template['components'] = [['type' => 'body', 'parameters' => array_map(fn ($p) => ['type' => 'text', 'text' => (string) $p], array_values($params))]];
+            $components[] = ['type' => 'body', 'parameters' => array_map(fn ($p) => ['type' => 'text', 'text' => (string) $p], array_values($params))];
+        }
+        if ($components) {
+            $template['components'] = $components;
         }
 
         return $this->post($from, ['messaging_product' => 'whatsapp', 'to' => $to, 'type' => 'template', 'template' => $template]);
+    }
+
+    /** A message with up to three reply buttons ([id => title]); titles are cut to WhatsApp's 20 characters. */
+    public function sendButtons(WhatsappNumber $from, string $to, string $body, array $buttons): array
+    {
+        $list = [];
+        foreach (array_slice($buttons, 0, 3, true) as $id => $title) {
+            $list[] = ['type' => 'reply', 'reply' => ['id' => (string) $id, 'title' => mb_substr(trim((string) $title), 0, 20)]];
+        }
+
+        return $this->post($from, ['messaging_product' => 'whatsapp', 'to' => $to, 'type' => 'interactive',
+            'interactive' => ['type' => 'button', 'body' => ['text' => mb_substr($body, 0, 1024)], 'action' => ['buttons' => $list]]]);
     }
 
     public function sendDocument(WhatsappNumber $from, string $to, string $path, string $filename, string $caption = ''): array

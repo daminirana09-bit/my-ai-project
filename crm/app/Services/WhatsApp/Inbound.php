@@ -59,6 +59,8 @@ class Inbound
             return; // Meta retries deliveries; each message is stored once
         }
         $body = $this->text($m);
+        $replyId = $m['interactive']['button_reply']['id'] ?? $m['interactive']['list_reply']['id'] ?? $m['button']['payload'] ?? null;
+        $replyId = is_string($replyId) && preg_match('/^bot_[a-z]{2,10}$/', $replyId) ? $replyId : null;
         $at = isset($m['timestamp']) ? CarbonImmutable::createFromTimestamp((int) $m['timestamp'])->setTimezone(config('app.timezone')) : now();
 
         [$c, $msg] = DB::transaction(function () use ($number, $from, $profileName, $body, $wamid, $at) {
@@ -80,9 +82,18 @@ class Inbound
             $c->last_inbound_at = $at;
             $c->last_message_at = $at;
             $c->unread = (int) $c->unread + 1;
+            if ($c->status === 'closed') {
+                $c->status = 'open'; // the client wrote again
+                $c->closed_at = null;
+            }
             $c->save();
 
             $this->linkLead($c, $number, $from);
+            if (! $c->assigned_to) {
+                // A salesperson's own number: theirs. The company's shared number: the client's salesperson.
+                $c->assigned_to = $number->user_id ?? Lead::whereKey($c->lead_id)->value('owner_id');
+                $c->save();
+            }
 
             $msg = WaMessage::create(['wa_conversation_id' => $c->id, 'direction' => 'in', 'body' => $body, 'type' => 'text', 'wamid' => $wamid ?: null,
                 'status' => 'received', 'language' => $language, 'intent' => $intent, 'sent_at' => $at]);
@@ -93,12 +104,18 @@ class Inbound
                     $c->lead->forceFill(['whatsapp_opt_out' => true])->save();
                 }
                 LeadActivity::create(['lead_id' => $c->lead_id, 'user_id' => null, 'type' => 'whatsapp', 'note' => mb_substr((string) $body, 0, 300), 'occurred_at' => $at]);
+                // A reply to a broadcast in the last 7 days counts for that broadcast.
+                $r = CampaignRecipient::where('lead_id', $c->lead_id)->whereNull('replied_at')->where('sent_at', '>=', now()->subDays(7))->orderByDesc('sent_at')->first();
+                $r?->forceFill(['replied_at' => $at])->save();
             }
 
             return [$c->fresh(['number.user', 'lead']), $msg];
         });
 
-        $this->cover($c, $msg);
+        $botWill = $this->cover($c, $msg);
+        if ($botWill) {
+            ChatBot::defer($c->id, $msg->id, $replyId);
+        }
     }
 
     private function text(array $m): string
@@ -145,11 +162,13 @@ class Inbound
     }
 
     /** AI cover: reply when the salesperson is away, queue a call-back, and raise urgent messages. */
-    private function cover(WaConversation $c, WaMessage $msg): void
+    /** @return bool true when the chatbot answers this message (it then also tells when the salesperson is back) */
+    private function cover(WaConversation $c, WaMessage $msg): bool
     {
         $co = CompanySetting::current();
-        $rep = $c->number?->user;
+        $rep = $c->number?->user ?? $c->assignee;
         [$away, $back] = $this->awayState($rep, $co);
+        $botWill = ChatBot::willAnswer($c, $away) && ! in_array(strtoupper(trim((string) $msg->body)), ['STOP', 'UNSUBSCRIBE', 'STOP ALL'], true);
 
         if ($away) {
             $c->waiting_callback = true;
@@ -168,12 +187,12 @@ class Inbound
         $c->save();
 
         $alreadyReplied = $c->auto_replied_at && $c->auto_replied_at->gt(now()->subHours(12));
-        if (! $away || $alreadyReplied || ! $this->client->configured()) {
-            return;
+        if ($botWill || ! $away || $alreadyReplied || ! $this->client->configured()) {
+            return $botWill;
         }
         $tpl = $this->replies->template('away', $c->language ?: 'en');
         if (! $tpl) {
-            return;
+            return false;
         }
         $text = \App\Models\ReplyTemplate::render($tpl->body, $this->replies->vars($c, $rep, $back));
         $res = $this->client->sendText($c->number, (string) $c->wa_id, $text);
@@ -183,6 +202,8 @@ class Inbound
         if (! $res['ok']) {
             Log::warning('WhatsApp auto-reply failed', ['conversation' => $c->id, 'error' => $res['error']]);
         }
+
+        return false;
     }
 
     /** @return array{0:bool,1:?string} away?, and when they are back (as text) */

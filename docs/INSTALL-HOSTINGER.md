@@ -190,7 +190,28 @@ key (billed by Google/Microsoft to the company). Phone numbers, emails and links
 the translation service; every translation is kept encrypted so the same line is not sent twice.
 A changed number (quantity, rate, date) is flagged before sending.
 
-## 11. Lock it down (Rule 1)
+## 11. Chatbot, team inbox and broadcasts
+
+**Chatbot** (Admin → Chatbot): switch it on, choose *Always* or *Only when the salesperson is away*,
+and add your own questions & answers (franchise/PCD, delivery time, payment terms, address…).
+It replies at once in the client's language with buttons *Price list · Place an order · Talk to a
+person*. It answers only from your answers, product list (rate, composition, packing) and the PDF
+price list; orders, samples, documents and payment questions become a task for the salesperson;
+"talk to a person" or a complaint hands the chat over at once. When a salesperson replies, the bot
+stays quiet in that chat (12 hours by default). Use **Try it** on the same page: nothing is sent.
+
+**Team inbox**: chats on the company number go to the client's salesperson; managers can give a
+chat to someone else, everyone can add team notes (never sent to the client) and close chats.
+Filters: Mine, Unassigned, Waiting for call, Urgent, Chatbot answered, Closed.
+
+**Broadcasts** (Marketing): approved template to thousands of clients by status, tag, city,
+language, salesperson or "no order in N days"; with a photo or PDF on top (from Catalogue & files);
+now or at a set time; pause, resume, cancel, send again to failed. Set your WhatsApp daily limit
+under WhatsApp settings (250 / 1,000 / 10,000 / 100,000): the CRM stays within it and carries on
+by itself the next day. The report shows delivered, read, replied, and orders and order value
+from those clients since the broadcast. New number lists: Leads → Import with a tag, then pick the tag.
+
+## 12. Lock it down (Rule 1)
 
 - Put the office's fixed IP (and VPN IP, if any) in `CRM_ALLOWED_IPS` in `.env`, then
   `php artisan config:cache`. The WhatsApp webhook, lead integrations and website form keep working from anywhere.

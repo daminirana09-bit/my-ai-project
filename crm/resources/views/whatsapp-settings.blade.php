@@ -10,6 +10,7 @@
     <div class="field"><label for="access_token">{{ __('Permanent access token (System user)') }}</label><input type="password" id="access_token" name="access_token" autocomplete="off" placeholder="{{ $c->wa('access_token') ? __('Saved. Leave empty to keep.') : '' }}"></div>
     <div class="field"><label for="app_secret">{{ __('App secret') }}</label><input type="password" id="app_secret" name="app_secret" autocomplete="off" placeholder="{{ $c->wa('app_secret') ? __('Saved. Leave empty to keep.') : '' }}"></div>
     <div class="field"><label for="api_version">{{ __('Graph API version') }}</label><input id="api_version" name="api_version" value="{{ $c->wa('api_version', 'v23.0') }}" required pattern="v[0-9]{2}\.[0-9]"></div>
+    <div class="field"><label for="daily_limit">{{ __('Messages per 24 hours for campaigns (WhatsApp limit of your account; 0 = no limit)') }}</label><input type="number" id="daily_limit" name="daily_limit" min="0" max="1000000" value="{{ $c->wa('daily_limit', 1000) }}"><span class="small muted">{{ __('New accounts start at 250 or 1,000; Meta raises it to 10,000, 100,000 and unlimited as quality stays good. See WhatsApp Manager → Insights.') }}</span></div>
     <div><button class="btn p">{{ __('Save') }}</button></div>
   </form>
   <section class="card form">

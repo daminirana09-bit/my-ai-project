@@ -39,6 +39,7 @@ class WhatsAppSettingsController extends Controller
             'access_token' => ['nullable', 'string', 'max:1000'],
             'app_secret' => ['nullable', 'string', 'max:200'],
             'api_version' => ['required', 'regex:/^v\d{2}\.\d$/'],
+            'daily_limit' => ['nullable', 'integer', 'min:0', 'max:1000000'],
         ]);
         $c = CompanySetting::current();
         $cfg = $c->whatsapp_config ?? [];
@@ -49,6 +50,7 @@ class WhatsAppSettingsController extends Controller
             }
         }
         $cfg['api_version'] = $data['api_version'];
+        $cfg['daily_limit'] = (int) ($data['daily_limit'] ?? 1000);
         $c->update(['whatsapp_config' => $cfg]);
         CompanySetting::forget();
         AuditLog::record('whatsapp.settings');

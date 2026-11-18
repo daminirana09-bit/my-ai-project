@@ -165,11 +165,25 @@ await p.goto(B+'/leads?source=JustDial');expect(await has(p,'Ajay Medicos')&&!(a
 expect((await p.goto(B+'/notifications')).status()===200,'alerts page opens');
 {const m=await newPage({width:390,height:844});await login(m.p,'owner@e2e.in');for(const u of ['/integrations','/leads']){await m.p.goto(B+u);const o=await overflow(m.p);expect(o<=0,'mobile overflow '+u+' '+o)}await m.c.close();}
 step();
-for(const u of ['/inbox','/quotes','/quotes/new','/campaigns','/campaigns/new','/ready-replies','/whatsapp','/automations','/system','/integrations']){const rr=await p.goto(B+u);expect(rr.status()===200,'admin page '+u+' '+rr.status());expect(await has(p,'Solvix Web'),'credit on '+u)}
+for(const u of ['/inbox','/quotes','/quotes/new','/campaigns','/campaigns/new','/ready-replies','/whatsapp','/automations','/system','/integrations','/chatbot','/analytics']){const rr=await p.goto(B+u);expect(rr.status()===200,'admin page '+u+' '+rr.status());expect(await has(p,'Solvix Web'),'credit on '+u)}
 await p.goto(B+'/automations');await Promise.all([p.waitForNavigation(),p.click('form[action$="/automations"] button.p')]);expect(await has(p,'flash ok'),'automations saved');
 await p.goto(B+'/ready-replies');await Promise.all([p.waitForNavigation(),p.click('form[action$="/ready-replies"] button.p')]);expect(await has(p,'flash ok'),'ready replies saved');
 await p.goto(B+'/campaigns/new');await p.fill('#name','E2E Diwali');await p.fill('#template_name','diwali_offer');await Promise.all([p.waitForNavigation(),p.click('button[name="preview"]')]);
-expect(p.url().includes('preview=1'),'campaign count preview works');step();
+expect(p.url().includes('preview=1'),'campaign count preview works');
+// Scheduled broadcast: waits for its time, can be cancelled
+await p.fill('#name','E2E Scheduled');await p.fill('#template_name','winter_offer');{const d=new Date(Date.now()+3*864e5),z=n=>String(n).padStart(2,'0');await p.fill('#scheduled_at',`${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}T10:00`);}
+p.once('dialog',d=>d.accept());await Promise.all([p.waitForNavigation(),p.click('form[action$="/campaigns"] button.p')]);
+expect(/\/campaigns\/\d+$/.test(p.url())&&await has(p,'flash ok'),'scheduled campaign created '+p.url());
+p.once('dialog',d=>d.accept());await Promise.all([p.waitForNavigation(),p.click('form[action$="/cancel"] button')]);expect(await has(p,'flash ok'),'scheduled campaign cancelled');
+// Chatbot: switch on, add an answer, try it (nothing is sent), then off again for the rest of the run
+await p.goto(B+'/chatbot');await p.check('#bot-settings input[name="enabled"]');await Promise.all([p.waitForNavigation(),p.click('#bot-settings button.p')]);expect(await has(p,'flash ok'),'chatbot switched on');
+await p.fill('#keywords','franchise, pcd');await p.fill('#answer','Yes, PCD franchise is available with monopoly rights.');await Promise.all([p.waitForNavigation(),p.click('form[action$="/chatbot/answers"] button')]);expect(await has(p,'monopoly rights'),'bot answer added');
+await p.fill('#try-message','PCD franchise milegi?');await Promise.all([p.waitForNavigation(),p.click('#bot-try button')]);
+expect((await p.locator('.bot-try .bubble.bot').count())>=1&&(await p.locator('.bot-try').textContent()).includes('monopoly'),'try box shows the bot answer');
+await p.fill('#try-message','E2E Pan-D rate?');await Promise.all([p.waitForNavigation(),p.click('#bot-try button')]);expect((await p.locator('.bot-try').textContent()).includes('E2E Pan-D'),'try box answers a product');
+await p.uncheck('#bot-settings input[name="enabled"]');await Promise.all([p.waitForNavigation(),p.click('#bot-settings button.p')]);expect(await has(p,'switched off'),'chatbot switched off');
+{const m=await newPage({width:390,height:844});await login(m.p,'owner@e2e.in');for(const u of ['/chatbot','/campaigns/new','/analytics']){await m.p.goto(B+u);const o=await overflow(m.p);expect(o<=0,'mobile overflow '+u+' '+o)}await m.c.close();}
+step();
 await logout(p);
 // Sohan goes on leave; a client writes in Hindi on his number
 await login(p,'sohan@e2e.in');await p.goto(B+'/profile');
@@ -190,6 +204,11 @@ const bubbles=await p.$$eval('.bubble',e=>e.map(x=>x.className));expect(bubbles.
 // Client language: Tamil shows the translate box; back to Hindi shows the plain reply box
 await Promise.all([p.waitForNavigation(),p.selectOption('#clang','ta')]);expect(await has(p,'flash ok')&&(await p.locator('form[action$="/draft"]').count())===1,'Tamil client: translate box shown');
 await Promise.all([p.waitForNavigation(),p.selectOption('#clang','hi')]);expect((await p.locator('form.compose').count())===1,'Hindi client: plain reply box');
+// Team note: stays inside the CRM; close and open again
+await p.click('.note-box summary');await p.fill('#note','E2E note: wants scheme');await Promise.all([p.waitForNavigation(),p.click('form[action$="/note"] button')]);
+expect(await has(p,'E2E note: wants scheme')&&(await p.locator('.bubble.note').count())===1,'team note shown in chat');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/close"] button')]);expect(await has(p,'flash ok'),'chat closed');
+await Promise.all([p.waitForNavigation(),p.click('form[action$="/close"] button')]);expect(await has(p,'flash ok'),'chat opened again');
 await p.fill('#body','Ji, rate list bhej raha hoon');await Promise.all([p.waitForNavigation(),p.click('form.compose button')]);expect(await has(p,'Ji, rate list bhej raha hoon'),'reply recorded (fake token: failed, shown)');
 // Share card on the lead page: WhatsApp not reachable with the fake token, so a clear error, never a crash
 await p.goto(B+'/leads');await Promise.all([p.waitForNavigation(),p.click('a:has-text("Clash Firm")')]);

@@ -27,6 +27,14 @@ One installation per company. Each company sets its own name, logo, timings and 
 - **WhatsApp inbox (Meta Cloud API):** each salesperson their own number; chats come in
   through a signed webhook; the client's language and request are detected and ready replies
   are offered in that language (14 Indian languages, editable under Ready replies).
+- **Chatbot:** instant WhatsApp replies day and night in the client's language, with buttons
+  (Price list / Place an order / Talk to a person); answers only from the company's own Q&A, product
+  list and PDF price list; orders, samples and queries become tasks; hands over to a person on request.
+  Safe "Try it" box.
+- **Team inbox:** chats assigned to the client's salesperson, hand-over by managers, team notes,
+  close/reopen, filters (mine, unassigned, chatbot, closed).
+- **Broadcasts:** thousands of clients by tag/city/language/status, scheduled, with photo/PDF,
+  pause/resume/cancel/retry, WhatsApp daily-limit aware, replied / ordered / order value report.
 - **Chat translation (main feature):** every client message shows its meaning in the salesperson's
   language (English / Hindi / Hinglish); the salesperson writes in English, Hindi or Hinglish and the
   client gets it in their own language (22 Indian languages) after a meaning check (translated back),

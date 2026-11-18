@@ -71,6 +71,7 @@
         <a class="sb-link {{ $on('roles') }}" href="{{ route('roles') }}"><x-icon name="shield"/>{{ __('Roles & permissions') }}</a>
         <a class="sb-link {{ $on('integrations.*') }}" href="{{ route('integrations.index') }}"><x-icon name="plug"/>{{ __('Lead integrations') }}</a>
         <a class="sb-link {{ $on('whatsapp.*') }}" href="{{ route('whatsapp.settings') }}"><x-icon name="chat"/>{{ __('WhatsApp settings') }}</a>
+        <a class="sb-link {{ $on('chatbot') }}" href="{{ route('chatbot') }}"><x-icon name="bot"/>{{ __('Chatbot') }}</a>
         <a class="sb-link {{ $on('automations') }}" href="{{ route('automations') }}"><x-icon name="bolt"/>{{ __('Automations') }}</a>
         <a class="sb-link {{ $on('masters.*') }}" href="{{ route('masters.index') }}"><x-icon name="list"/>{{ __('Masters') }}</a>
         <a class="sb-link {{ $on('settings') }}" href="{{ route('settings') }}"><x-icon name="settings"/>{{ __('Company settings') }}</a>

@@ -96,7 +96,11 @@ class BhashiniProvider implements Provider
         $header = (string) ($res->json('pipelineInferenceAPIEndPoint.inferenceApiKey.name') ?: 'Authorization');
         $key = (string) $res->json('pipelineInferenceAPIEndPoint.inferenceApiKey.value');
         if (! $res->successful() || ! $serviceId || $key === '') {
-            throw new TranslationFailed('Bhashini: '.($res->status() === 401 || $res->status() === 403 ? 'the User ID or API key is wrong.' : 'this language pair is not available ('.$src.' → '.$tgt.').'));
+            throw new TranslationFailed('Bhashini: '.match (true) {
+                in_array($res->status(), [401, 403], true) => 'the User ID or API key is wrong.',
+                ! $res->successful() => 'not available right now (HTTP '.$res->status().'). Try again in a few minutes.',
+                default => 'this language pair is not available ('.$src.' → '.$tgt.').',
+            });
         }
         $host = (string) parse_url($url, PHP_URL_HOST);
         if (parse_url($url, PHP_URL_SCHEME) !== 'https' || ! preg_match('/(^|\.)bhashini\.gov\.in$/', $host)) {

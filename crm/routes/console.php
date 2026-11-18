@@ -36,6 +36,22 @@ Artisan::command('leads:pull', function (\App\Services\Leads\Puller $puller) {
     }
 })->purpose('Fetch new leads from IndiaMART, TradeIndia and portal API links');
 
+// Starts scheduled broadcasts on time, and carries on those waiting for WhatsApp's daily limit.
+Artisan::command('campaigns:due', function () {
+    $n = 0;
+    $free = \App\Models\Campaign::remainingToday();
+    foreach (\App\Models\Campaign::where(fn ($q) => $q->where('status', 'scheduled')->where('scheduled_at', '<=', now()))
+        ->orWhere(fn ($q) => $q->where('status', 'limit'))->orderBy('id')->get() as $c) {
+        if ($c->status === 'limit' && $free === 0) {
+            continue;
+        }
+        $c->update(['status' => 'sending']);
+        \App\Jobs\SendCampaign::dispatch($c->id);
+        $n++;
+    }
+    $this->info("Campaigns started or continued: {$n}.");
+})->purpose('Start scheduled campaigns and continue those waiting for the daily limit');
+
 // Last resort when the only admin forgot the password and email is not set up (run over SSH).
 Artisan::command('crm:reset-password {email}', function (string $email) {
     $u = \App\Models\User::where('email', strtolower(trim($email)))->first();
@@ -71,4 +87,5 @@ Schedule::call($task('attendance-close-yesterday', 'attendance:close', ['date' =
 Schedule::call($task('automations', 'crm:automations'))->dailyAt('09:05')->name('automations');
 Schedule::call($task('leads-pull', 'leads:pull'))->everyTenMinutes()->name('leads-pull')->withoutOverlapping(15);
 // Last, because it may work for up to 50 seconds (WhatsApp campaigns and other background work).
+Schedule::call($task('campaigns-due', 'campaigns:due'))->everyMinute()->name('campaigns-due')->withoutOverlapping(5);
 Schedule::call($task('queue', 'queue:work', ['--stop-when-empty' => true, '--max-time' => 50, '--tries' => 3]))->everyMinute()->name('queue')->withoutOverlapping(5);

@@ -64,6 +64,17 @@
   </section>
 </div>
 
+<section class="card">
+  <h2>{{ __('WhatsApp: from chat to order (last 30 days)') }}</h2>
+  @php $f = $funnel; $top = max(1, $f['chats'], $f['leads']); @endphp
+  <div class="funnel">
+    @foreach(['chats' => 'Chats with clients', 'leads' => 'New leads from WhatsApp', 'interested' => 'Interested or further', 'won' => 'Won'] as $k => $l)
+      <div class="frow"><span class="l">{{ __($l) }}</span><meter min="0" max="100" value="{{ round($f[$k] * 100 / $top) }}"></meter><b class="num">{{ $f[$k] }}</b></div>
+    @endforeach
+  </div>
+  <p class="small muted">{{ __('Chatbot answered :a chats · :b clients replied to a broadcast', ['a' => $f['bot'], 'b' => $f['replied']]) }}</p>
+</section>
+
 @if(! auth()->user()->isRep())
 <section class="card flush">
   <div class="ch"><h2>{{ __('Salesperson-wise conversion') }}</h2></div>

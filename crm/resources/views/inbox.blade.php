@@ -4,7 +4,7 @@
 @php $me = auth()->user(); $L = $languages; @endphp
 <div class="head"><div><h1>{{ __('WhatsApp inbox') }}</h1><p>{{ __('Chats on your WhatsApp numbers. The client\'s language and request are detected, and ready replies are shown in that language.') }}</p></div></div>
 <div class="chips">
-  @foreach([null => 'All', 'unread' => 'Unread', 'callback' => 'Waiting for call', 'urgent' => 'Urgent'] as $k => $l)
+  @foreach([null => 'All open', 'mine' => 'Mine', 'unassigned' => 'Unassigned', 'unread' => 'Unread', 'callback' => 'Waiting for call', 'urgent' => 'Urgent', 'bot' => 'Chatbot answered', 'closed' => 'Closed'] as $k => $l)
     <a class="chip {{ $filter === $k ? 'on' : '' }}" href="{{ route('inbox', array_filter(['show' => $k])) }}">{{ __($l) }}</a>
   @endforeach
 </div>
@@ -14,7 +14,8 @@
       <a class="conv {{ $current?->id === $c->id ? 'on' : '' }}" href="{{ route('inbox.show', array_filter(['conversation' => $c->id, 'show' => $filter])) }}">
         <span class="t"><b>{{ $c->lead?->firm_name ?? $c->contact_name ?? $c->maskedNumber() }}</b>@if($c->unread)<span class="count">{{ $c->unread }}</span>@endif</span>
         <small>{{ $L[$c->language][1] ?? '—' }} · {{ __(\App\Models\ReplyTemplate::INTENTS[$c->last_intent] ?? 'Other') }} · {{ $c->last_message_at?->diffForHumans() }}</small>
-        <span class="row">@if($c->urgent)<span class="pill bad">{{ __('Urgent') }}</span>@endif @if($c->waiting_callback)<span class="pill warn">{{ __('Waiting for call') }}</span>@endif<span class="pill">{{ $c->number?->label }}</span></span>
+        <span class="row">@if($c->urgent)<span class="pill bad">{{ __('Urgent') }}</span>@endif @if($c->waiting_callback)<span class="pill warn">{{ __('Waiting for call') }}</span>@endif<span class="pill">{{ $c->number?->label }}</span>
+          <span class="pill {{ $c->assignee ? 'accent' : 'warn' }}">{{ $c->assignee?->name ?? __('Unassigned') }}</span>@if($c->status === 'closed')<span class="pill">{{ __('Closed') }}</span>@endif</span>
       </a>
     @empty
       <p class="empty">{{ __('No chats yet. Messages appear here once WhatsApp is connected under WhatsApp settings.') }}</p>
@@ -33,14 +34,26 @@
         <div class="row">
           @if($current->lead_id)<a class="btn sm" href="{{ route('leads.show', $current->lead_id) }}">{{ __('Open lead') }}</a><a class="btn sm" href="{{ route('quotes.create', ['lead' => $current->lead_id]) }}">{{ __('New quote') }}</a>@endif
           @if($current->waiting_callback || $current->urgent)<form method="post" action="{{ route('inbox.done', $current) }}">@csrf<button class="btn sm good"><x-icon name="check"/>{{ __('Handled') }}</button></form>@endif
+          <form method="post" action="{{ route('inbox.close', $current) }}">@csrf<button class="btn sm">{{ $current->status === 'closed' ? __('Open again') : __('Close chat') }}</button></form>
+          @if(\App\Services\WhatsApp\ChatBot::config('enabled'))<form method="post" action="{{ route('inbox.bot', $current) }}">@csrf<button class="btn sm" title="{{ __('Chatbot in this chat') }}"><x-icon name="{{ $current->botMayReply() ? 'pause' : 'bot' }}"/>{{ $current->botMayReply() ? __('Stop bot here') : __('Start bot here') }}</button></form>@endif
         </div>
+      </div>
+      <div class="assign-bar row">
+        <span class="small muted">{{ __('Handled by') }}: <b>{{ $current->assignee?->name ?? __('Unassigned') }}</b></span>
+        @if($team->isNotEmpty())
+          <form method="post" action="{{ route('inbox.assign', $current) }}" class="row">@csrf
+            <label for="assign" class="sr">{{ __('Give chat to') }}</label>
+            <select id="assign" name="assigned_to" class="sm" data-autosubmit><option value="">{{ __('Give chat to…') }}</option>@foreach($team as $u)<option value="{{ $u->id }}" @selected($current->assigned_to === $u->id)>{{ $u->name }}</option>@endforeach<option value="0">— {{ __('Unassigned') }}</option></select>
+          </form>
+        @endif
+        @if(! $current->botMayReply() && \App\Services\WhatsApp\ChatBot::config('enabled'))<span class="pill">{{ $current->bot_paused_until->gt(now()->addYear()) ? __('Bot stopped here') : __('Bot quiet until :t', ['t' => $current->bot_paused_until->format('d M, g:i A')]) }}</span>@endif
       </div>
       <div class="msgs">
         @foreach($current->messages as $m)
-          <div class="bubble {{ $m->direction }} {{ $m->type === 'auto' ? 'auto' : '' }}">
-            @if($m->type === 'auto')<span class="tag">{{ __('Automatic reply') }}</span>@endif
+          <div class="bubble {{ $m->direction }} {{ $m->type === 'auto' ? 'auto' : '' }} {{ $m->type === 'bot' ? 'bot' : '' }}">
+            @if($m->type === 'auto')<span class="tag">{{ __('Automatic reply') }}</span>@elseif($m->type === 'bot')<span class="tag">{{ __('Chatbot') }}</span>@elseif($m->direction === 'note')<span class="tag"><x-icon name="note"/>{{ __('Team note: the client does not see this') }}</span>@endif
             <div class="txt" lang="{{ $m->language === 'hing' ? 'hi-Latn' : ($m->language ?: 'en') }}">{{ $m->body }}</div>
-            <span class="meta">{{ $m->sent_at->format('d M, g:i A') }}@if($m->direction === 'in' && $m->intent && $m->intent !== 'other') · {{ __(\App\Models\ReplyTemplate::INTENTS[$m->intent]) }}@endif @if($m->direction === 'out') · {{ $m->user?->name ?? __('Automatic') }} · {{ __(ucfirst($m->status)) }}@endif</span>
+            <span class="meta">{{ $m->sent_at->format('d M, g:i A') }}@if($m->direction === 'in' && $m->intent && $m->intent !== 'other') · {{ __(\App\Models\ReplyTemplate::INTENTS[$m->intent]) }}@endif @if($m->direction === 'out') · {{ $m->user?->name ?? ($m->type === 'bot' ? __('Chatbot') : __('Automatic')) }} · {{ __(ucfirst($m->status)) }}@elseif($m->direction === 'note') · {{ $m->user?->name }}@endif</span>
             @if($m->error)<span class="meta err">{{ $m->error }}</span>@endif
             @if($m->translation)
               <div class="tr"><span>{{ $m->direction === 'in' ? __('Meaning (:lang)', ['lang' => $L[$m->translation_lang][0] ?? '']) : __('You wrote') }}:</span> {{ $m->translation }}</div>
@@ -95,6 +108,14 @@
         @else
           <p class="note">{{ __('More than 24 hours since the client\'s last message, so WhatsApp only allows an approved template. Use Marketing to send one, or call the client.') }}</p>
         @endif
+        <details class="note-box" @if($errors->has('note')) open @endif>
+          <summary><x-icon name="note"/>{{ __('Add a team note') }}</summary>
+          <form method="post" action="{{ route('inbox.note', $current) }}" class="row note-form">@csrf
+            <label class="sr" for="note">{{ __('Team note') }}</label>
+            <textarea id="note" name="note" rows="2" maxlength="2000" required placeholder="{{ __('Only your team sees this, e.g. “Asked for 10% scheme, check with manager”') }}"></textarea>
+            <button class="btn">{{ __('Add note') }}</button>
+          </form>
+        </details>
       </div>
     @else
       <p class="empty">{{ __('Choose a chat on the left.') }}</p>

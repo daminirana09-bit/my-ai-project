@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AutomationController;
+use App\Http\Controllers\BotController;
 use App\Http\Controllers\AvailabilityController;
 use App\Http\Controllers\CampaignController;
 use App\Http\Controllers\InboxController;
@@ -96,6 +97,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/inbox/{conversation}', [InboxController::class, 'index'])->name('inbox.show');
     Route::post('/inbox/{conversation}/send', [InboxController::class, 'send'])->middleware('throttle:30,1')->name('inbox.send');
     Route::post('/inbox/{conversation}/done', [InboxController::class, 'done'])->name('inbox.done');
+    Route::post('/inbox/{conversation}/assign', [InboxController::class, 'assign'])->name('inbox.assign');
+    Route::post('/inbox/{conversation}/note', [InboxController::class, 'note'])->middleware('throttle:60,1')->name('inbox.note');
+    Route::post('/inbox/{conversation}/close', [InboxController::class, 'close'])->name('inbox.close');
+    Route::post('/inbox/{conversation}/bot', [InboxController::class, 'bot'])->name('inbox.bot');
     Route::post('/inbox/{conversation}/draft', [InboxController::class, 'draft'])->middleware('throttle:60,1')->name('inbox.draft');
     Route::post('/inbox/{conversation}/language', [InboxController::class, 'language'])->name('inbox.language');
     Route::post('/inbox/message/{message}/translate', [InboxController::class, 'translateMessage'])->middleware('throttle:60,1')->name('inbox.translate');
@@ -133,6 +138,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/campaigns/new', [CampaignController::class, 'create'])->name('campaigns.create');
         Route::post('/campaigns', [CampaignController::class, 'store'])->middleware('throttle:5,1')->name('campaigns.store');
         Route::get('/campaigns/{campaign}', [CampaignController::class, 'show'])->name('campaigns.show');
+        Route::post('/campaigns/{campaign}/{action}', [CampaignController::class, 'control'])->where('action', 'pause|resume|cancel|retry')->name('campaigns.control');
         Route::get('/ready-replies', [ReplyTemplateController::class, 'index'])->name('replies.index');
         Route::post('/ready-replies', [ReplyTemplateController::class, 'save'])->name('replies.save');
         Route::post('/clashes/{clash}/resolve', [ClashController::class, 'resolve'])->name('clashes.resolve');
@@ -171,6 +177,12 @@ Route::middleware('auth')->group(function () {
         Route::post('/whatsapp/translation/test', [WhatsAppSettingsController::class, 'testTranslation'])->middleware('throttle:10,1')->name('whatsapp.translation.test');
         Route::get('/automations', [AutomationController::class, 'edit'])->name('automations');
         Route::post('/automations', [AutomationController::class, 'update'])->name('automations.update');
+        Route::get('/chatbot', [BotController::class, 'index'])->name('chatbot');
+        Route::post('/chatbot', [BotController::class, 'update'])->name('chatbot.update');
+        Route::post('/chatbot/answers', [BotController::class, 'store'])->name('chatbot.answers.store');
+        Route::put('/chatbot/answers/{answer}', [BotController::class, 'updateAnswer'])->name('chatbot.answers.update');
+        Route::delete('/chatbot/answers/{answer}', [BotController::class, 'destroy'])->name('chatbot.answers.destroy');
+        Route::post('/chatbot/try', [BotController::class, 'test'])->middleware('throttle:20,1')->name('chatbot.try');
         Route::get('/system', SystemController::class)->name('system');
         Route::get('/integrations', [\App\Http\Controllers\IntegrationController::class, 'index'])->name('integrations.index');
         Route::post('/integrations/facebook/subscribe', [\App\Http\Controllers\IntegrationController::class, 'subscribeFacebook'])->middleware('throttle:10,1')->name('integrations.facebook');

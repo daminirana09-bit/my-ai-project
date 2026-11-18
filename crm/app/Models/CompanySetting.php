@@ -10,7 +10,7 @@ class CompanySetting extends Model
         'company_name', 'logo_path', 'address', 'gstin', 'drug_licence_no', 'phone', 'email',
         'office_start', 'office_end', 'lunch_start', 'lunch_end', 'late_grace_minutes',
         'full_day_minutes', 'half_day_minutes', 'weekly_off', 'reps_can_export_own_leads', 'permissions',
-        'whatsapp_config', 'automations', 'lead_capture_token', 'links', 'share_messages', 'mail_config', 'translation_config',
+        'whatsapp_config', 'automations', 'lead_capture_token', 'links', 'share_messages', 'mail_config', 'translation_config', 'bot_config',
     ];
 
     /** Automation switches and their defaults. */
@@ -37,7 +37,7 @@ class CompanySetting extends Model
 
     protected function casts(): array
     {
-        return ['reps_can_export_own_leads' => 'boolean', 'permissions' => 'array', 'whatsapp_config' => 'encrypted:array', 'automations' => 'array', 'links' => 'array', 'share_messages' => 'array', 'mail_config' => 'encrypted:array', 'translation_config' => 'encrypted:array'];
+        return ['reps_can_export_own_leads' => 'boolean', 'permissions' => 'array', 'whatsapp_config' => 'encrypted:array', 'automations' => 'array', 'links' => 'array', 'share_messages' => 'array', 'mail_config' => 'encrypted:array', 'translation_config' => 'encrypted:array', 'bot_config' => 'array'];
     }
 
     private static ?CompanySetting $cached = null;

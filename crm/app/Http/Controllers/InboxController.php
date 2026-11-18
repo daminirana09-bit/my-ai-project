@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
 use App\Models\Lead;
+use App\Models\User;
+use App\Notifications\ChatAssigned;
 use App\Models\WaConversation;
 use App\Models\WaMessage;
 use App\Services\WhatsApp\Client;
@@ -16,21 +18,29 @@ use Illuminate\Http\Request;
 /** WhatsApp chats of the numbers this person may see, with ready replies in the client's language. */
 class InboxController extends Controller
 {
+    public const FILTERS = ['mine', 'unassigned', 'unread', 'callback', 'urgent', 'bot', 'closed'];
+
     public function index(Request $request, ?WaConversation $conversation = null)
     {
         $me = $request->user();
         $filter = $request->query('show');
-        $list = WaConversation::visibleTo($me)->with(['lead:id,firm_name,owner_id', 'number:id,label,user_id'])
+        $filter = in_array($filter, self::FILTERS, true) ? $filter : null;
+        $list = WaConversation::visibleTo($me)->with(['lead:id,firm_name,owner_id', 'number:id,label,user_id', 'assignee:id,name'])
+            ->when($filter === 'closed', fn ($q) => $q->where('status', 'closed'), fn ($q) => $q->where('status', '!=', 'closed'))
+            ->when($filter === 'mine', fn ($q) => $q->where(fn ($w) => $w->where('assigned_to', $me->id)
+                ->orWhere(fn ($x) => $x->whereNull('assigned_to')->whereIn('whatsapp_number_id', \App\Models\WhatsappNumber::where('user_id', $me->id)->select('id')))))
+            ->when($filter === 'unassigned', fn ($q) => $q->whereNull('assigned_to'))
             ->when($filter === 'unread', fn ($q) => $q->where('unread', '>', 0))
             ->when($filter === 'callback', fn ($q) => $q->where('waiting_callback', true))
             ->when($filter === 'urgent', fn ($q) => $q->where('urgent', true))
+            ->when($filter === 'bot', fn ($q) => $q->whereNotNull('bot_replied_at')->where('bot_replied_at', '>=', now()->subDay()))
             ->orderByDesc('last_message_at')->limit(100)->get();
 
         $current = null;
         $suggestions = collect();
         if ($conversation) {
             abort_unless($conversation->isVisibleTo($me), 404);
-            $conversation->load(['messages.user:id,name', 'lead.owner:id,name', 'number.user']);
+            $conversation->load(['messages.user:id,name', 'lead.owner:id,name', 'number.user', 'assignee:id,name']);
             if ($conversation->unread) {
                 $conversation->forceFill(['unread' => 0])->save();
             }
@@ -40,7 +50,8 @@ class InboxController extends Controller
         }
         $tr = app(Translator::class);
 
-        return view('inbox', ['list' => $list, 'current' => $current, 'suggestions' => $suggestions, 'filter' => $filter, 'languages' => LanguageDetector::NAMES,
+        return view('inbox', ['list' => $list, 'current' => $current,
+            'team' => $me->canManage() ? User::active()->visibleTo($me)->orderBy('name')->get(['id', 'name']) : collect(), 'suggestions' => $suggestions, 'filter' => $filter, 'languages' => LanguageDetector::NAMES,
             'translator' => $tr->enabled(), 'readLang' => Translator::readerLang($me)]);
     }
 
@@ -139,7 +150,11 @@ class InboxController extends Controller
             // What the salesperson wrote before translation, kept with the message.
             'translation' => filled($data['original'] ?? null) && $data['original'] !== $data['body'] ? $data['original'] : null,
             'translation_lang' => filled($data['original'] ?? null) ? mb_substr((string) ($data['original_lang'] ?? ''), 0, 8) : null]);
-        $conversation->forceFill(['last_message_at' => now(), 'waiting_callback' => $res['ok'] ? false : $conversation->waiting_callback])->save();
+        $conversation->forceFill(['last_message_at' => now(), 'waiting_callback' => $res['ok'] ? false : $conversation->waiting_callback,
+            // A person is talking now: the chatbot stays quiet in this chat for a while.
+            'bot_paused_until' => $conversation->bot_paused_until?->isFuture() && $conversation->bot_paused_until->gt(now()->addHours(\App\Services\WhatsApp\ChatBot::humanPauseHours()))
+                ? $conversation->bot_paused_until : now()->addHours(\App\Services\WhatsApp\ChatBot::humanPauseHours()),
+            'assigned_to' => $conversation->assigned_to ?? $me->id])->save();
         if ($res['ok'] && $conversation->lead_id) {
             Lead::whereKey($conversation->lead_id)->update(['last_contact_at' => now()]);
         }
@@ -154,5 +169,63 @@ class InboxController extends Controller
         AuditLog::record('inbox.done', "conversation:{$conversation->id}");
 
         return back()->with('ok', __('Marked as handled.'));
+    }
+
+    /** Give the chat to a team member (managers and admins). */
+    public function assign(Request $request, WaConversation $conversation)
+    {
+        $me = $request->user();
+        abort_unless($me->canManage() && $conversation->isVisibleTo($me), 404);
+        $id = $request->validate(['assigned_to' => ['nullable', 'integer']])['assigned_to'] ?? null;
+        $to = $id ? User::active()->visibleTo($me)->find($id) : null;
+        if ($id && ! $to) {
+            return back()->withErrors(['assigned_to' => __('Choose a person from your team.')]);
+        }
+        $conversation->forceFill(['assigned_to' => $to?->id])->save();
+        if ($to && $conversation->lead_id) {
+            Lead::whereKey($conversation->lead_id)->whereNull('owner_id')->update(['owner_id' => $to->id]);
+        }
+        if ($to && $to->id !== $me->id) {
+            $to->notify(new ChatAssigned($conversation, $me->name));
+        }
+        AuditLog::record('inbox.assign', "conversation:{$conversation->id}", ['to' => $to?->id]);
+
+        return back()->with('ok', $to ? __('Chat given to :name.', ['name' => $to->name]) : __('Chat is now unassigned.'));
+    }
+
+    /** A note for the team inside the chat. The client never sees it. */
+    public function note(Request $request, WaConversation $conversation)
+    {
+        $me = $request->user();
+        abort_unless($conversation->isVisibleTo($me), 404);
+        $body = $request->validate(['note' => ['required', 'string', 'max:2000']])['note'];
+        WaMessage::create(['wa_conversation_id' => $conversation->id, 'direction' => 'note', 'body' => $body, 'type' => 'note', 'status' => 'note',
+            'user_id' => $me->id, 'sent_at' => now()]);
+
+        return back()->with('ok', __('Note added. Only your team sees it.'));
+    }
+
+    public function close(Request $request, WaConversation $conversation)
+    {
+        $me = $request->user();
+        abort_unless($conversation->isVisibleTo($me), 404);
+        $closing = $conversation->status !== 'closed';
+        $conversation->forceFill($closing ? ['status' => 'closed', 'closed_at' => now(), 'waiting_callback' => false, 'urgent' => false, 'unread' => 0]
+            : ['status' => 'open', 'closed_at' => null])->save();
+        AuditLog::record($closing ? 'inbox.close' : 'inbox.reopen', "conversation:{$conversation->id}");
+
+        return back()->with('ok', $closing ? __('Chat closed. It opens again when the client writes.') : __('Chat opened again.'));
+    }
+
+    /** Stop or start the chatbot in this one chat. */
+    public function bot(Request $request, WaConversation $conversation)
+    {
+        $me = $request->user();
+        abort_unless($conversation->isVisibleTo($me), 404);
+        $stop = $conversation->botMayReply();
+        $conversation->forceFill(['bot_paused_until' => $stop ? now()->addYears(5) : null, 'bot_step' => null])->save();
+        AuditLog::record('inbox.bot', "conversation:{$conversation->id}", ['stopped' => $stop]);
+
+        return back()->with('ok', $stop ? __('Chatbot stopped in this chat.') : __('Chatbot answers this chat again.'));
     }
 }
