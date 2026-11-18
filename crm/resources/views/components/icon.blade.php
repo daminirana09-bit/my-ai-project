@@ -40,6 +40,7 @@ $p = [
  'chat' => '<path d="M4 20l1.4-4.2A8 8 0 1 1 8.2 18.6z"/><path d="M9 10h6M9 13h4"/>',
  'megaphone' => '<path d="M3 10v4h3l7 5V5L6 10z"/><path d="M17 9a4 4 0 0 1 0 6"/>',
  'bolt' => '<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',
+ 'briefcase' => '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
  'bot' => '<rect x="4" y="8" width="16" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M9.5 16h5"/>',
  'note' => '<path d="M5 4h10l4 4v12H5z"/><path d="M14 4v5h5M8 13h8M8 16h5"/>',
  'send' => '<path d="M4 12l16-8-6 16-2-6z"/>',

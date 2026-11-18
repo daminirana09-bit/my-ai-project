@@ -356,3 +356,11 @@ small.err{color:var(--bad)}
 .frow meter{width:100%}
 .frow b{text-align:right}
 @media (max-width:560px){.frow{grid-template-columns:1fr 40px}.frow meter{grid-column:1/-1;order:3}}
+
+/* HR */
+.pill.approved,.pill.paid{background:var(--good-soft);color:var(--good)}
+.pill.rejected,.pill.cancelled{background:var(--bad-soft);color:var(--bad)}
+.pill.holiday,.pill.leave{background:var(--info-soft);color:var(--info)}
+.decide,.adj{gap:6px;flex-wrap:wrap}.decide input,.adj input{width:110px;min-width:0}
+.bad-t{color:var(--bad)}
+fieldset.f2{border:1px dashed var(--line);border-radius:var(--r-sm);padding:8px 10px;margin:0}

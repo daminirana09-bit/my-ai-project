@@ -100,7 +100,7 @@ class AttendanceController extends Controller
         abort_unless($me->canManage() && $me->canSeeUser($user->id), 404);
         $data = $request->validate([
             'date' => ['required', 'date'],
-            'status' => ['required', Rule::in(['full_day', 'half_day', 'absent', 'leave', 'weekly_off', 'auto'])],
+            'status' => ['required', Rule::in(['full_day', 'half_day', 'absent', 'leave', 'weekly_off', 'holiday', 'auto'])],
             'remark' => ['nullable', 'string', 'max:150'],
         ]);
         if ($data['status'] === 'auto') {

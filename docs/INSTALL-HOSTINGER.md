@@ -211,7 +211,24 @@ under WhatsApp settings (250 / 1,000 / 10,000 / 100,000): the CRM stays within i
 by itself the next day. The report shows delivered, read, replied, and orders and order value
 from those clients since the broadcast. New number lists: Leads → Import with a tag, then pick the tag.
 
-## 12. Lock it down (Rule 1)
+## 12. HR: employees, leave, TA/DA and payroll
+
+1. **Holidays & HR rules** (Admin): add this year's festival holidays (national ones are added
+   already), check DA (HQ / ex-HQ / outstation) and per-km rates, PF/ESI/professional tax.
+   Weekly off stays under Office hours. Leave types: CL 12, SL 7, EL 15, LWP; change as you like.
+2. **Employees**: for each person fill employee code, designation, HQ, joining date, salary
+   (basic, HRA, allowances, PF/ESI ticks, PT, TDS), bank and IDs. Bank, ID, salary and personal
+   details are stored encrypted; only the last 4 digits of Aadhaar are kept. Upload offer letters etc.
+3. Everyone uses **Leave, claims & payslips**: ask for leave (weekly offs and holidays are not
+   counted), claim DA/travel/hotel with a receipt photo, see payslips. Managers approve under
+   **Approvals**; approved leave shows in attendance and is never marked absent.
+4. **Payroll** (Admin): choose the month → draft. Absent days (½ for half day or a single punch)
+   and leave without pay are cut for people who punch in; people who never punch get the full
+   month. PF 12% of basic up to ₹15,000; ESI 0.75% if gross ≤ ₹21,000; PT and TDS as set; approved
+   claims are added. Add incentive / other deduction, **Finalise**, then download the salary register
+   and the bank transfer sheet. Everyone then sees their payslip PDF.
+
+## 13. Lock it down (Rule 1)
 
 - Put the office's fixed IP (and VPN IP, if any) in `CRM_ALLOWED_IPS` in `.env`, then
   `php artisan config:cache`. The WhatsApp webhook, lead integrations and website form keep working from anywhere.

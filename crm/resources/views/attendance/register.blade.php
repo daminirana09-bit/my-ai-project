@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('title', __('Monthly register'))
 @section('content')
-@php $code = ['full_day' => 'F', 'half_day' => 'H', 'absent' => 'A', 'single_swipe' => 'S', 'weekly_off' => 'W', 'leave' => 'L', 'present' => 'P']; @endphp
+@php $code = ['full_day' => 'F', 'half_day' => 'H', 'absent' => 'A', 'single_swipe' => 'S', 'weekly_off' => 'W', 'leave' => 'L', 'holiday' => 'HO', 'present' => 'P']; @endphp
 <div class="head"><div><h1>{{ __('Monthly register') }}</h1><p>{{ __('F full day · H half day · A absent · S single swipe · W weekly off · L leave') }}</p></div>
   <form method="get" class="row"><label class="sr" for="month">{{ __('Month') }}</label><input type="month" id="month" name="month" value="{{ $start->format('Y-m') }}" data-autosubmit></form></div>
 <div class="card"><div class="tbl"><table class="reg">

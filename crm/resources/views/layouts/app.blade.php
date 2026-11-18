@@ -57,8 +57,22 @@
         <a class="sb-link {{ $on('replies.*') }}" href="{{ route('replies.index') }}"><x-icon name="globe"/>{{ __('Ready replies') }}</a>
       @endif
 
-      <span class="sb-grp">{{ __('Attendance') }}</span>
+      <span class="sb-grp">{{ __('HR & attendance') }}</span>
       <a class="sb-link {{ $on('attendance.mine') }}" href="{{ route('attendance.mine') }}"><x-icon name="clock"/>{{ __('My attendance') }}</a>
+      <a class="sb-link {{ $on('hr.me') }}" href="{{ route('hr.me') }}"><x-icon name="briefcase"/>{{ __('Leave, claims & payslips') }}</a>
+      @if($me->isAdmin() || $me->allows('approve_leaves'))
+        @php $hrPending = \App\Models\LeaveRequest::whereIn('user_id', \App\Models\User::visibleTo($me)->whereKeyNot($me->id)->select('id'))->where('status', 'pending')->count()
+          + \App\Models\ExpenseClaim::whereIn('user_id', \App\Models\User::visibleTo($me)->whereKeyNot($me->id)->select('id'))->where('status', 'pending')->count(); @endphp
+        <a class="sb-link {{ $on('hr.approvals') }}" href="{{ route('hr.approvals') }}"><x-icon name="check"/><span class="sp">{{ __('Approvals') }}</span>@if($hrPending)<span class="count">{{ $hrPending }}</span>@endif</a>
+      @endif
+      @if($me->canManage())
+        <a class="sb-link {{ $on('hr.dashboard') }}" href="{{ route('hr.dashboard') }}"><x-icon name="users"/>{{ __('HR dashboard') }}</a>
+      @endif
+      @if($me->isAdmin())
+        <a class="sb-link {{ $on('hr.employees', 'hr.employees.*') }}" href="{{ route('hr.employees') }}"><x-icon name="customers"/>{{ __('Employees') }}</a>
+        <a class="sb-link {{ $on('hr.payroll', 'hr.payroll.*') }}" href="{{ route('hr.payroll') }}"><x-icon name="rupee"/>{{ __('Payroll') }}</a>
+        <a class="sb-link {{ $on('hr.settings') }}" href="{{ route('hr.settings') }}"><x-icon name="calendar"/>{{ __('Holidays & HR rules') }}</a>
+      @endif
       @if($me->canManage())
         <a class="sb-link {{ $on('attendance.today', 'attendance.person') }}" href="{{ route('attendance.today') }}"><x-icon name="users"/>{{ __('Today\'s attendance') }}</a>
         <a class="sb-link {{ $on('attendance.register') }}" href="{{ route('attendance.register') }}"><x-icon name="calendar"/>{{ __('Monthly register') }}</a>

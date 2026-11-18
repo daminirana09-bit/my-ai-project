@@ -121,6 +121,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/attendance/punch', [AttendanceController::class, 'punch'])->middleware('throttle:10,1')->name('attendance.punch');
     Route::get('/attendance/me', [AttendanceController::class, 'mine'])->name('attendance.mine');
 
+    // HR: everyone's own leave, claims and payslips; approvers decide for their team
+    Route::get('/hr/me', [\App\Http\Controllers\Hr\HrController::class, 'me'])->name('hr.me');
+    Route::post('/hr/leaves', [\App\Http\Controllers\Hr\LeaveController::class, 'store'])->middleware('throttle:20,1')->name('hr.leaves.store');
+    Route::post('/hr/leaves/{leave}/cancel', [\App\Http\Controllers\Hr\LeaveController::class, 'cancel'])->name('hr.leaves.cancel');
+    Route::post('/hr/leaves/{leave}/decide', [\App\Http\Controllers\Hr\LeaveController::class, 'decide'])->name('hr.leaves.decide');
+    Route::post('/hr/claims', [\App\Http\Controllers\Hr\ClaimController::class, 'store'])->middleware('throttle:30,1')->name('hr.claims.store');
+    Route::post('/hr/claims/{claim}/cancel', [\App\Http\Controllers\Hr\ClaimController::class, 'cancel'])->name('hr.claims.cancel');
+    Route::post('/hr/claims/{claim}/decide', [\App\Http\Controllers\Hr\ClaimController::class, 'decide'])->name('hr.claims.decide');
+    Route::get('/hr/claims/{claim}/receipt', [\App\Http\Controllers\Hr\ClaimController::class, 'receipt'])->name('hr.claims.receipt');
+    Route::get('/hr/approvals', [\App\Http\Controllers\Hr\HrController::class, 'approvals'])->name('hr.approvals');
+    Route::get('/hr/payslips/{payslip}', [\App\Http\Controllers\Hr\PayrollController::class, 'payslip'])->name('hr.payslip');
+
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
@@ -145,6 +157,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/targets', [TargetController::class, 'saveTargets'])->name('targets.save');
         Route::patch('/sales/{sale}', [TargetController::class, 'updateSale'])->name('sales.update');
         Route::get('/attendance/today', [AttendanceController::class, 'today'])->name('attendance.today');
+        Route::get('/hr', [\App\Http\Controllers\Hr\HrController::class, 'dashboard'])->name('hr.dashboard');
         Route::get('/attendance/register', [AttendanceController::class, 'register'])->name('attendance.register');
         Route::get('/attendance/people/{user}', [AttendanceController::class, 'person'])->name('attendance.person');
         Route::post('/attendance/people/{user}/day', [AttendanceController::class, 'override'])->name('attendance.override');
@@ -178,6 +191,29 @@ Route::middleware('auth')->group(function () {
         Route::get('/automations', [AutomationController::class, 'edit'])->name('automations');
         Route::post('/automations', [AutomationController::class, 'update'])->name('automations.update');
         Route::get('/chatbot', [BotController::class, 'index'])->name('chatbot');
+
+        // HR (admins): employee master, holidays & rules, payroll
+        Route::get('/hr/employees', [\App\Http\Controllers\Hr\EmployeeController::class, 'index'])->name('hr.employees');
+        Route::get('/hr/employees/{user}', [\App\Http\Controllers\Hr\EmployeeController::class, 'edit'])->name('hr.employees.edit');
+        Route::put('/hr/employees/{user}', [\App\Http\Controllers\Hr\EmployeeController::class, 'update'])->name('hr.employees.update');
+        Route::post('/hr/employees/{user}/documents', [\App\Http\Controllers\Hr\EmployeeController::class, 'storeDocument'])->name('hr.documents.store');
+        Route::get('/hr/documents/{document}', [\App\Http\Controllers\Hr\EmployeeController::class, 'document'])->name('hr.documents.show');
+        Route::delete('/hr/documents/{document}', [\App\Http\Controllers\Hr\EmployeeController::class, 'destroyDocument'])->name('hr.documents.destroy');
+        Route::get('/hr/settings', [\App\Http\Controllers\Hr\HrSettingsController::class, 'index'])->name('hr.settings');
+        Route::post('/hr/settings', [\App\Http\Controllers\Hr\HrSettingsController::class, 'update'])->name('hr.settings.update');
+        Route::post('/hr/holidays', [\App\Http\Controllers\Hr\HrSettingsController::class, 'storeHoliday'])->name('hr.holidays.store');
+        Route::post('/hr/holidays/national', [\App\Http\Controllers\Hr\HrSettingsController::class, 'seedYear'])->name('hr.holidays.seed');
+        Route::delete('/hr/holidays/{holiday}', [\App\Http\Controllers\Hr\HrSettingsController::class, 'destroyHoliday'])->name('hr.holidays.destroy');
+        Route::post('/hr/leave-types', [\App\Http\Controllers\Hr\HrSettingsController::class, 'saveLeaveType'])->name('hr.leave-types.store');
+        Route::put('/hr/leave-types/{type}', [\App\Http\Controllers\Hr\HrSettingsController::class, 'saveLeaveType'])->name('hr.leave-types.update');
+        Route::get('/hr/payroll', [\App\Http\Controllers\Hr\PayrollController::class, 'index'])->name('hr.payroll');
+        Route::post('/hr/payroll', [\App\Http\Controllers\Hr\PayrollController::class, 'store'])->name('hr.payroll.store');
+        Route::get('/hr/payroll/{run}', [\App\Http\Controllers\Hr\PayrollController::class, 'show'])->name('hr.payroll.show');
+        Route::post('/hr/payroll/{run}/recalculate', [\App\Http\Controllers\Hr\PayrollController::class, 'recalculate'])->name('hr.payroll.recalculate');
+        Route::post('/hr/payroll/{run}/finalize', [\App\Http\Controllers\Hr\PayrollController::class, 'finalize'])->name('hr.payroll.finalize');
+        Route::delete('/hr/payroll/{run}', [\App\Http\Controllers\Hr\PayrollController::class, 'destroy'])->name('hr.payroll.destroy');
+        Route::post('/hr/payroll/{run}/payslips/{payslip}', [\App\Http\Controllers\Hr\PayrollController::class, 'adjust'])->name('hr.payroll.adjust');
+        Route::get('/hr/payroll/{run}/export', [\App\Http\Controllers\Hr\PayrollController::class, 'export'])->name('hr.payroll.export');
         Route::post('/chatbot', [BotController::class, 'update'])->name('chatbot.update');
         Route::post('/chatbot/answers', [BotController::class, 'store'])->name('chatbot.answers.store');
         Route::put('/chatbot/answers/{answer}', [BotController::class, 'updateAnswer'])->name('chatbot.answers.update');

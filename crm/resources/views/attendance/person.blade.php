@@ -27,7 +27,7 @@
           <td><form method="post" action="{{ route('attendance.override', $person) }}" class="row">@csrf
             <input type="hidden" name="date" value="{{ $key }}">
             <label class="sr" for="o{{ $key }}">{{ __('Status') }}</label>
-            <select id="o{{ $key }}" name="status"><option value="auto">{{ __('From punches') }}</option>@foreach(['full_day', 'half_day', 'absent', 'leave', 'weekly_off'] as $k)<option value="{{ $k }}" @selected($day?->manual && $day->status === $k)>{{ __($S[$k]) }}</option>@endforeach</select>
+            <select id="o{{ $key }}" name="status"><option value="auto">{{ __('From punches') }}</option>@foreach(['full_day', 'half_day', 'absent', 'leave', 'weekly_off', 'holiday'] as $k)<option value="{{ $k }}" @selected($day?->manual && $day->status === $k)>{{ __($S[$k]) }}</option>@endforeach</select>
             <label class="sr" for="r{{ $key }}">{{ __('Remark') }}</label><input id="r{{ $key }}" name="remark" placeholder="{{ __('Remark') }}" value="{{ $day?->remark }}">
             <button class="btn sm">{{ __('Save') }}</button></form></td>
         @endif

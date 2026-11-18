@@ -13,6 +13,7 @@ class AttendanceDay extends Model
         'absent' => 'Absent',
         'single_swipe' => 'Single swipe',
         'weekly_off' => 'Weekly off',
+        'holiday' => 'Holiday',
         'leave' => 'Leave',
         'present' => 'Working now',
     ];

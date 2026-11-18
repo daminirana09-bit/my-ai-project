@@ -57,14 +57,15 @@ class AttendanceService
         $shift = $user->shift($c);
         $at = fn (string $time) => $date->setTimeFromTimeString($time);
         $isWeeklyOff = in_array($date->dayOfWeek, $c->weeklyOffDays(), true);
+        $isHoliday = ! $isWeeklyOff && \App\Models\Holiday::isHoliday($date);
 
         if ($punches->isEmpty()) {
             $isPast = $date->lt(today()) || ($date->isToday() && now()->gt($at($shift['office_end'])));
-            if (! $isPast && ! $isWeeklyOff) {
+            if (! $isPast && ! $isWeeklyOff && ! $isHoliday) {
                 return null; // the working day is not over yet
             }
             $day->fill(['first_in' => null, 'last_out' => null, 'worked_minutes' => 0, 'late' => false,
-                'status' => $isWeeklyOff ? 'weekly_off' : 'absent'])->save();
+                'status' => $isWeeklyOff ? 'weekly_off' : ($isHoliday ? 'holiday' : 'absent')])->save();
 
             return $day;
         }

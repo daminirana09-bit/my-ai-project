@@ -227,6 +227,37 @@ expect((await p.goto(B+'/whatsapp')).status()===403,'rep blocked from WhatsApp s
 await p.goto(B+'/');await logout(p);step();
 await p.goto(B+'/login');await Promise.all([p.waitForNavigation(),p.click('a[href$="/forgot-password"]')]);await p.fill('#email','sohan@e2e.in');
 await Promise.all([p.waitForNavigation(),p.click('form button.p')]);expect(await has(p,'flash ok'),'forgot password answered');
+// 10. HR: employee and salary, leave and claim, approval, payroll, payslip
+{const z=n=>String(n).padStart(2,'0'),fmt=d=>`${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`,now=new Date(),thisMonth=`${now.getFullYear()}-${z(now.getMonth()+1)}`;
+ const lv=new Date(Date.now()+12*864e5);while([0,6].includes(lv.getDay()))lv.setDate(lv.getDate()+1);
+ await login(p,'owner@e2e.in');await p.goto(B+'/hr/employees');await Promise.all([p.waitForNavigation(),p.click('a:has-text("Sohan Rep")')]);
+ await p.fill('#emp_code','E2E-01');await p.fill('#designation','Medical Representative');await p.fill('#headquarter','Indore');await p.fill('#date_of_joining',thisMonth+'-01');
+ await p.fill('#s_basic','15000');await p.fill('#s_hra','5000');await p.check('input[name="salary[pf]"]');await p.fill('#bacc','123456789012');await p.fill('#bifsc','SBIN0001234');await p.fill('#id_pan','ABCDE1234F');
+ await Promise.all([p.waitForNavigation(),p.click('form[action*="/hr/employees/"] button.p')]);expect(await has(p,'flash ok')&&!(await has(p,'123456789012'))&&!(await has(p,'ABCDE1234F')),'employee saved, bank and PAN hidden');
+ fs.writeFileSync(SP+'/e2e-offer.pdf','%PDF-1.4\n1 0 obj<<>>endobj\ntrailer<<>>\n%%EOF\n');await p.fill('#doc_title','Offer letter');await p.setInputFiles('#doc_file',SP+'/e2e-offer.pdf');
+ await Promise.all([p.waitForNavigation(),p.click('#documents button')]);expect(await has(p,'Offer letter'),'HR document uploaded');
+ const hd=new Date(now.getFullYear()+1,0,14);await p.goto(B+'/hr/settings');await p.fill('#h_date',fmt(hd));await p.fill('#h_name','E2E Makar Sankranti');
+ await Promise.all([p.waitForNavigation(),p.click('form[action$="/hr/holidays"] button')]);expect(await has(p,'E2E Makar Sankranti')||await has(p,'flash ok'),'holiday added');
+ await logout(p);
+ await login(p,'sohan@e2e.in');await p.goto(B+'/hr/me');await p.fill('#from_date',fmt(lv));await p.fill('#to_date',fmt(lv));await p.fill('#reason','E2E family function');
+ await Promise.all([p.waitForNavigation(),p.click('#leave-form button.p')]);expect(await has(p,'flash ok')&&await has(p,'E2E family function')===false,'leave asked (reason not shown in own list)');
+ await p.selectOption('#kind','da');await p.selectOption('#area','exhq');await Promise.all([p.waitForNavigation(),p.click('form[action$="/hr/claims"] button.p')]);expect(await has(p,'flash ok'),'DA claim sent');
+ await p.selectOption('#kind','hotel');await p.fill('#amount','800');await p.setInputFiles('#receipt',SP+'/e2e-offer.pdf');await Promise.all([p.waitForNavigation(),p.click('form[action$="/hr/claims"] button.p')]);expect(await has(p,'flash ok'),'hotel claim with receipt sent');
+ {const m=await newPage({width:390,height:844});await login(m.p,'sohan@e2e.in');await m.p.goto(B+'/hr/me');const o=await overflow(m.p);expect(o<=0,'mobile overflow /hr/me '+o);await m.c.close();}
+ await logout(p);
+ await login(p,'mgr@e2e.in');await p.goto(B+'/hr/approvals');expect(await has(p,'E2E family function'),'manager sees the leave reason');
+ await Promise.all([p.waitForNavigation(),p.click('form[action*="/hr/leaves/"] button[value="approve"]')]);expect(await has(p,'flash ok'),'leave approved');
+ for(let i=0;i<2;i++){await Promise.all([p.waitForNavigation(),p.click('form[action*="/hr/claims/"] button[value="approve"]')]);expect(await has(p,'flash ok'),'claim approved '+i)}
+ expect((await p.goto(B+'/hr/payroll')).status()===403,'manager cannot open payroll');await p.goto(B+'/');await logout(p);
+ await login(p,'owner@e2e.in');await p.goto(B+'/hr/payroll');await p.fill('#month',thisMonth);await Promise.all([p.waitForNavigation(),p.click('#new-run button')]);
+ expect(/\/hr\/payroll\/\d+$/.test(p.url())&&await has(p,'Sohan Rep'),'payroll draft made '+p.url());
+ r=await p.request.get(p.url()+'/export?type=register');expect(r.status()===200&&(await r.body()).slice(0,2).toString()==='PK','salary register downloads');
+ p.once('dialog',d=>d.accept());await p.click('form[action$="/finalize"] button');await p.waitForSelector('form[action$="/finalize"]',{state:'detached',timeout:30000}).catch(()=>{});await p.waitForLoadState('load');
+ expect(await has(p,'flash ok')&&(await p.locator('form[action$="/finalize"]').count())===0,'payroll finalised');
+ await p.goto(B+'/hr');expect(await has(p,'Solvix Web'),'HR dashboard opens');await logout(p);
+ await login(p,'sohan@e2e.in');await p.goto(B+'/hr/me');const slip=await p.$eval('#payslips a[href*="/hr/payslips/"]',a=>a.href).catch(()=>'');
+ r=slip?await p.request.get(slip):null;expect(r&&r.status()===200&&(await r.body()).slice(0,4).toString()==='%PDF','payslip PDF for the employee');
+ await logout(p);step();}
 const r404=await p.goto(B+'/nope-page');expect(r404.status()===404&&await has(p,'Solvix Web'),'own 404 page with credit');
 await b.close();
 console.log(`\nRUN ${RUN}: ${issues.length?'ISSUES':'OK'}`);issues.forEach(i=>console.log('  '+i));process.exit(issues.length?1:0);

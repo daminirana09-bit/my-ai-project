@@ -133,4 +133,9 @@ class User extends Authenticatable implements \Illuminate\Contracts\Translation\
     {
         return $this->locale ?: 'en';
     }
+
+    public function profile(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(EmployeeProfile::class);
+    }
 }

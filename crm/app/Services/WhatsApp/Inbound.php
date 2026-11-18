@@ -228,7 +228,7 @@ class Inbound
             $now = now();
             $start = $now->copy()->setTimeFromTimeString($shift['office_start']);
             $end = $now->copy()->setTimeFromTimeString($shift['office_end']);
-            $off = in_array($now->dayOfWeek, $co->weeklyOffDays(), true);
+            $off = in_array($now->dayOfWeek, $co->weeklyOffDays(), true) || \App\Models\Holiday::isHoliday($now);
             if ($off || $now->lt($start) || $now->gt($end)) {
                 return [true, $this->nextStart($shift, $co, $now->lt($start) && ! $off)->format('d M, g:i A')];
             }
@@ -248,7 +248,7 @@ class Inbound
         $shift = $rep->shift($co);
         $start = $now->copy()->setTimeFromTimeString($shift['office_start']);
         $end = $now->copy()->setTimeFromTimeString($shift['office_end']);
-        if (in_array($now->dayOfWeek, $co->weeklyOffDays(), true) || $now->lt($start) || $now->gt($end)) {
+        if (in_array($now->dayOfWeek, $co->weeklyOffDays(), true) || \App\Models\Holiday::isHoliday($now) || $now->lt($start) || $now->gt($end)) {
             return null; // outside office hours: the after-hours reply decides
         }
         // Only for people who actually punch in; a company that does not use attendance is never "absent".
@@ -279,7 +279,7 @@ class Inbound
         if (! $today) {
             $next = $next->addDay();
         }
-        for ($i = 0; $i < 7 && in_array($next->dayOfWeek, $co->weeklyOffDays(), true); $i++) {
+        for ($i = 0; $i < 14 && (in_array($next->dayOfWeek, $co->weeklyOffDays(), true) || \App\Models\Holiday::isHoliday($next)); $i++) {
             $next = $next->addDay();
         }
 
