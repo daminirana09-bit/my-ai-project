@@ -10,7 +10,7 @@ class LeadActivity extends Model
     public const TYPES = ['call' => 'Call', 'whatsapp' => 'WhatsApp', 'visit' => 'Visit', 'note' => 'Note', 'status' => 'Status change', 'assign' => 'Assigned', 'enquiry' => 'New enquiry'];
     public const CALL_OUTCOMES = ['connected' => 'Connected', 'not_picked' => 'Not picked', 'busy' => 'Busy', 'switched_off' => 'Switched off', 'call_back' => 'Call back later'];
 
-    protected $fillable = ['lead_id', 'user_id', 'type', 'outcome', 'duration_seconds', 'note', 'occurred_at'];
+    protected $fillable = ['lead_id', 'user_id', 'type', 'outcome', 'duration_seconds', 'note', 'occurred_at', 'lat', 'lng', 'accuracy', 'distance_m'];
 
     protected function casts(): array
     {

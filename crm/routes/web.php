@@ -62,6 +62,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/leads/{lead}/edit', [LeadController::class, 'edit'])->name('leads.edit');
     Route::put('/leads/{lead}', [LeadController::class, 'update'])->name('leads.update');
     Route::post('/leads/{lead}/activity', [LeadController::class, 'activity'])->name('leads.activity');
+    Route::post('/leads/{lead}/checkin', [\App\Http\Controllers\TrackingController::class, 'checkin'])->middleware('throttle:30,1')->name('leads.checkin');
+    Route::post('/leads/{lead}/place/reset', [\App\Http\Controllers\TrackingController::class, 'resetPlace'])->name('leads.place.reset');
+    Route::get('/reports/deals', [\App\Http\Controllers\ReportController::class, 'deals'])->name('reports.deals');
+    Route::get('/reports/monthly', [\App\Http\Controllers\ReportController::class, 'monthly'])->name('reports.monthly');
+    Route::get('/team', [\App\Http\Controllers\TrackingController::class, 'team'])->name('tracking.team');
+    Route::get('/team/{user}', [\App\Http\Controllers\TrackingController::class, 'person'])->name('tracking.person');
     Route::post('/leads/{lead}/assign', [LeadController::class, 'assign'])->middleware('role:manage')->name('leads.assign');
 
     Route::get('/search', SearchController::class)->name('search');
@@ -150,6 +156,11 @@ Route::middleware('auth')->group(function () {
         Route::get('/campaigns/new', [CampaignController::class, 'create'])->name('campaigns.create');
         Route::post('/campaigns', [CampaignController::class, 'store'])->middleware('throttle:5,1')->name('campaigns.store');
         Route::get('/campaigns/{campaign}', [CampaignController::class, 'show'])->name('campaigns.show');
+        Route::get('/followups', [\App\Http\Controllers\FollowupController::class, 'index'])->name('followups');
+        Route::post('/followups', [\App\Http\Controllers\FollowupController::class, 'store'])->name('followups.store');
+        Route::post('/followups/run', [\App\Http\Controllers\FollowupController::class, 'runNow'])->middleware('throttle:5,1')->name('followups.run');
+        Route::put('/followups/{rule}', [\App\Http\Controllers\FollowupController::class, 'update'])->name('followups.update');
+        Route::delete('/followups/{rule}', [\App\Http\Controllers\FollowupController::class, 'destroy'])->name('followups.destroy');
         Route::post('/campaigns/{campaign}/{action}', [CampaignController::class, 'control'])->where('action', 'pause|resume|cancel|retry')->name('campaigns.control');
         Route::get('/ready-replies', [ReplyTemplateController::class, 'index'])->name('replies.index');
         Route::post('/ready-replies', [ReplyTemplateController::class, 'save'])->name('replies.save');

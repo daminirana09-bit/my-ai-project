@@ -364,3 +364,15 @@ small.err{color:var(--bad)}
 .decide,.adj{gap:6px;flex-wrap:wrap}.decide input,.adj input{width:110px;min-width:0}
 .bad-t{color:var(--bad)}
 fieldset.f2{border:1px dashed var(--line);border-radius:var(--r-sm);padding:8px 10px;margin:0}
+
+/* Team tracking */
+.checkin{align-items:flex-end;gap:10px}.checkin .field{flex:1;min-width:180px;margin:0}
+form.inline{display:inline}
+.tl-list{display:flex;flex-direction:column}
+.ev{display:grid;grid-template-columns:70px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.ev time{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem}
+.ev b{display:block}.ev .row{gap:6px;flex-wrap:wrap;margin-top:4px}
+.fu-rule summary{cursor:pointer;padding:2px 0}.fu-rule[open] summary{margin-bottom:10px}
+.filters{gap:10px;align-items:flex-end;flex-wrap:wrap}.filters .field{margin:0;min-width:140px}
+.good-t{color:var(--good)}
+table.report tfoot th{border-top:2px solid var(--line);font-variant-numeric:tabular-nums}

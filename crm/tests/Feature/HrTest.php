@@ -284,6 +284,10 @@ class HrTest extends CrmTestCase
         $this->actingAs($this->admin)->post('/hr/settings', ['da_hq' => 175] + \App\Models\CompanySetting::HR_DEFAULTS)->assertSessionHas('ok');
         \App\Models\CompanySetting::forget();
         $this->assertSame(175.0, \App\Models\CompanySetting::current()->hr('da_hq'));
+        $this->get('/hr/settings')->assertOk()->assertSee('name="punch_location_required"', false);
+        $this->post('/hr/settings', ['punch_location_required' => 1] + \App\Models\CompanySetting::HR_DEFAULTS)->assertSessionHas('ok');
+        \App\Models\CompanySetting::forget();
+        $this->assertSame(1.0, \App\Models\CompanySetting::current()->hr('punch_location_required'));
         $this->post('/hr/leave-types', ['code' => 'ml', 'name' => 'Maternity leave', 'yearly_quota' => 182, 'paid' => 1])->assertSessionHas('ok');
         $this->assertTrue(LeaveType::where('code', 'ML')->value('paid'));
         $this->get('/hr')->assertSee('People');

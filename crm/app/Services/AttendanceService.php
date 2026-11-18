@@ -29,12 +29,13 @@ class AttendanceService
         return $this->lastPunchToday($user)?->type === 'in' ? 'out' : 'in';
     }
 
-    public function punch(User $user, string $type, ?string $ip = null, ?CarbonInterface $at = null): AttendancePunch
+    public function punch(User $user, string $type, ?string $ip = null, ?CarbonInterface $at = null, ?array $where = null): AttendancePunch
     {
         if (! in_array($type, ['in', 'out'], true) || $type !== $this->nextPunchType($user)) {
             throw ValidationException::withMessages(['punch' => __('You are already punched :type.', ['type' => $type === 'in' ? __('in') : __('out')])]);
         }
-        $punch = AttendancePunch::create(['user_id' => $user->id, 'type' => $type, 'punched_at' => $at ?? now(), 'ip' => $ip]);
+        $punch = AttendancePunch::create(['user_id' => $user->id, 'type' => $type, 'punched_at' => $at ?? now(), 'ip' => $ip,
+            'lat' => $where['lat'] ?? null, 'lng' => $where['lng'] ?? null, 'accuracy' => isset($where['accuracy']) ? (int) $where['accuracy'] : null]);
         $this->recalculate($user, CarbonImmutable::parse($punch->punched_at)->startOfDay());
 
         return $punch;

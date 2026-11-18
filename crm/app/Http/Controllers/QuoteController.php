@@ -147,7 +147,7 @@ class QuoteController extends Controller
         WaMessage::create(['wa_conversation_id' => $conv->id, 'direction' => 'out', 'body' => 'PDF: '.$quote->number, 'type' => 'document', 'wamid' => $res['id'],
             'status' => $res['ok'] ? 'sent' : 'failed', 'error' => $res['error'], 'user_id' => $me->id, 'sent_at' => now()]);
         if ($res['ok']) {
-            $quote->update(['status' => 'sent']);
+            $quote->update(['status' => 'sent', 'sent_at' => now()]);
             $conv->forceFill(['last_message_at' => now()])->save();
         }
         AuditLog::record('quote.send', $quote->number, ['ok' => $res['ok']]);

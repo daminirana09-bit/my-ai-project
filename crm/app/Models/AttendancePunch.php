@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class AttendancePunch extends Model
 {
-    protected $fillable = ['user_id', 'type', 'punched_at', 'ip'];
+    protected $fillable = ['user_id', 'type', 'punched_at', 'ip', 'lat', 'lng', 'accuracy'];
 
     protected function casts(): array
     {

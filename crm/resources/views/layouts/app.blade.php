@@ -42,6 +42,11 @@
       <a class="sb-link {{ $on('quotes.*') }}" href="{{ route('quotes.index') }}"><x-icon name="audit"/>{{ __('Quotations') }}</a>
       <a class="sb-link {{ $on('targets.*') }}" href="{{ route('targets.index') }}"><x-icon name="target"/>{{ __('Targets & orders') }}</a>
       @if($me->canManage())
+        <a class="sb-link {{ $on('tracking.*') }}" href="{{ route('tracking.team') }}"><x-icon name="pin"/>{{ __('Team tracking') }}</a>
+      @else
+        <a class="sb-link {{ $on('tracking.*') }}" href="{{ route('tracking.person', $me) }}"><x-icon name="pin"/>{{ __('My day') }}</a>
+      @endif
+      @if($me->canManage())
         <a class="sb-link {{ $on('clashes.*') }}" href="{{ route('clashes.index') }}"><x-icon name="clash"/><span class="sp">{{ __('Lead clashes') }}</span>@if($openClashes)<span class="count">{{ $openClashes }}</span>@endif</a>
       @endif
       <a class="sb-link {{ $on('products.*') }}" href="{{ route('products.index') }}"><x-icon name="products"/>{{ __('Products') }}</a>
@@ -49,9 +54,12 @@
       <a class="sb-link {{ $on('share') }}" href="{{ route('share') }}"><x-icon name="star"/>{{ __('Share & reviews') }}</a>
       @if($me->allows('view_analytics'))
         <a class="sb-link {{ $on('analytics') }}" href="{{ route('analytics') }}"><x-icon name="analytics"/>{{ __('Analytics') }}</a>
+        <a class="sb-link {{ $on('reports.deals') }}" href="{{ route('reports.deals') }}"><x-icon name="target"/>{{ __('Deals report') }}</a>
+        <a class="sb-link {{ $on('reports.monthly') }}" href="{{ route('reports.monthly') }}"><x-icon name="audit"/>{{ __('Monthly sales report') }}</a>
       @endif
       @if($me->canManage() && $me->allows('send_campaigns'))
         <a class="sb-link {{ $on('campaigns.*') }}" href="{{ route('campaigns.index') }}"><x-icon name="megaphone"/>{{ __('Marketing') }}</a>
+        <a class="sb-link {{ $on('followups') }}" href="{{ route('followups') }}"><x-icon name="bolt"/>{{ __('Auto follow-ups') }}</a>
       @endif
       @if($me->canManage())
         <a class="sb-link {{ $on('replies.*') }}" href="{{ route('replies.index') }}"><x-icon name="globe"/>{{ __('Ready replies') }}</a>
@@ -108,9 +116,9 @@
         <button type="submit" aria-label="{{ __('Search') }}"><x-icon name="search"/></button>
       </form>
       <span class="sp"></span>
-      <form method="post" action="{{ route('attendance.punch') }}">
+      <form method="post" action="{{ route('attendance.punch') }}" data-geo>
         @csrf
-        <input type="hidden" name="type" value="{{ $nextPunch }}">
+        <input type="hidden" name="type" value="{{ $nextPunch }}"><input type="hidden" name="lat"><input type="hidden" name="lng"><input type="hidden" name="accuracy">
         <button class="btn {{ $nextPunch === 'in' ? 'good' : 'bad' }}"><x-icon name="clock"/>{{ $nextPunch === 'in' ? __('Punch in') : __('Punch out') }}</button>
       </form>
       <form method="post" action="{{ route('profile.theme') }}" data-theme-toggle>@csrf<input type="hidden" name="theme" value="{{ $me->theme === 'dark' ? 'light' : 'dark' }}"><button class="iconbtn" aria-label="{{ __('Light / dark') }}" title="{{ __('Light / dark') }}"><span class="i-moon"><x-icon name="moon"/></span><span class="i-sun"><x-icon name="sun"/></span></button></form>

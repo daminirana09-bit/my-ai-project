@@ -52,6 +52,12 @@ Artisan::command('campaigns:due', function () {
     $this->info("Campaigns started or continued: {$n}.");
 })->purpose('Start scheduled campaigns and continue those waiting for the daily limit');
 
+// Automatic WhatsApp follow-ups (office hours, working days only).
+Artisan::command('followups:run', function (\App\Services\WhatsApp\FollowupRunner $runner) {
+    $r = $runner->run();
+    $this->info("Follow-ups sent: {$r['sent']}, failed: {$r['failed']}, skipped: {$r['skipped']}.");
+})->purpose('Send automatic WhatsApp follow-ups');
+
 // Last resort when the only admin forgot the password and email is not set up (run over SSH).
 Artisan::command('crm:reset-password {email}', function (string $email) {
     $u = \App\Models\User::where('email', strtolower(trim($email)))->first();
@@ -88,4 +94,5 @@ Schedule::call($task('automations', 'crm:automations'))->dailyAt('09:05')->name(
 Schedule::call($task('leads-pull', 'leads:pull'))->everyTenMinutes()->name('leads-pull')->withoutOverlapping(15);
 // Last, because it may work for up to 50 seconds (WhatsApp campaigns and other background work).
 Schedule::call($task('campaigns-due', 'campaigns:due'))->everyMinute()->name('campaigns-due')->withoutOverlapping(5);
+Schedule::call($task('followups', 'followups:run'))->everyFifteenMinutes()->name('followups')->withoutOverlapping(14);
 Schedule::call($task('queue', 'queue:work', ['--stop-when-empty' => true, '--max-time' => 50, '--tries' => 3]))->everyMinute()->name('queue')->withoutOverlapping(5);

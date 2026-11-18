@@ -18,8 +18,13 @@ class AttendanceController extends Controller
 
     public function punch(Request $request)
     {
-        $type = $request->validate(['type' => ['required', Rule::in(['in', 'out'])]])['type'];
-        $p = $this->service->punch($request->user(), $type, $request->ip());
+        $data = $request->validate(['type' => ['required', Rule::in(['in', 'out'])]] + self::locationRules());
+        $type = $data['type'];
+        $where = isset($data['lat'], $data['lng']) ? ['lat' => (float) $data['lat'], 'lng' => (float) $data['lng'], 'accuracy' => $data['accuracy'] ?? null] : null;
+        if (! $where && \App\Models\CompanySetting::current()->hr('punch_location_required') > 0) {
+            return back()->withErrors(['punch' => __('Allow location in your browser to punch in or out. Your company asks for it.')]);
+        }
+        $p = $this->service->punch($request->user(), $type, $request->ip(), null, $where);
 
         $msg = __($type === 'in' ? 'Punched in at :time.' : 'Punched out at :time.', ['time' => $p->punched_at->format('h:i A')]);
         if ($type === 'in') {
@@ -31,6 +36,13 @@ class AttendanceController extends Controller
         }
 
         return back()->with('ok', $msg);
+    }
+
+    /** Where the phone was, sent by the browser (only when the person allows it). */
+    public static function locationRules(): array
+    {
+        return ['lat' => ['nullable', 'numeric', 'between:-90,90', 'required_with:lng'], 'lng' => ['nullable', 'numeric', 'between:-180,180', 'required_with:lat'],
+            'accuracy' => ['nullable', 'numeric', 'min:0', 'max:100000']];
     }
 
     private function month(Request $request): CarbonImmutable

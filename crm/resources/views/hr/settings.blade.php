@@ -41,6 +41,9 @@
       @endforeach
     </div>
     <p class="small muted">{{ __('Professional tax differs by state; set each person\'s amount on their employee page if it differs.') }}</p>
+    <h2>{{ __('Attendance') }}</h2>
+    <input type="hidden" name="punch_location_required" value="0">
+    <label class="check top"><input type="checkbox" name="punch_location_required" value="1" @checked($co->hr('punch_location_required') > 0)><span><b>{{ __('Punch in/out only with the phone\'s location') }}</b><span class="sub muted small">{{ __('The place is kept with the punch and shown in Team tracking. Nobody is followed in the background.') }}</span></span></label>
     <div><button class="btn p">{{ __('Save') }}</button></div>
   </form>
 </div>

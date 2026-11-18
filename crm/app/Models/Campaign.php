@@ -32,12 +32,15 @@ class Campaign extends Model
         return max(0, (int) (CompanySetting::current()?->wa('daily_limit', 1000) ?? 1000));
     }
 
-    /** Messages that may still go out in the next 24 hours, across all campaigns. */
+    /** Messages that may still go out in the next 24 hours, across all campaigns and automatic follow-ups. */
     public static function remainingToday(): ?int
     {
         $limit = self::dailyLimit();
 
-        return $limit === 0 ? null : max(0, $limit - CampaignRecipient::whereIn('status', ['sent', 'delivered', 'read'])->whereNotNull('sent_at')->where('sent_at', '>=', now()->subDay())->count());
+        $used = CampaignRecipient::whereIn('status', ['sent', 'delivered', 'read'])->whereNotNull('sent_at')->where('sent_at', '>=', now()->subDay())->count()
+            + FollowupLog::where('status', 'sent')->where('sent_at', '>=', now()->subDay())->count(); // automatic follow-ups count too
+
+        return $limit === 0 ? null : max(0, $limit - $used);
     }
 
     public function isRunning(): bool

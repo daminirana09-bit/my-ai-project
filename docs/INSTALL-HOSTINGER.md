@@ -228,7 +228,25 @@ from those clients since the broadcast. New number lists: Leads → Import with 
    claims are added. Add incentive / other deduction, **Finalise**, then download the salary register
    and the bank transfer sheet. Everyone then sees their payslip PDF.
 
-## 13. Lock it down (Rule 1)
+## 13. Team tracking, auto follow-ups and reports
+
+- **Team tracking** (managers): each person's day — punch in/out with place, calls, client visits
+  checked in with **Check in here** on the lead page, WhatsApp sent, new leads, quotations and orders,
+  with a Google Maps route. The first good check-in saves the client's place; later check-ins more than
+  300 m away are flagged. Places come only from punches and check-ins (never background tracking).
+  To make location compulsory for punching: Holidays & HR rules → Attendance. The phone's browser must
+  allow location for the CRM's address (it asks the first time).
+- **Auto follow-ups** (Marketing → Auto follow-ups): rules such as "quotation sent, no reply in 2 days",
+  "follow-up date reached", "no contact for 7 days", "no reorder in 30 days", "new lead not contacted in
+  2 hours". Each needs an approved WhatsApp template (and optionally a message used when the client wrote
+  in the last 24 hours). They go out every 15 minutes in office hours on working days, once per client per
+  rule within its repeat days, never after STOP, within the daily limit.
+- **Deals report**: pipeline by stage (and weighted), won/lost, win rate, average deal, days to win,
+  by salesperson and source, lost reasons, deals not touched for 30 days, Excel.
+- **Monthly sales report**: every salesperson's target, achieved %, orders, new vs repeat customers,
+  growth over last month, leads, calls/visits and days present; Excel and PDF.
+
+## 14. Lock it down (Rule 1)
 
 - Put the office's fixed IP (and VPN IP, if any) in `CRM_ALLOWED_IPS` in `.env`, then
   `php artisan config:cache`. The WhatsApp webhook, lead integrations and website form keep working from anywhere.

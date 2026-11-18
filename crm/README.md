@@ -27,6 +27,12 @@ One installation per company. Each company sets its own name, logo, timings and 
 - **WhatsApp inbox (Meta Cloud API):** each salesperson their own number; chats come in
   through a signed webhook; the client's language and request are detected and ready replies
   are offered in that language (14 Indian languages, editable under Ready replies).
+- **Team tracking:** punch and client-visit check-ins with location (no background tracking),
+  far-from-client flags, each person's day as a timeline with a Google Maps route, team summary.
+- **Auto WhatsApp follow-ups:** rules for due follow-ups, unanswered quotations, quiet leads,
+  reorder reminders and uncontacted new leads; office hours only, once per repeat window, within limits.
+- **Reports:** deals report (pipeline, weighted, win rate, lost reasons, stale deals) and monthly sales
+  report for every salesperson (target, new/repeat customers, growth, activity) with Excel and PDF.
 - **HR & payroll:** employee master (encrypted bank/ID/salary, documents), holiday calendar,
   leave types with balances and approval (marked in attendance), TA/DA expense claims with receipts
   and company rates, HR dashboard (on leave, birthdays, anniversaries), monthly payroll from

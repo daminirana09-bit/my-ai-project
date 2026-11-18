@@ -258,6 +258,26 @@ await Promise.all([p.waitForNavigation(),p.click('form button.p')]);expect(await
  await login(p,'sohan@e2e.in');await p.goto(B+'/hr/me');const slip=await p.$eval('#payslips a[href*="/hr/payslips/"]',a=>a.href).catch(()=>'');
  r=slip?await p.request.get(slip):null;expect(r&&r.status()===200&&(await r.body()).slice(0,4).toString()==='%PDF','payslip PDF for the employee');
  await logout(p);step();}
+// 11. Team tracking (real browser location), reports, auto follow-ups
+{const gc=await b.newContext({viewport:{width:1280,height:900},geolocation:{latitude:22.7196,longitude:75.8577,accuracy:12},permissions:['geolocation']});const g=await gc.newPage();
+ g.on('pageerror',e=>issues.push(`[js] ${e.message}`));g.on('response',r=>{if(r.status()>=500)issues.push(`[${r.status()}] ${r.url()}`)});
+ await g.goto(B+'/login');await g.fill('#email','mgr@e2e.in');await g.fill('#password',PW);await Promise.all([g.waitForNavigation(),g.click('form button.p')]);
+ await Promise.all([g.waitForNavigation(),g.click('form[action$="/attendance/punch"] button')]);expect(await g.$('.flash.ok')!==null,'punch with location');
+ await g.goto(B+'/leads');await Promise.all([g.waitForNavigation(),g.click('a:has-text("Clash Firm")')]);await g.fill('#ci_note','E2E visit');
+ await Promise.all([g.waitForNavigation(),g.click('#checkin button')]);expect(await g.$('.flash.ok')!==null,'visit checked in with location');
+ expect((await g.content()).includes('google.com/maps/search'),'map link on the visit');
+ await g.context().setGeolocation({latitude:22.7396,longitude:75.8577});await g.fill('#ci_note','E2E far visit');
+ await Promise.all([g.waitForNavigation(),g.click('#checkin button')]);expect(await g.$('.flash.warn')!==null,'far check-in flagged');
+ let rr=await g.goto(B+'/team');expect(rr.status()===200,'team tracking opens');
+ await Promise.all([g.waitForNavigation(),g.click('a[href*="/team/"]')]);expect(rr.status()===200&&(await g.content()).includes('Solvix Web'),'person day opens');
+ rr=await g.goto(B+'/reports/deals');expect(rr.status()===200,'deals report');rr=await g.goto(B+'/reports/monthly');expect(rr.status()===200,'monthly report');
+ const pdf=await g.request.get(B+'/reports/monthly?export=pdf');expect(pdf.status()===200&&(await pdf.body()).slice(0,4).toString()==='%PDF','monthly PDF');
+ const xl=await g.request.get(B+'/reports/deals?export=xlsx');expect(xl.status()===200&&(await xl.body()).slice(0,2).toString()==='PK','deals Excel');
+ rr=await g.goto(B+'/followups');expect(rr.status()===200,'follow-ups page');
+ await g.fill('#n_name','E2E quotation reminder');await g.selectOption('#n_trigger','quote_no_reply');await g.fill('#n_after','2');await g.fill('#n_tpl','quote_followup');
+ await Promise.all([g.waitForNavigation(),g.click('#new-rule button.p')]);expect((await g.content()).includes('E2E quotation reminder'),'follow-up rule added');
+ {const m=await gc.newPage();await m.setViewportSize({width:390,height:844});for(const u of ['/team','/reports/deals','/reports/monthly','/followups']){await m.goto(B+u);const o=await overflow(m);expect(o<=0,'mobile overflow '+u+' '+o)}await m.close();}
+ await gc.close();step();}
 const r404=await p.goto(B+'/nope-page');expect(r404.status()===404&&await has(p,'Solvix Web'),'own 404 page with credit');
 await b.close();
 console.log(`\nRUN ${RUN}: ${issues.length?'ISSUES':'OK'}`);issues.forEach(i=>console.log('  '+i));process.exit(issues.length?1:0);

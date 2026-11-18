@@ -10,11 +10,11 @@ class Quote extends Model
 {
     public const STATUSES = ['draft' => 'Draft', 'sent' => 'Sent', 'accepted' => 'Accepted', 'rejected' => 'Rejected'];
 
-    protected $fillable = ['number', 'lead_id', 'user_id', 'quote_date', 'valid_days', 'freight', 'terms', 'status', 'subtotal', 'gst_total', 'grand_total'];
+    protected $fillable = ['number', 'lead_id', 'user_id', 'quote_date', 'valid_days', 'freight', 'terms', 'status', 'subtotal', 'gst_total', 'grand_total', 'sent_at'];
 
     protected function casts(): array
     {
-        return ['quote_date' => 'date', 'freight' => 'decimal:2', 'subtotal' => 'decimal:2', 'gst_total' => 'decimal:2', 'grand_total' => 'decimal:2'];
+        return ['quote_date' => 'date', 'freight' => 'decimal:2', 'subtotal' => 'decimal:2', 'gst_total' => 'decimal:2', 'grand_total' => 'decimal:2', 'sent_at' => 'datetime'];
     }
 
     public function lead(): BelongsTo { return $this->belongsTo(Lead::class); }

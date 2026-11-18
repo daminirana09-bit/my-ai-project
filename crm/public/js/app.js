@@ -40,3 +40,16 @@ document.addEventListener('click', function (e) {
   var ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.className = 'sr'; document.body.appendChild(ta); ta.select();
   try { document.execCommand('copy'); done(); } catch (x) {} document.body.removeChild(ta);
 });
+// Forms marked data-geo send where the phone is (only if the person allows it; otherwise they go without).
+document.addEventListener('submit', function (e) {
+  var f = e.target.closest('form[data-geo]');
+  if (!f || f.dataset.geoDone || !navigator.geolocation || !window.isSecureContext) return;
+  e.preventDefault();
+  var btn = f.querySelector('button'), go = function () { f.dataset.geoDone = '1'; f.submit(); };
+  if (btn) btn.disabled = true;
+  navigator.geolocation.getCurrentPosition(function (p) {
+    var set = function (n, v) { var i = f.querySelector('input[name="' + n + '"]'); if (i) i.value = v; };
+    set('lat', p.coords.latitude.toFixed(7)); set('lng', p.coords.longitude.toFixed(7)); set('accuracy', Math.round(p.coords.accuracy));
+    go();
+  }, go, { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 });
+});

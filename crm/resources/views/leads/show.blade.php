@@ -13,6 +13,11 @@
 
 <div class="grid g21">
   <div class="grid">
+    <form method="post" action="{{ route('leads.checkin', $lead) }}" class="card form row checkin" data-geo id="checkin">
+      @csrf<input type="hidden" name="lat"><input type="hidden" name="lng"><input type="hidden" name="accuracy">
+      <div class="field"><label for="ci_note">{{ __('At the client now? Check in your visit') }}</label><input id="ci_note" name="note" maxlength="1000" placeholder="{{ __('e.g. Met the doctor, discussed new range') }}"></div>
+      <button class="btn good"><x-icon name="pin"/>{{ __('Check in here') }}</button>
+    </form>
     <form method="post" action="{{ route('leads.activity', $lead) }}" class="card form">
       @csrf
       <h2>{{ __('Log a call or update') }}</h2>
@@ -83,7 +88,8 @@
       <div class="timeline">
         @forelse($lead->activities as $a)
           <div class="tl {{ $a->type }}"><b>{{ __(\App\Models\LeadActivity::TYPES[$a->type] ?? $a->type) }}</b>@if($a->outcome) · {{ __(\App\Models\LeadActivity::CALL_OUTCOMES[$a->outcome] ?? $a->outcome) }}@endif
-            <div>{{ $a->note }}</div><span class="small muted">{{ $a->user?->name }} · {{ $a->occurred_at->format('d M Y, h:i A') }}</span></div>
+            <div>{{ $a->note }}</div><span class="small muted">{{ $a->user?->name }} · {{ $a->occurred_at->format('d M Y, h:i A') }}@if($a->lat !== null) · <a href="{{ \App\Support\Geo::mapLink((float) $a->lat, (float) $a->lng) }}" target="_blank" rel="noopener noreferrer">{{ __('Map') }}</a>@endif
+              @if($a->distance_m !== null)<span class="pill {{ $a->distance_m > \App\Http\Controllers\TrackingController::FAR_METRES ? 'bad' : 'good' }}">{{ __(':d from client', ['d' => \App\Http\Controllers\TrackingController::distanceLabel($a->distance_m)]) }}</span>@endif</span></div>
         @empty
           <p class="muted">{{ __('No activity yet.') }}</p>
         @endforelse
@@ -97,6 +103,9 @@
         <tr><td class="muted">{{ __('Phone / WhatsApp') }}</td><td class="mono">{{ $lead->phone ?: '—' }}</td></tr>
         <tr><td class="muted">{{ __('Email') }}</td><td>{{ $lead->email ?: '—' }}</td></tr>
         <tr><td class="muted">GSTIN</td><td class="mono">{{ $lead->gstin ?: '—' }}</td></tr>
+        <tr><td class="muted">{{ __('Client\'s place') }}</td><td>@if($lead->lat !== null)<a href="{{ \App\Support\Geo::mapLink((float) $lead->lat, (float) $lead->lng) }}" target="_blank" rel="noopener noreferrer">{{ __('Saved at first visit · Map') }}</a>
+          @if($me->canManage())<form method="post" action="{{ route('leads.place.reset', $lead) }}" class="inline">@csrf<button class="linkbtn" data-confirm="{{ __('Clear the saved place? The next visit check-in saves it again.') }}">{{ __('Clear') }}</button></form>@endif
+          @else<span class="muted">{{ __('Saved at the first visit check-in') }}</span>@endif</td></tr>
         <tr><td class="muted">{{ __('Orders') }}</td><td>{{ $lead->sales->where('status', 'confirmed')->count() }} · {{ inr($lead->sales->where('status', 'confirmed')->sum('amount')) }}</td></tr>
         <tr><td class="muted">{{ __('Source and tags') }}</td><td>@forelse($lead->tagList() as $i => $t)<a class="{{ $i === 0 && $lead->source ? \App\Models\Lead::tagClass($t) : 'tag' }}" href="{{ route('leads.index', $i === 0 && $lead->source ? ['source' => $t] : ['tag' => $t]) }}">{{ $t }}</a>@empty — @endforelse</td></tr>
         @if($lead->campaign)<tr><td class="muted">{{ __('Campaign / form') }}</td><td>{{ $lead->campaign }}</td></tr>@endif

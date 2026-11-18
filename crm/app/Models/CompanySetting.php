@@ -113,6 +113,7 @@ class CompanySetting extends Model
         'pf_ceiling' => 15000, 'pf_rate' => 12,                     // PF: 12% of basic up to ₹15,000
         'esi_ceiling' => 21000, 'esi_rate' => 0.75, 'esi_employer_rate' => 3.25,
         'pt_default' => 200,                                         // professional tax per month (state-wise)
+        'punch_location_required' => 0,                             // 1 = punch only with the phone's location
     ];
 
     public function hr(string $key): float

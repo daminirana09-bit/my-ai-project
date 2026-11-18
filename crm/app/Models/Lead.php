@@ -29,7 +29,7 @@ class Lead extends Model
         'firm_name', 'contact_name', 'phone', 'email', 'city', 'state', 'gstin', 'source', 'client_type',
         'requirement', 'status', 'expected_value', 'owner_id', 'created_by', 'created_via',
         'last_contact_at', 'next_follow_up_on', 'lost_reason', 'notes', 'temperature', 'whatsapp_opt_out', 'language',
-        'tags', 'campaign', 'referred_by', 'external_ref',
+        'tags', 'campaign', 'referred_by', 'external_ref', 'lat', 'lng', 'won_at', 'lost_at',
     ];
 
     protected function casts(): array
@@ -43,6 +43,8 @@ class Lead extends Model
             'whatsapp_opt_out' => 'boolean',
             'review_requested_at' => 'datetime',
             'tags' => 'array',
+            'won_at' => 'datetime',
+            'lost_at' => 'datetime',
         ];
     }
 
@@ -51,6 +53,11 @@ class Lead extends Model
         // Keep a keyed hash of the phone so the same client can be found again
         // without storing the number in readable form.
         static::saving(function (Lead $lead) {
+            // When a deal is won or lost, for the deals report
+            if ($lead->isDirty('status')) {
+                $lead->won_at = $lead->status === 'won' ? ($lead->won_at ?? now()) : null;
+                $lead->lost_at = $lead->status === 'lost' ? ($lead->lost_at ?? now()) : null;
+            }
             $lead->phone_hash = self::hashPhone($lead->phone);
             $lead->email_hash = self::hashEmail($lead->email);
             if ($lead->gstin) {
@@ -137,5 +144,10 @@ class Lead extends Model
     {
         $n = self::normalizePhone($this->phone);
         return $n ? str_repeat('•', max(strlen($n) - 4, 0)).substr($n, -4) : '—';
+    }
+
+    public function followupLogs(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(FollowupLog::class);
     }
 }
