@@ -1,0 +1,642 @@
+[
+  {
+    "word": "Aapka",
+    "start": 0,
+    "end": 0.32
+  },
+  {
+    "word": "waiter",
+    "start": 0.36,
+    "end": 0.72
+  },
+  {
+    "word": "har",
+    "start": 0.88,
+    "end": 1.12
+  },
+  {
+    "word": "table",
+    "start": 1.2,
+    "end": 1.44
+  },
+  {
+    "word": "pe",
+    "start": 1.52,
+    "end": 1.72
+  },
+  {
+    "word": "ek",
+    "start": 1.84,
+    "end": 2
+  },
+  {
+    "word": "saath",
+    "start": 2.08,
+    "end": 2.4
+  },
+  {
+    "word": "nahi",
+    "start": 2.44,
+    "end": 2.64
+  },
+  {
+    "word": "ho",
+    "start": 2.667,
+    "end": 2.72
+  },
+  {
+    "word": "sakta",
+    "start": 2.8,
+    "end": 3.36
+  },
+  {
+    "word": "par",
+    "start": 3.653,
+    "end": 3.76
+  },
+  {
+    "word": "aapki",
+    "start": 3.84,
+    "end": 4.08
+  },
+  {
+    "word": "website",
+    "start": 4.16,
+    "end": 4.64
+  },
+  {
+    "word": "ho",
+    "start": 4.68,
+    "end": 4.76
+  },
+  {
+    "word": "sakti",
+    "start": 4.8,
+    "end": 5.12
+  },
+  {
+    "word": "hai.",
+    "start": 5.2,
+    "end": 5.64
+  },
+  {
+    "word": "Customer",
+    "start": 5.92,
+    "end": 6.32
+  },
+  {
+    "word": "table",
+    "start": 6.4,
+    "end": 6.64
+  },
+  {
+    "word": "pe",
+    "start": 6.72,
+    "end": 6.8
+  },
+  {
+    "word": "baitha,",
+    "start": 6.84,
+    "end": 7.52
+  },
+  {
+    "word": "QR",
+    "start": 7.6,
+    "end": 7.92
+  },
+  {
+    "word": "scan",
+    "start": 8,
+    "end": 8.32
+  },
+  {
+    "word": "kiya",
+    "start": 8.4,
+    "end": 8.64
+  },
+  {
+    "word": "poora",
+    "start": 9.173,
+    "end": 9.44
+  },
+  {
+    "word": "menu",
+    "start": 9.52,
+    "end": 9.867
+  },
+  {
+    "word": "phone",
+    "start": 9.92,
+    "end": 10.16
+  },
+  {
+    "word": "pe.",
+    "start": 10.24,
+    "end": 10.96
+  },
+  {
+    "word": "Har",
+    "start": 11.04,
+    "end": 11.16
+  },
+  {
+    "word": "dish",
+    "start": 11.2,
+    "end": 11.44
+  },
+  {
+    "word": "ka",
+    "start": 11.48,
+    "end": 11.6
+  },
+  {
+    "word": "rate,",
+    "start": 11.64,
+    "end": 12.16
+  },
+  {
+    "word": "spice",
+    "start": 12.24,
+    "end": 12.56
+  },
+  {
+    "word": "level",
+    "start": 12.64,
+    "end": 12.96
+  },
+  {
+    "word": "aur",
+    "start": 13.12,
+    "end": 13.32
+  },
+  {
+    "word": "allergy",
+    "start": 13.36,
+    "end": 13.76
+  },
+  {
+    "word": "info",
+    "start": 13.8,
+    "end": 14.16
+  },
+  {
+    "word": "sab",
+    "start": 14.587,
+    "end": 14.72
+  },
+  {
+    "word": "saamne.",
+    "start": 14.76,
+    "end": 15.6
+  },
+  {
+    "word": "Order",
+    "start": 15.68,
+    "end": 16
+  },
+  {
+    "word": "phone",
+    "start": 16.08,
+    "end": 16.32
+  },
+  {
+    "word": "se",
+    "start": 16.36,
+    "end": 16.48
+  },
+  {
+    "word": "hi",
+    "start": 16.52,
+    "end": 16.64
+  },
+  {
+    "word": "aur",
+    "start": 17.093,
+    "end": 17.2
+  },
+  {
+    "word": "ek",
+    "start": 17.28,
+    "end": 17.52
+  },
+  {
+    "word": "tap",
+    "start": 17.56,
+    "end": 17.76
+  },
+  {
+    "word": "mein",
+    "start": 17.8,
+    "end": 18
+  },
+  {
+    "word": "seedha",
+    "start": 18.08,
+    "end": 18.4
+  },
+  {
+    "word": "kitchen",
+    "start": 18.44,
+    "end": 18.72
+  },
+  {
+    "word": "screen",
+    "start": 18.76,
+    "end": 19.04
+  },
+  {
+    "word": "pe.",
+    "start": 19.12,
+    "end": 19.76
+  },
+  {
+    "word": "Kitchen",
+    "start": 19.84,
+    "end": 20.08
+  },
+  {
+    "word": "mein",
+    "start": 20.16,
+    "end": 20.32
+  },
+  {
+    "word": "live",
+    "start": 20.4,
+    "end": 20.64
+  },
+  {
+    "word": "orders",
+    "start": 20.68,
+    "end": 21.04
+  },
+  {
+    "word": "aur",
+    "start": 21.12,
+    "end": 21.24
+  },
+  {
+    "word": "timer",
+    "start": 21.28,
+    "end": 21.68
+  },
+  {
+    "word": "kaunsa",
+    "start": 22.213,
+    "end": 22.56
+  },
+  {
+    "word": "order",
+    "start": 22.64,
+    "end": 22.88
+  },
+  {
+    "word": "kitni",
+    "start": 23.04,
+    "end": 23.32
+  },
+  {
+    "word": "der",
+    "start": 23.36,
+    "end": 23.56
+  },
+  {
+    "word": "mein.",
+    "start": 23.6,
+    "end": 24.24
+  },
+  {
+    "word": "Customer",
+    "start": 24.32,
+    "end": 24.72
+  },
+  {
+    "word": "ko",
+    "start": 24.76,
+    "end": 24.88
+  },
+  {
+    "word": "bhi",
+    "start": 24.92,
+    "end": 25
+  },
+  {
+    "word": "dikhta",
+    "start": 25.04,
+    "end": 25.32
+  },
+  {
+    "word": "hai",
+    "start": 25.36,
+    "end": 25.52
+  },
+  {
+    "word": "khana",
+    "start": 26,
+    "end": 26.24
+  },
+  {
+    "word": "ban",
+    "start": 26.32,
+    "end": 26.48
+  },
+  {
+    "word": "raha",
+    "start": 26.56,
+    "end": 26.72
+  },
+  {
+    "word": "hai,",
+    "start": 26.8,
+    "end": 27.28
+  },
+  {
+    "word": "kitne",
+    "start": 27.32,
+    "end": 27.56
+  },
+  {
+    "word": "minute",
+    "start": 27.6,
+    "end": 27.84
+  },
+  {
+    "word": "baaki.",
+    "start": 27.88,
+    "end": 28.64
+  },
+  {
+    "word": "Kuch",
+    "start": 28.68,
+    "end": 28.84
+  },
+  {
+    "word": "chahiye?",
+    "start": 28.88,
+    "end": 29.68
+  },
+  {
+    "word": "Call",
+    "start": 29.76,
+    "end": 30
+  },
+  {
+    "word": "waiter",
+    "start": 30.08,
+    "end": 30.36
+  },
+  {
+    "word": "dabao",
+    "start": 30.4,
+    "end": 30.72
+  },
+  {
+    "word": "staff",
+    "start": 31.28,
+    "end": 31.653
+  },
+  {
+    "word": "ko",
+    "start": 31.68,
+    "end": 31.76
+  },
+  {
+    "word": "floor",
+    "start": 31.92,
+    "end": 32.12
+  },
+  {
+    "word": "map",
+    "start": 32.16,
+    "end": 32.4
+  },
+  {
+    "word": "pe",
+    "start": 32.427,
+    "end": 32.48
+  },
+  {
+    "word": "dikhta",
+    "start": 32.56,
+    "end": 32.84
+  },
+  {
+    "word": "hai",
+    "start": 32.88,
+    "end": 33.04
+  },
+  {
+    "word": "kis",
+    "start": 33.28,
+    "end": 33.44
+  },
+  {
+    "word": "table",
+    "start": 33.52,
+    "end": 33.76
+  },
+  {
+    "word": "ne",
+    "start": 33.787,
+    "end": 33.84
+  },
+  {
+    "word": "bulaya.",
+    "start": 33.92,
+    "end": 34.8
+  },
+  {
+    "word": "Aakhir",
+    "start": 34.88,
+    "end": 35.16
+  },
+  {
+    "word": "mein",
+    "start": 35.2,
+    "end": 35.36
+  },
+  {
+    "word": "bill",
+    "start": 35.44,
+    "end": 35.6
+  },
+  {
+    "word": "split",
+    "start": 35.64,
+    "end": 35.92
+  },
+  {
+    "word": "karo,",
+    "start": 35.96,
+    "end": 36.56
+  },
+  {
+    "word": "table",
+    "start": 36.6,
+    "end": 36.88
+  },
+  {
+    "word": "pe",
+    "start": 36.96,
+    "end": 37.04
+  },
+  {
+    "word": "hi",
+    "start": 37.067,
+    "end": 37.12
+  },
+  {
+    "word": "pay",
+    "start": 37.2,
+    "end": 37.36
+  },
+  {
+    "word": "karo",
+    "start": 37.4,
+    "end": 37.6
+  },
+  {
+    "word": "cash,",
+    "start": 38.08,
+    "end": 38.64
+  },
+  {
+    "word": "card",
+    "start": 38.68,
+    "end": 38.96
+  },
+  {
+    "word": "ya",
+    "start": 39.2,
+    "end": 39.28
+  },
+  {
+    "word": "UPI.",
+    "start": 39.36,
+    "end": 40.32
+  },
+  {
+    "word": "Aur",
+    "start": 40.4,
+    "end": 40.52
+  },
+  {
+    "word": "review",
+    "start": 40.56,
+    "end": 40.8
+  },
+  {
+    "word": "dena",
+    "start": 40.88,
+    "end": 41.12
+  },
+  {
+    "word": "bas",
+    "start": 41.627,
+    "end": 41.84
+  },
+  {
+    "word": "ek",
+    "start": 41.92,
+    "end": 42.08
+  },
+  {
+    "word": "tap.",
+    "start": 42.16,
+    "end": 42.8
+  },
+  {
+    "word": "Ye",
+    "start": 43.12,
+    "end": 43.28
+  },
+  {
+    "word": "hai",
+    "start": 43.36,
+    "end": 43.52
+  },
+  {
+    "word": "Solvix",
+    "start": 43.6,
+    "end": 44.053
+  },
+  {
+    "word": "ka",
+    "start": 44.08,
+    "end": 44.24
+  },
+  {
+    "word": "restaurant",
+    "start": 44.32,
+    "end": 44.72
+  },
+  {
+    "word": "QR",
+    "start": 44.88,
+    "end": 45.12
+  },
+  {
+    "word": "system",
+    "start": 45.2,
+    "end": 45.6
+  },
+  {
+    "word": "table,",
+    "start": 46.053,
+    "end": 46.64
+  },
+  {
+    "word": "kitchen",
+    "start": 46.68,
+    "end": 47.12
+  },
+  {
+    "word": "aur",
+    "start": 47.2,
+    "end": 47.32
+  },
+  {
+    "word": "staff,",
+    "start": 47.36,
+    "end": 48.08
+  },
+  {
+    "word": "sab",
+    "start": 48.16,
+    "end": 48.32
+  },
+  {
+    "word": "ek",
+    "start": 48.36,
+    "end": 48.48
+  },
+  {
+    "word": "jagah.",
+    "start": 48.56,
+    "end": 49.36
+  },
+  {
+    "word": "Details",
+    "start": 49.44,
+    "end": 49.84
+  },
+  {
+    "word": "chahiye?",
+    "start": 49.88,
+    "end": 50.64
+  },
+  {
+    "word": "Comment",
+    "start": 50.72,
+    "end": 51.04
+  },
+  {
+    "word": "karo",
+    "start": 51.08,
+    "end": 51.28
+  },
+  {
+    "word": "SOFTWARE.",
+    "start": 51.44,
+    "end": 52.32
+  }
+]

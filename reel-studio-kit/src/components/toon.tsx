@@ -91,12 +91,12 @@ const Mouth: React.FC<{ open: number; mood: Mood; y: number }> = ({ open, mood, 
   );
 };
 
-export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha" | "bansal"; mouth: number[]; cues: PoseCue[]; lookRight?: boolean; speaking?: boolean; scale?: number }> = ({ who, mouth, cues, lookRight = true, speaking = false, scale = 1 }) => {
+export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha" | "bansal" | "riya"; mouth: number[]; cues: PoseCue[]; lookRight?: boolean; speaking?: boolean; scale?: number }> = ({ who, mouth, cues, lookRight = true, speaking = false, scale = 1 }) => {
   const frame = useCurrentFrame();
   const { angles, mood, pose } = usePose(cues, frame);
   const m = mouth[frame] ?? 0;
   // blink every ~3.3 s (offset per character), 5 frames long
-  const period = who === "aunty" ? 100 : who === "doctor" || who === "bansal" ? 107 : who === "neha" ? 97 : 113;
+  const period = who === "aunty" ? 100 : who === "doctor" || who === "bansal" ? 107 : who === "neha" ? 97 : who === "riya" ? 91 : 113;
   const ph = (frame + (who === "aunty" ? 37 : who === "doctor" ? 61 : 0)) % period;
   const blink = ph < 5 ? Math.sin((ph / 5) * Math.PI) : 0;
   const breathe = Math.sin(frame / 22) * 3;
@@ -107,10 +107,11 @@ export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha" | "bans
   const A = who === "aunty";
   const B = who === "bansal";
   const D = who === "doctor" || B; // Bansal shares the doctor's head (bald, grey sides, moustache)
-  const N = who === "neha";
-  const skin = A ? "#C68863" : D ? "#B97A56" : N ? "#C98E6A" : "#A86E4C";
-  const sleeve = A ? "#22314F" : B ? "#4A4E57" : D || N ? "#F7F7F2" : "#F26B3A";
-  const hair = A ? "#2B2B30" : D ? "#CFCFD6" : N ? "#3A2A22" : "#18181C";
+  const R = who === "riya"; // Riya (Solvix presenter) shares Neha's head, in a black blazer over a neon-green top
+  const N = who === "neha" || R;
+  const skin = A ? "#C68863" : D ? "#B97A56" : R ? "#B9805E" : N ? "#C98E6A" : "#A86E4C";
+  const sleeve = A ? "#22314F" : B ? "#4A4E57" : R ? "#16191A" : D || N ? "#F7F7F2" : "#F26B3A";
+  const hair = A ? "#2B2B30" : D ? "#CFCFD6" : R ? "#1E1512" : N ? "#3A2A22" : "#18181C";
   return (
     <svg width={420 * scale} height={640 * scale} viewBox="0 0 420 640" style={{ overflow: "visible" }}>
       <g transform={`translate(0 ${breathe})`}>
@@ -122,6 +123,14 @@ export const Toon: React.FC<{ who: "aunty" | "arjun" | "doctor" | "neha" | "bans
             <path d="M86 332 Q 150 300 184 298 L 200 480 L 150 660 L 60 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
             <path d="M334 332 Q 270 300 236 298 L 220 480 L 270 660 L 360 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
             <path d="M262 420 L 300 420" stroke="#F4F4F0" strokeWidth={6} />
+          </g>
+        ) : R ? (
+          <g>
+            <path d="M86 332 Q 210 278 334 332 L 360 660 L 60 660 Z" fill="#22E01C" stroke={OUT} strokeWidth={SW} />
+            <path d="M86 332 Q 150 300 184 298 L 204 470 L 150 660 L 60 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
+            <path d="M334 332 Q 270 300 236 298 L 216 470 L 270 660 L 360 660 Z" fill={sleeve} stroke={OUT} strokeWidth={SW} />
+            <circle cx={286} cy={420} r={20} fill="#fff" stroke={OUT} strokeWidth={4} />
+            <text x={286} y={430} textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight={800} fontSize={28} fill="#111">S</text>
           </g>
         ) : D || N ? (
           <g>
